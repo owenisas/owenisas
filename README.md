@@ -1,67 +1,39 @@
-## Hi there 👋 I’m **Owen Isa**
+## Hi there! 👋
 
-### 🎓 About Me
-- 🏫 **Student** at Bellevue College studying Computer Science  
-- 🌌 **Space & ISRU Enthusiast** — building autonomous systems for lunar/cislunar resource extraction  
-- 🤖 **AI & Automation Buff** — designing multi-agent frameworks and self-healing architectures  
-- 🌱 **AgriTech & DePIN Explorer** — prototyping validator hardware (FarmOrb) and decentralized physical infrastructure  
+a Computer Science student specializing in AI, space tech, and DePIN-enabled infrastructure.
 
 ---
 
-### 🛠️ What I’m Working On
-- **WATERIG + OASIS**  
-  Advanced optical + sorbent platform for in situ volatile capture and purification  
-- **WAVE (Water-based Adaptive Velocity Engine)**  
-  Modular water-electrolysis propulsion for CubeSats to cislunar transporters  
-- **FLARE**  
-  Flexible Lunar Adaptive REsource explorer — a hopping mobility system powered by WAVE  
-- **FarmOrb**  
-  AI-vision + tamper-proof validator hardware for transparent, precision agriculture  
-- **REACTOR & AWH2**  
-  Solar-powered syngas generator and aluminum–water hydrogen production prototypes  
+## About Me
+- 🧑‍🎓 Studying Computer Science
+- 🤖 Building **multi-agent AI frameworks** and autonomous control architectures  
+- 🌱 Exploring **AgriTech & DePIN** for transparent, on-Earth and off-Earth applications  
 
 ---
 
-### 🔭 I’m Currently
-- Reverse-engineering & hot-fire testing WAVE-XS & WAVE-S thruster modules  
-- Integrating Web4/DePIN & RWA infrastructure into PVM & AURA network layers  
-- Building open-source community for validator orb hardware and AI-driven farm inspection  
-- Exploring nuclear-thermal and hybrid propulsion concepts for deep-space missions  
+## Projects
+- [owenisas](https://github.com/owenisas/owenisas) (Profile README)  [oai_citation:0‡GitHub](https://github.com/owenisas?tab=repositories)  
+- [VolunTier](https://github.com/owenisas/VolunTier) – HTML demo (★1)  [oai_citation:2‡GitHub](https://github.com/owenisas?tab=repositories)  
+- [Amadeus](https://github.com/owenisas/Amadeus) – Mobile AI assistant framework  [oai_citation:3‡GitHub](https://github.com/owenisas?tab=repositories)  
+- [Owenisas-Music](https://github.com/owenisas/Owenisas-Music) – Local music app  [oai_citation:4‡GitHub](https://github.com/owenisas?tab=repositories)  
+- [owenisas.github.io](https://github.com/owenisas/owenisas.github.io) – Personal website source  [oai_citation:5‡GitHub](https://github.com/owenisas?tab=repositories)  
+- [MoA](https://github.com/owenisas/MoA) – Mixture-of-Agents (fork)  [oai_citation:6‡GitHub](https://github.com/owenisas?tab=repositories)  
 
 ---
 
-### 🌱 I’m Learning
-- High-temperature PEM & SOEC electrolyzers for space ISRU  
-- Laser-pumped metalens/fresnel solutions for debris removal  
-- Advanced SLAM (LiDAR + vision) for planetary rover autonomy  
-- Blockchain-based multi-agent governance and tokenized marketplaces  
+## Skills & Tools
+- **Languages:** Python · C++ · Swift · JavaScript (React, Vue)  
+- **AI & Data:** PyTorch · TensorFlow · scikit-learn · Pandas  
+- **Cloud & DevOps:** AWS · Azure · GitHub Actions · Docker  
+- **Hardware & Embedded:** Arduino · STM32 · PCB design · Soldering  
+- **Frameworks & APIs:** FastAPI · Flask · OpenAI API  
 
 ---
 
-### 🤝 Let’s Collaborate
-- **Open to:**  
-  - Space tech & ISRU R&D partnerships  
-  - AI governance & multi-agent automation projects  
-  - AgriTech pilots with real-world DePIN deployments  
-- **Reach me at:**  
-  - 📧 [email protected]  
-  - 💼 [LinkedIn](https://linkedin.com/in/owenisas)  
-  - 🐦 [@owenisas](https://twitter.com/owenisas)  
+## Contact & Connect
+- 📧 [email protected]  
+- 💼 [LinkedIn](https://linkedin.com/in/owenisas)  
+- 🐦 [Twitter @owenisas](https://twitter.com/owenisas)  
+- 🌐 [Portfolio & Projects](https://owenisas.github.io/)  
 
----
-
-### ⚡ Fun Facts
-- Watched a lunar landing rocket launch at Cape Canaveral invited by a Facebook contact  
-- Once got grilled by a very friendly Homeland Security “Uber” driver 😉  
-- Son is in college near Seattle — flew out via NASA’s backyard  
-
-<details>
-  <summary>🧰 Tech & Tools</summary>
-
-  - **Languages:** Python, C++, Swift, JavaScript (Vue, React)  
-  - **Tools:** Git, GitHub Actions, Docker, VS Code, FastAPI, Flask  
-  - **Cloud & CI/CD:** AWS, Azure, GitHub Codespaces  
-  - **AI & Data:** OpenAI API, PyTorch, TensorFlow, Pandas, scikit-learn  
-  - **Hardware:** Arduino Mega, INDIEGO Mega Orb, soldering & prototyping  
-
-</details>
+*Feel free to reach out for collaborations in space systems, AI governance, or DePIN-driven infrastructure!*  
