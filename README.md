@@ -12,12 +12,10 @@ a Computer Science student specializing in AI, space tech, and DePIN-enabled inf
 ---
 
 ## Projects
-- [owenisas](https://github.com/owenisas/owenisas) (Profile README)  [oai_citation:0‡GitHub](https://github.com/owenisas?tab=repositories)  
-- [VolunTier](https://github.com/owenisas/VolunTier) – HTML demo (★1)  [oai_citation:2‡GitHub](https://github.com/owenisas?tab=repositories)  
-- [Amadeus](https://github.com/owenisas/Amadeus) – Mobile AI assistant framework  [oai_citation:3‡GitHub](https://github.com/owenisas?tab=repositories)  
-- [Owenisas-Music](https://github.com/owenisas/Owenisas-Music) – Local music app  [oai_citation:4‡GitHub](https://github.com/owenisas?tab=repositories)  
-- [owenisas.github.io](https://github.com/owenisas/owenisas.github.io) – Personal website source  [oai_citation:5‡GitHub](https://github.com/owenisas?tab=repositories)  
-- [MoA](https://github.com/owenisas/MoA) – Mixture-of-Agents (fork)  [oai_citation:6‡GitHub](https://github.com/owenisas?tab=repositories)  
+- [owenisas](https://github.com/owenisas/owenisas) – Personal website source
+- [VolunTier](https://github.com/owenisas/VolunTier) – VolunTier Backend
+- [Amadeus](https://github.com/owenisas/Amadeus) – Mobile AI assistant framework  
+- [Owenisas-Music](https://github.com/owenisas/Owenisas-Music) – Local music app  
 
 ---
 
