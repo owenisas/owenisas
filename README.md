@@ -29,9 +29,9 @@ a Computer Science student specializing in AI, space tech, and DePIN-enabled inf
 ---
 
 ## Contact & Connect
-- 📧 [email protected]  
+- 📧 [Email me](mailto:owenisas@gmail.com)  
 - 💼 [LinkedIn](https://linkedin.com/in/owenisas)  
 - 🐦 [Twitter @owenisas](https://twitter.com/owenisas)  
-- 🌐 [Portfolio & Projects](https://owenisas.github.io/)  
+- 🌐 [Portfolio & Projects](https://www.owenisas.com)  
 
 *Feel free to reach out for collaborations in space systems, AI governance, or DePIN-driven infrastructure!*  
