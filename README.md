@@ -1,9 +1,9 @@
 <div align="center">
 
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=200&section=header&text=Thomas%20Suen&fontSize=42&fontColor=fff&animation=fadeIn&fontAlignY=35&desc=iOS%20%7C%20AI%2FML%20%7C%20Full%20Stack&descSize=18&descAlignY=55" width="100%" />
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=200&section=header&text=Thomas%20Suen&fontSize=42&fontColor=fff&animation=fadeIn&fontAlignY=35&desc=AI%2FML%20%7C%20Full%20Stack%20%7C%20Agentic%20Systems&descSize=18&descAlignY=55" width="100%" />
 
   <a href="https://git.io/typing-svg">
-    <img src="https://readme-typing-svg.demolab.com/?lines=iOS+Developer+%26+AI+Engineer;LLM+Fine-tuning+%26+Agentic+Workflows;Full+Stack+%26+Production+Deployments;Hackathon+Champion+%40+HackTheEast&font=Fira+Code&size=22&duration=3000&pause=1000&color=36BCF7&center=true&vCenter=true&width=550&height=60" alt="Typing SVG" />
+    <img src="https://readme-typing-svg.demolab.com/?lines=AI%2FML+Engineer+%26+Full+Stack+Dev;LLM+Fine-tuning+%26+Agentic+Workflows;Building+Autonomous+AI+Systems;Hackathon+Champion+%40+HackTheEast&font=Fira+Code&size=22&duration=3000&pause=1000&color=36BCF7&center=true&vCenter=true&width=550&height=60" alt="Typing SVG" />
   </a>
 
   <br/><br/>
@@ -27,10 +27,10 @@
 
 ### About Me
 
-iOS developer, AI/ML engineer, and full-stack builder. CS student who ships production apps, fine-tunes LLMs, and builds agentic automation systems.
+AI/ML engineer and full-stack developer. CS student who fine-tunes LLMs, builds agentic automation systems, and ships production web + mobile apps.
 
-- Shipped **MindDrop** to the App Store — AI voice journal with on-device mood analysis
 - Won **Champion** at [Hack The East](https://hacktheeast.com/) (Hong Kong AI hackathon) with **Origraph**
+- Co-founder at **Reunify Labs** — building [FPAI](https://fpai.reunifylabs.com/) (first-principles AI ed-tech)
 - Fine-tuned LLMs (Nemotron, Qwen) and DiT audio models on H100s
 - Built autonomous pipelines with **Claude Code**, **Appium**, and multi-agent frameworks
 - 11 models + 8 datasets on [HuggingFace](https://huggingface.co/owenisas) (1.7K+ dataset downloads)
@@ -41,21 +41,20 @@ iOS developer, AI/ML engineer, and full-stack builder. CS student who ships prod
 
 | Area | Details |
 |:---|:---|
-| **iOS Development** | SwiftUI, SwiftData, StoreKit 2, AVFoundation, Speech, NaturalLanguage, RevenueCat, App Store Connect, Fastlane |
 | **AI/ML** | LLM fine-tuning (GRPO/RL, LoRA), DiT audio model training, data collection & curation, PyTorch, transformers |
-| **AI Development** | Agentic workflows (Claude Code, Appium), tool-use patterns, API orchestration, multi-agent systems |
+| **Agentic AI** | Autonomous workflows (Claude Code, Appium), tool-use patterns, LLM API orchestration, multi-agent systems |
 | **Full Stack** | Python, TypeScript, Node.js, FastAPI, Next.js, Supabase, PostgreSQL |
-| **Deployment** | Vercel, Docker, AWS, App Store (xcodebuild + archive), CI/CD, Fastlane, GitHub Actions |
+| **Deployment** | Vercel, Docker, AWS (Lambda, S3, CloudFront, DynamoDB), Railway, CI/CD, GitHub Actions |
 | **Data** | Dataset creation & curation (HuggingFace), preference datasets, synthetic data pipelines |
+| **Mobile** | Some iOS experience (SwiftUI, App Store deployment) — primarily AI-assisted development |
 | **Hardware** | Arduino, ESP32 — timing control, voltage switching, sensor I/O |
 
 ### Tech Stack
 
 | **Category** | **Technologies** |
 |:---:|:---|
-| **Languages** | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ![Swift](https://img.shields.io/badge/Swift-F05138?style=flat-square&logo=swift&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black) ![C++](https://img.shields.io/badge/C++-00599C?style=flat-square&logo=c%2B%2B&logoColor=white) |
-| **iOS** | ![SwiftUI](https://img.shields.io/badge/SwiftUI-0D96F6?style=flat-square&logo=swift&logoColor=white) ![Xcode](https://img.shields.io/badge/Xcode-147EFB?style=flat-square&logo=xcode&logoColor=white) ![App Store](https://img.shields.io/badge/App%20Store-0D96F6?style=flat-square&logo=appstore&logoColor=white) |
-| **AI/ML** | ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white) ![HuggingFace](https://img.shields.io/badge/HuggingFace-FFD21E?style=flat-square&logo=huggingface&logoColor=black) ![Claude](https://img.shields.io/badge/Claude-191919?style=flat-square&logo=anthropic&logoColor=white) |
+| **Languages** | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black) ![C++](https://img.shields.io/badge/C++-00599C?style=flat-square&logo=c%2B%2B&logoColor=white) ![Swift](https://img.shields.io/badge/Swift-F05138?style=flat-square&logo=swift&logoColor=white) |
+| **AI/ML** | ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white) ![HuggingFace](https://img.shields.io/badge/HuggingFace-FFD21E?style=flat-square&logo=huggingface&logoColor=black) ![Claude](https://img.shields.io/badge/Claude-191919?style=flat-square&logo=anthropic&logoColor=white) ![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=flat-square&logo=openai&logoColor=white) |
 | **Backend** | ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white) ![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?style=flat-square&logo=supabase&logoColor=white) ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js&logoColor=white) |
 | **Deploy** | ![Vercel](https://img.shields.io/badge/Vercel-000?style=flat-square&logo=vercel&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) ![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazon-aws&logoColor=white) |
 | **Hardware** | ![Arduino](https://img.shields.io/badge/Arduino-00979D?style=flat-square&logo=arduino&logoColor=white) ![ESP32](https://img.shields.io/badge/ESP32-E7352C?style=flat-square&logo=espressif&logoColor=white) |
@@ -71,9 +70,9 @@ iOS developer, AI/ML engineer, and full-stack builder. CS student who ships prod
 | **[Origraph](https://github.com/owenisas/Origraph)** | AI content provenance platform — invisible text watermarking SDK, provenance registry, browser extension. **Champion at [Hack The East](https://hacktheeast.com/) 2026.** | `Python` `JS` `AI` |
 | **[Amadeus 2.0](https://github.com/owenisas/Amadeus2.0)** | Vision-first Android automation framework — AI-directed app workflows via Appium + Gemini/local LLM. GUI dashboard, TUI operator mode, scheduled jobs. | `Python` `Appium` `Gemini` |
 | **[Amadeus](https://github.com/owenisas/Amadeus)** | Original mobile AI assistant framework (legacy). Foundation for 2.0. | `Python` `Swift` |
-| **[MindDrop](https://apps.apple.com/app/minddrop-voice-journal/id6761807011)** | AI voice journal & mood tracker — 30s voice entries, on-device transcription & mood analysis, streak tracking. Live on the App Store. | `SwiftUI` `SwiftData` `StoreKit` |
 | **[AudioX](https://github.com/owenisas/AudioX)** | Audio generation model fine-tuned on H100s — mixed SFX & music preference datasets. | `PyTorch` `DiT` `H100` |
-| **[iOS App Factory](https://github.com/owenisas/ios-app-factory)** | Autonomous pipeline: Research, Design, Build, QA, Audit, Release, Market — powered by Claude Code subagents. | `Swift` `Python` `Claude` |
+| **[MindDrop](https://apps.apple.com/app/minddrop-voice-journal/id6761807011)** | AI voice journal & mood tracker — shipped to App Store. Built with AI-assisted development pipeline. | `SwiftUI` `Claude Code` |
+| **[iOS App Factory](https://github.com/owenisas/ios-app-factory)** | Autonomous agentic pipeline: Research, Design, Build, QA, Audit, Release, Market — powered by Claude Code subagents. | `Python` `Claude` `Agents` |
 
 ### HuggingFace Highlights
 
