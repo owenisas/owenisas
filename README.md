@@ -47,7 +47,7 @@ iOS developer, AI/ML engineer, and full-stack builder. CS student who ships prod
 | **Full Stack** | Python, TypeScript, Node.js, FastAPI, Next.js, Supabase, PostgreSQL |
 | **Deployment** | Vercel, Docker, AWS, App Store (xcodebuild + archive), CI/CD, Fastlane, GitHub Actions |
 | **Data** | Dataset creation & curation (HuggingFace), preference datasets, synthetic data pipelines |
-| **Hardware** | Arduino, STM32, PCB design, embedded systems |
+| **Hardware** | Arduino, ESP32 — timing control, voltage switching, sensor I/O |
 
 ### Tech Stack
 
@@ -58,7 +58,7 @@ iOS developer, AI/ML engineer, and full-stack builder. CS student who ships prod
 | **AI/ML** | ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white) ![HuggingFace](https://img.shields.io/badge/HuggingFace-FFD21E?style=flat-square&logo=huggingface&logoColor=black) ![Claude](https://img.shields.io/badge/Claude-191919?style=flat-square&logo=anthropic&logoColor=white) |
 | **Backend** | ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white) ![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?style=flat-square&logo=supabase&logoColor=white) ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js&logoColor=white) |
 | **Deploy** | ![Vercel](https://img.shields.io/badge/Vercel-000?style=flat-square&logo=vercel&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) ![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazon-aws&logoColor=white) |
-| **Hardware** | ![Arduino](https://img.shields.io/badge/Arduino-00979D?style=flat-square&logo=arduino&logoColor=white) ![STM32](https://img.shields.io/badge/STM32-03234B?style=flat-square&logo=stmicroelectronics&logoColor=white) |
+| **Hardware** | ![Arduino](https://img.shields.io/badge/Arduino-00979D?style=flat-square&logo=arduino&logoColor=white) ![ESP32](https://img.shields.io/badge/ESP32-E7352C?style=flat-square&logo=espressif&logoColor=white) |
 
 ---
 
