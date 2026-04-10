@@ -1,59 +1,109 @@
 <div align="center">
 
-  # Hi there! I'm Thomas 👋
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=200&section=header&text=Thomas%20Suen&fontSize=42&fontColor=fff&animation=fadeIn&fontAlignY=35&desc=iOS%20%7C%20AI%2FML%20%7C%20Full%20Stack&descSize=18&descAlignY=55" width="100%" />
 
-  <p>
-    <a href="https://www.owenisas.com">
-      <img src="https://img.shields.io/badge/Portfolio-owenisas.com-blue?style=for-the-badge&logo=googlechrome&logoColor=white" />
-    </a>
-    <a href="mailto:owenisas@gmail.com">
-      <img src="https://img.shields.io/badge/Email-Contact%20Me-red?style=for-the-badge&logo=gmail&logoColor=white" />
-    </a>
-    <a href="https://linkedin.com/in/owenisas">
-      <img src="https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" />
-    </a>
-  </p>
+  <a href="https://git.io/typing-svg">
+    <img src="https://readme-typing-svg.demolab.com/?lines=iOS+Developer+%26+AI+Engineer;LLM+Fine-tuning+%26+Agentic+Workflows;Full+Stack+%26+Production+Deployments;Hackathon+Champion+%40+HackTheEast&font=Fira+Code&size=22&duration=3000&pause=1000&color=36BCF7&center=true&vCenter=true&width=550&height=60" alt="Typing SVG" />
+  </a>
+
+  <br/><br/>
+
+  <a href="https://www.owenisas.com">
+    <img src="https://img.shields.io/badge/Portfolio-owenisas.com-blue?style=for-the-badge&logo=googlechrome&logoColor=white" />
+  </a>
+  <a href="https://huggingface.co/owenisas">
+    <img src="https://img.shields.io/badge/HuggingFace-owenisas-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black" />
+  </a>
+  <a href="https://linkedin.com/in/owenisas">
+    <img src="https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" />
+  </a>
+  <a href="mailto:owenisas@gmail.com">
+    <img src="https://img.shields.io/badge/Email-Contact%20Me-red?style=for-the-badge&logo=gmail&logoColor=white" />
+  </a>
 
 </div>
 
 ---
 
-### 👨‍💻 About Me
+### About Me
 
-I am a Computer Science student passionate about building autonomous systems that bridge the digital and physical worlds. My work spans from **multi-agent AI** to **decentralized infrastructure (DePIN)** for Earth and space applications.
+iOS developer, AI/ML engineer, and full-stack builder. CS student who ships production apps, fine-tunes LLMs, and builds agentic automation systems.
 
-- 🔭 I’m currently building **multi-agent AI frameworks** and **AgriTech solutions**.
-- 🌱 I’m exploring **DePIN** for transparent, off-Earth data infrastructure.
-- 💬 Ask me about **Space Systems, AI Governance, and Embedded Engineering.**
+- Shipped **MindDrop** to the App Store — AI voice journal with on-device mood analysis
+- Won **Champion** at [Hack The East](https://hacktheeast.com/) (Hong Kong AI hackathon) with **Origraph**
+- Fine-tuned LLMs (Nemotron, Qwen) and DiT audio models on H100s
+- Built autonomous pipelines with **Claude Code**, **Appium**, and multi-agent frameworks
+- 11 models + 8 datasets on [HuggingFace](https://huggingface.co/owenisas) (1.7K+ dataset downloads)
 
 ---
 
-### 🛠️ Tech Stack
+### Skills & Experience
+
+| Area | Details |
+|:---|:---|
+| **iOS Development** | SwiftUI, SwiftData, StoreKit 2, AVFoundation, Speech, NaturalLanguage, RevenueCat, App Store Connect, Fastlane |
+| **AI/ML** | LLM fine-tuning (GRPO/RL, LoRA), DiT audio model training, data collection & curation, PyTorch, transformers |
+| **AI Development** | Agentic workflows (Claude Code, Appium), tool-use patterns, API orchestration, multi-agent systems |
+| **Full Stack** | Python, TypeScript, Node.js, FastAPI, Next.js, Supabase, PostgreSQL |
+| **Deployment** | Vercel, Docker, AWS, App Store (xcodebuild + archive), CI/CD, Fastlane, GitHub Actions |
+| **Data** | Dataset creation & curation (HuggingFace), preference datasets, synthetic data pipelines |
+| **Hardware** | Arduino, STM32, PCB design, embedded systems |
+
+### Tech Stack
 
 | **Category** | **Technologies** |
 |:---:|:---|
-| **Languages** | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ![C++](https://img.shields.io/badge/C++-00599C?style=flat-square&logo=c%2B%2B&logoColor=white) ![Swift](https://img.shields.io/badge/Swift-F05138?style=flat-square&logo=swift&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black) |
-| **AI & Data** | ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white) ![TensorFlow](https://img.shields.io/badge/TensorFlow-FF6F00?style=flat-square&logo=tensorflow&logoColor=white) ![Pandas](https://img.shields.io/badge/Pandas-150458?style=flat-square&logo=pandas&logoColor=white) ![Scikit-Learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat-square&logo=scikit-learn&logoColor=white) |
-| **Backend & Cloud** | ![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazon-aws&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white) |
-| **Hardware** | ![Arduino](https://img.shields.io/badge/Arduino-00979D?style=flat-square&logo=arduino&logoColor=white) ![STM32](https://img.shields.io/badge/STM32-03234B?style=flat-square&logo=stmicroelectronics&logoColor=white) 🔌 PCB Design |
+| **Languages** | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ![Swift](https://img.shields.io/badge/Swift-F05138?style=flat-square&logo=swift&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black) ![C++](https://img.shields.io/badge/C++-00599C?style=flat-square&logo=c%2B%2B&logoColor=white) |
+| **iOS** | ![SwiftUI](https://img.shields.io/badge/SwiftUI-0D96F6?style=flat-square&logo=swift&logoColor=white) ![Xcode](https://img.shields.io/badge/Xcode-147EFB?style=flat-square&logo=xcode&logoColor=white) ![App Store](https://img.shields.io/badge/App%20Store-0D96F6?style=flat-square&logo=appstore&logoColor=white) |
+| **AI/ML** | ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white) ![HuggingFace](https://img.shields.io/badge/HuggingFace-FFD21E?style=flat-square&logo=huggingface&logoColor=black) ![Claude](https://img.shields.io/badge/Claude-191919?style=flat-square&logo=anthropic&logoColor=white) |
+| **Backend** | ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white) ![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?style=flat-square&logo=supabase&logoColor=white) ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js&logoColor=white) |
+| **Deploy** | ![Vercel](https://img.shields.io/badge/Vercel-000?style=flat-square&logo=vercel&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) ![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazon-aws&logoColor=white) |
+| **Hardware** | ![Arduino](https://img.shields.io/badge/Arduino-00979D?style=flat-square&logo=arduino&logoColor=white) ![STM32](https://img.shields.io/badge/STM32-03234B?style=flat-square&logo=stmicroelectronics&logoColor=white) |
 
 ---
 
-### 📂 Featured Projects
+### Featured Projects
 
 | Project | Description | Stack |
 | :--- | :--- | :--- |
-| **📱 [Amadeus](https://github.com/owenisas/Amadeus)** | A mobile AI assistant framework for autonomous tasks. | `Swift` `Python` `AI` |
-| **🌍 [VolunTier](https://github.com/owenisas/VolunTier)** | Backend infrastructure for a volunteer coordination platform. | `Python` `FastAPI` |
-| **🎵 [Owenisas-Music](https://github.com/owenisas/Owenisas-Music)** | Local music player app focused on high-fidelity playback. | `Swift` `Audio` |
+| **[Origraph](https://github.com/owenisas/Origraph)** | AI content provenance platform — invisible text watermarking SDK, provenance registry, browser extension. **Champion at [Hack The East](https://hacktheeast.com/) 2026.** | `Python` `JS` `AI` |
+| **[Amadeus 2.0](https://github.com/owenisas/Amadeus2.0)** | Vision-first Android automation framework — AI-directed app workflows via Appium + Gemini/local LLM. GUI dashboard, TUI operator mode, scheduled jobs. | `Python` `Appium` `Gemini` |
+| **[Amadeus](https://github.com/owenisas/Amadeus)** | Original mobile AI assistant framework (legacy). Foundation for 2.0. | `Python` `Swift` |
+| **[MindDrop](https://apps.apple.com/app/minddrop-voice-journal/id6761807011)** | AI voice journal & mood tracker — 30s voice entries, on-device transcription & mood analysis, streak tracking. Live on the App Store. | `SwiftUI` `SwiftData` `StoreKit` |
+| **[AudioX](https://github.com/owenisas/AudioX)** | Audio generation model fine-tuned on H100s — mixed SFX & music preference datasets. | `PyTorch` `DiT` `H100` |
+| **[iOS App Factory](https://github.com/owenisas/ios-app-factory)** | Autonomous pipeline: Research, Design, Build, QA, Audit, Release, Market — powered by Claude Code subagents. | `Swift` `Python` `Claude` |
+
+### HuggingFace Highlights
+
+| Type | Notable | Downloads/Likes |
+|:---|:---|:---|
+| **Models** | `audiox-full-dataset-final-rank32` (audio), `nemotron-3-nano-reasoning` (32B), `qwen-3-nano-reasoning`, `gpt-oss-20b-union-identity` (21B) | 11 models |
+| **Datasets** | `opus46-reasoning-mix-full` (reasoning), `audio-mixed-preference-collection` (audio prefs), `big-math-rl-30k-subset` | 1.7K+ downloads, 100+ likes |
+
+---
+
+### GitHub Stats
+
+<div align="center">
+
+  <img src="https://github-readme-stats.vercel.app/api?username=owenisas&show_icons=true&theme=tokyonight&hide_border=true&include_all_commits=true&count_private=true" height="180" />
+  &nbsp;&nbsp;
+  <img src="https://streak-stats.demolab.com/?user=owenisas&theme=tokyonight&hide_border=true" height="180" />
+
+  <br/><br/>
+
+  <img src="https://github-readme-activity-graph.vercel.app/graph?username=owenisas&theme=tokyo-night&hide_border=true&area=true" width="95%" />
+
+</div>
 
 ---
 
 <div align="center">
-  <br>
-  
-  <a href="https://twitter.com/owenisas">
-    <img src="https://img.shields.io/twitter/follow/owenisas?style=social" alt="Twitter Follow">
-  </a>
+
+  <img src="https://komarev.com/ghpvc/?username=owenisas&style=flat-square&color=36BCF7" alt="Profile views" />
+
+  <br/><br/>
+
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=120&section=footer" width="100%" />
 
 </div>
