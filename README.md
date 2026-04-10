@@ -51,13 +51,11 @@ AI/ML engineer and full-stack developer. CS student who fine-tunes LLMs, builds 
 
 ### Tech Stack
 
-| **Category** | **Technologies** |
-|:---:|:---|
-| **Languages** | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black) ![C++](https://img.shields.io/badge/C++-00599C?style=flat-square&logo=c%2B%2B&logoColor=white) ![Swift](https://img.shields.io/badge/Swift-F05138?style=flat-square&logo=swift&logoColor=white) |
-| **AI/ML** | ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white) ![HuggingFace](https://img.shields.io/badge/HuggingFace-FFD21E?style=flat-square&logo=huggingface&logoColor=black) ![Claude](https://img.shields.io/badge/Claude-191919?style=flat-square&logo=anthropic&logoColor=white) ![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=flat-square&logo=openai&logoColor=white) |
-| **Backend** | ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white) ![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?style=flat-square&logo=supabase&logoColor=white) ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js&logoColor=white) |
-| **Deploy** | ![Vercel](https://img.shields.io/badge/Vercel-000?style=flat-square&logo=vercel&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) ![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazon-aws&logoColor=white) |
-| **Hardware** | ![Arduino](https://img.shields.io/badge/Arduino-00979D?style=flat-square&logo=arduino&logoColor=white) ![ESP32](https://img.shields.io/badge/ESP32-E7352C?style=flat-square&logo=espressif&logoColor=white) |
+<div align="center">
+
+  [![My Skills](https://skillicons.dev/icons?i=python,pytorch,tensorflow,ts,js,cpp,swift,fastapi,nextjs,nodejs,supabase,postgres,docker,aws,vercel,linux,git,arduino&theme=dark&perline=9)](https://skillicons.dev)
+
+</div>
 
 ---
 
@@ -83,17 +81,17 @@ AI/ML engineer and full-stack developer. CS student who fine-tunes LLMs, builds 
 
 ---
 
-### GitHub Stats
-
-<div align="center">
-
-  <img src="https://streak-stats.demolab.com/?user=owenisas&theme=tokyonight&hide_border=true" height="180" />
-
-</div>
-
 ---
 
 <div align="center">
+
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/owenisas/owenisas/output/github-snake-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/owenisas/owenisas/output/github-snake.svg" />
+    <img alt="contribution snake" src="https://raw.githubusercontent.com/owenisas/owenisas/output/github-snake.svg" />
+  </picture>
+
+  <br/><br/>
 
   <img src="https://komarev.com/ghpvc/?username=owenisas&style=flat-square&color=36BCF7" alt="Profile views" />
 
