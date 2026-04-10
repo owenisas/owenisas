@@ -87,13 +87,11 @@ AI/ML engineer and full-stack developer. CS student who fine-tunes LLMs, builds 
 
 <div align="center">
 
-  <img src="https://github-readme-stats.vercel.app/api?username=owenisas&show_icons=true&theme=tokyonight&hide_border=true&include_all_commits=true&count_private=true" height="180" />
-  &nbsp;&nbsp;
   <img src="https://streak-stats.demolab.com/?user=owenisas&theme=tokyonight&hide_border=true" height="180" />
 
   <br/><br/>
 
-  <img src="https://github-readme-activity-graph.vercel.app/graph?username=owenisas&theme=tokyo-night&hide_border=true&area=true" width="95%" />
+  <img src="https://github-readme-stats.vercel.app/api?username=owenisas&show_icons=true&theme=tokyonight&hide_border=true&include_all_commits=true&count_private=true" height="180" />
 
 </div>
 
