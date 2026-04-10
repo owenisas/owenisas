@@ -89,10 +89,6 @@ AI/ML engineer and full-stack developer. CS student who fine-tunes LLMs, builds 
 
   <img src="https://streak-stats.demolab.com/?user=owenisas&theme=tokyonight&hide_border=true" height="180" />
 
-  <br/><br/>
-
-  <img src="https://github-readme-stats.vercel.app/api?username=owenisas&show_icons=true&theme=tokyonight&hide_border=true&include_all_commits=true&count_private=true" height="180" />
-
 </div>
 
 ---
