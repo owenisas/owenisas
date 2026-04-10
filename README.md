@@ -74,10 +74,10 @@ AI/ML engineer and full-stack developer. CS student who fine-tunes LLMs, builds 
 
 ### HuggingFace Highlights
 
-| Type | Notable | Downloads/Likes |
+| Type | Notable | Stats |
 |:---|:---|:---|
-| **Models** | `audiox-full-dataset-final-rank32` (audio), `nemotron-3-nano-reasoning` (32B), `qwen-3-nano-reasoning`, `gpt-oss-20b-union-identity` (21B) | 11 models |
-| **Datasets** | `opus46-reasoning-mix-full` (reasoning), `audio-mixed-preference-collection` (audio prefs), `big-math-rl-30k-subset` | 1.7K+ downloads, 100+ likes |
+| **Models** | `nemotron-3-nano-reasoning` (32B), `qwen-3-nano-reasoning`, `gpt-oss-20b-union-identity` (21B LLM fine-tune) | Public models |
+| **Datasets** | `opus46-reasoning-mix-full` (reasoning data), `big-math-rl-30k-subset` (math RL) | 1.7K+ downloads, 100+ likes |
 
 ---
 
