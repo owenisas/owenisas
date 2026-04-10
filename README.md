@@ -66,6 +66,7 @@ iOS developer, AI/ML engineer, and full-stack builder. CS student who ships prod
 
 | Project | Description | Stack |
 | :--- | :--- | :--- |
+| **[FPAI](https://fpai.reunifylabs.com/)** | First Principle AI — an AI platform with a block interface for first-principles reasoning and learning. Co-founder at ReunifyLabs. *(Private repo)* | `Next.js` `AI` `Platform` |
 | **[Origraph](https://github.com/owenisas/Origraph)** | AI content provenance platform — invisible text watermarking SDK, provenance registry, browser extension. **Champion at [Hack The East](https://hacktheeast.com/) 2026.** | `Python` `JS` `AI` |
 | **[Amadeus 2.0](https://github.com/owenisas/Amadeus2.0)** | Vision-first Android automation framework — AI-directed app workflows via Appium + Gemini/local LLM. GUI dashboard, TUI operator mode, scheduled jobs. | `Python` `Appium` `Gemini` |
 | **[Amadeus](https://github.com/owenisas/Amadeus)** | Original mobile AI assistant framework (legacy). Foundation for 2.0. | `Python` `Swift` |
