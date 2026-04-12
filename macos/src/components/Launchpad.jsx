@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { appIcons } from './Icons';
 
-// All apps available in Launchpad, grouped by rows
-const launchpadApps = [
+const appCatalog = [
   { id: 'finder', title: 'Finder' },
   { id: 'safari', title: 'Safari' },
   { id: 'messages', title: 'Messages' },
@@ -31,98 +30,151 @@ const launchpadApps = [
   { id: 'preview', title: 'Preview' },
   { id: 'voicememos', title: 'Voice Memos' },
   { id: 'photobooth', title: 'Photo Booth' },
-  { id: 'quicktime', title: 'QuickTime' },
+  { id: 'quicktime', title: 'QuickTime Player' },
   { id: 'clock', title: 'Clock' },
   { id: 'home', title: 'Home' },
   { id: 'findmy', title: 'Find My' },
   { id: 'siri', title: 'Siri' },
-  { id: 'settings', title: 'Settings' },
+  { id: 'settings', title: 'System Settings' },
   { id: 'activitymonitor', title: 'Activity Monitor' },
   { id: 'diskutility', title: 'Disk Utility' },
 ];
 
+function AppGlyph({ app, size = 70 }) {
+  return (
+    <div className="shrink-0" style={{ width: size, height: size }}>
+      {appIcons[app.id] || (
+        <div
+          className="w-full h-full rounded-[14px] flex items-center justify-center text-white/72 text-[24px] font-semibold"
+          style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.22), rgba(255,255,255,0.08))' }}
+        >
+          {app.title[0]}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AppTile({ app, onLaunch }) {
+  return (
+    <button
+      className="w-[100px] h-[106px] flex flex-col items-center justify-start gap-1.5 rounded-[12px] p-2 outline-none transition-transform active:scale-95 group focus:bg-white/10"
+      onClick={() => onLaunch(app.id, app.title)}
+    >
+      <div className="w-[74px] h-[74px] transition-transform duration-200 group-hover:-translate-y-1 drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)]">
+        <AppGlyph app={app} size={74} />
+      </div>
+      <span 
+        className="text-[13px] text-white text-center font-medium leading-tight max-w-[90px] truncate px-1 rounded-sm tracking-wide"
+        style={{ textShadow: '0 1px 2px rgba(0,0,0,0.6)' }}
+      >
+        {app.title}
+      </span>
+    </button>
+  );
+}
+
 export default function Launchpad({ isOpen, onClose, onAppLaunch }) {
+  const [renderOpen, setRenderOpen] = useState(isOpen);
+  const [isClosing, setIsClosing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredApps = searchQuery
-    ? launchpadApps.filter(app => app.title.toLowerCase().includes(searchQuery.toLowerCase()))
-    : launchpadApps;
+  useEffect(() => {
+    if (isOpen) {
+      setRenderOpen(true);
+      setIsClosing(false);
+    } else if (renderOpen) {
+      setIsClosing(true);
+      const timer = setTimeout(() => {
+        setRenderOpen(false);
+        setIsClosing(false);
+      }, 250);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, renderOpen]);
 
-  if (!isOpen) return null;
+  const filteredApps = useMemo(() => {
+    const normalized = searchQuery.trim().toLowerCase();
+    return appCatalog
+      .filter(app => !normalized || app.title.toLowerCase().includes(normalized))
+      .sort((a, b) => a.title.localeCompare(b.title));
+  }, [searchQuery]);
+
+  const launch = (id, title) => {
+    onAppLaunch(id, title);
+    onClose();
+  };
+
+  if (!renderOpen && !isOpen) return null;
 
   return (
     <div
-      className="fixed inset-0 z-[300] flex flex-col"
+      className="fixed inset-0 z-[300] flex flex-col items-center pt-[5vh] pb-[10vh] overflow-hidden"
       style={{
-        background: 'rgba(0,0,0,0.7)',
-        backdropFilter: 'blur(40px) saturate(120%)',
-        WebkitBackdropFilter: 'blur(40px) saturate(120%)',
-        animation: 'launchpad-in 0.3s ease',
+        background: 'rgba(0,0,0,0.15)',
+        backdropFilter: 'blur(45px) saturate(160%)',
+        WebkitBackdropFilter: 'blur(45px) saturate(160%)',
+        animation: isClosing 
+          ? 'launchpad-out 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards' 
+          : 'launchpad-in 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
       }}
       onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
+        // If they click anything that isn't a button or input natively close it!
+        if (e.target.closest('button') || e.target.closest('input')) return;
+        setSearchQuery('');
+        onClose();
       }}
     >
-      {/* Search bar */}
-      <div className="flex justify-center pt-8 pb-6">
-        <div className="relative">
+      {/* Search Header */}
+      <div className="w-[360px] max-w-[90%] mb-12 flex justify-center mt-6 shrink-0">
+        <div 
+          className="flex items-center gap-2 rounded-[14px] px-3 py-1.5 w-full transition-colors focus-within:bg-white/10 bg-white/5"
+          style={{ border: '0.5px solid rgba(255,255,255,0.2)' }}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="2.5" strokeLinecap="round" className="shrink-0">
+            <circle cx="11" cy="11" r="7" /><path d="m21 21-4.35-4.35" />
+          </svg>
           <input
             type="text"
             placeholder="Search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-[220px] h-[28px] rounded-[8px] px-7 text-[13px] text-white placeholder-white/40 outline-none"
-            style={{
-              background: 'rgba(255,255,255,0.12)',
-              border: '0.5px solid rgba(255,255,255,0.15)',
-            }}
+            className="flex-1 bg-transparent text-[16px] text-white font-light placeholder:text-white/40 outline-none h-[28px] text-center ml-[-26px]"
             autoFocus
           />
-          <svg className="absolute left-2 top-1/2 -translate-y-1/2" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="2.5" strokeLinecap="round">
-            <circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/>
-          </svg>
         </div>
       </div>
 
-      {/* App grid */}
-      <div className="flex-1 overflow-auto px-16">
-        <div className="grid gap-y-6 justify-center mx-auto max-w-[900px]"
-          style={{ gridTemplateColumns: 'repeat(7, 90px)', justifyContent: 'center' }}>
-          {filteredApps.map(app => (
-            <button
-              key={app.id}
-              className="flex flex-col items-center gap-1 group"
-              onClick={(e) => {
-                e.stopPropagation();
-                onAppLaunch(app.id, app.title);
-                onClose();
-              }}
-            >
-              <div className="w-[64px] h-[64px] transition-transform group-hover:scale-110 group-active:scale-95">
-                {appIcons[app.id] || (
-                  <div className="w-full h-full rounded-[14px] bg-white/10 flex items-center justify-center text-white/30 text-[10px]">
-                    {app.title[0]}
-                  </div>
-                )}
-              </div>
-              <span className="text-[11px] text-white/90 text-center leading-tight max-w-[80px] truncate">
-                {app.title}
-              </span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Page dots */}
-      <div className="flex justify-center gap-2 py-4">
-        <div className="w-[6px] h-[6px] rounded-full bg-white/80" />
-        <div className="w-[6px] h-[6px] rounded-full bg-white/30" />
+      {/* Grid Layout */}
+      <div className="flex-1 w-[90%] md:w-[95%] max-w-[1400px] overflow-y-auto px-4 hide-scrollbar">
+        {filteredApps.length === 0 ? (
+          <div className="mt-20 flex flex-col items-center justify-center text-white/50 gap-3">
+            <div className="text-[22px] text-white/80 font-medium">No Results</div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-7 gap-x-[1vw] gap-y-[4vh] justify-items-center mb-[5vh]">
+            {filteredApps.map(app => (
+              <AppTile key={app.id} app={app} onLaunch={launch} />
+            ))}
+          </div>
+        )}
       </div>
 
       <style>{`
         @keyframes launchpad-in {
-          from { opacity: 0; transform: scale(1.1); }
-          to { opacity: 1; transform: scale(1); }
+          0% { opacity: 0; transform: scale(1.05); filter: blur(5px); }
+          100% { opacity: 1; transform: scale(1); filter: blur(0); }
+        }
+        @keyframes launchpad-out {
+          0% { opacity: 1; transform: scale(1); filter: blur(0); }
+          100% { opacity: 0; transform: scale(1.05); filter: blur(5px); }
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
         }
       `}</style>
     </div>

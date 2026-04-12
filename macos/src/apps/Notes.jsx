@@ -8,7 +8,9 @@ function loadNotes() {
   try {
     const data = localStorage.getItem(STORAGE_KEY);
     if (data) return JSON.parse(data);
-  } catch {}
+  } catch (error) {
+    void error;
+  }
   return [
     { id: '1', title: 'Welcome to Notes', content: 'Welcome to Notes\n\nThis is your first note. Start typing to edit it.\n\nYou can create new notes, search through them, and organize your thoughts.', folder: 'notes', updated: Date.now() },
     { id: '2', title: 'Shopping List', content: 'Shopping List\n\n- Milk\n- Eggs\n- Bread\n- Coffee\n- Avocados', folder: 'notes', updated: Date.now() - 3600000 },
@@ -93,7 +95,7 @@ export default function Notes() {
     <div className="flex h-full">
       {/* Column 1: Folders */}
       <div
-        className="w-[180px] shrink-0 flex flex-col pt-2 pb-1 overflow-y-auto"
+        className="w-[188px] shrink-0 flex flex-col pt-2 pb-1 overflow-y-auto"
         style={{ background: 'rgba(42,42,44,0.95)', borderRight: '0.5px solid rgba(255,255,255,0.08)' }}
       >
         <MacSidebarSection title="iCloud">
@@ -113,35 +115,46 @@ export default function Notes() {
 
       {/* Column 2: Note List */}
       <div
-        className="w-[250px] shrink-0 flex flex-col"
+        className="w-[270px] shrink-0 flex flex-col"
         style={{ background: 'rgba(36,36,38,0.95)', borderRight: '0.5px solid rgba(255,255,255,0.06)' }}
       >
         {/* Search */}
-        <div className="px-2.5 pt-2.5 pb-1.5">
+        <div className="px-3 pt-2.5 pb-1.5">
           <MacSearchField value={search} onChange={setSearch} placeholder="Search" />
         </div>
 
         {/* Note list */}
-        <div className="flex-1 overflow-y-auto px-1.5">
+        <div className="flex-1 overflow-y-auto px-2">
           {filteredNotes.map(note => (
             <button
               key={note.id}
-              className="w-full text-left px-2.5 py-2 rounded-[6px] mb-[1px] cursor-default transition-colors duration-75"
+              className="w-full text-left px-3 py-2.5 rounded-[7px] mb-[4px] cursor-default transition-colors duration-75"
               style={{
-                background: activeId === note.id ? '#0a84ff' : 'transparent',
+                background: activeId === note.id ? 'rgba(10,132,255,0.95)' : 'transparent',
+                boxShadow: activeId === note.id ? 'inset 0 0 0 1px rgba(255,255,255,0.08)' : 'none',
               }}
-              onMouseEnter={e => { if (activeId !== note.id) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
-              onMouseLeave={e => { if (activeId !== note.id) e.currentTarget.style.background = 'transparent'; }}
+              onMouseEnter={e => {
+                if (activeId !== note.id) {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+                  e.currentTarget.style.boxShadow = 'inset 0 0 0 1px rgba(255,255,255,0.04)';
+                }
+              }}
+              onMouseLeave={e => {
+                if (activeId !== note.id) {
+                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.boxShadow = 'none';
+                }
+              }}
               onClick={() => setActiveId(note.id)}
             >
-              <div className="text-[13px] font-semibold truncate" style={{ color: activeId === note.id ? '#fff' : 'rgba(255,255,255,0.9)' }}>
+              <div className="text-[13px] font-semibold truncate leading-[1.25]" style={{ color: activeId === note.id ? '#fff' : 'rgba(255,255,255,0.92)' }}>
                 {note.title}
               </div>
-              <div className="flex items-center gap-1.5 mt-[2px]">
-                <span className="text-[11px] shrink-0" style={{ color: activeId === note.id ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.4)' }}>
+              <div className="flex items-center gap-1.5 mt-[3px]">
+                <span className="text-[10px] uppercase tracking-[0.04em] shrink-0" style={{ color: activeId === note.id ? 'rgba(255,255,255,0.66)' : 'rgba(255,255,255,0.34)' }}>
                   {formatDate(note.updated)}
                 </span>
-                <span className="text-[11px] truncate" style={{ color: activeId === note.id ? 'rgba(255,255,255,0.55)' : 'rgba(255,255,255,0.3)' }}>
+                <span className="text-[11px] truncate" style={{ color: activeId === note.id ? 'rgba(255,255,255,0.58)' : 'rgba(255,255,255,0.28)' }}>
                   {getPreview(note)}
                 </span>
               </div>
@@ -158,8 +171,19 @@ export default function Notes() {
         {activeNote ? (
           <>
             {/* Toolbar */}
-            <div className="h-[36px] flex items-center justify-between px-3 shrink-0" style={{ borderBottom: '0.5px solid rgba(255,255,255,0.06)' }}>
-              <div className="flex items-center gap-0.5">
+            <div className="h-[38px] flex items-center justify-between px-3 shrink-0" style={{ borderBottom: '0.5px solid rgba(255,255,255,0.06)' }}>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={createNote}
+                  className="flex items-center gap-1.5 h-[26px] px-2 rounded-[6px] text-[12px] text-white/85 transition-colors cursor-default"
+                  style={{ background: 'rgba(255,255,255,0.08)' }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; }}
+                  title="New Note"
+                >
+                  <SFSymbol name="plus" size={11} color="currentColor" weight={2} />
+                  <span>New Note</span>
+                </button>
                 <MacToolbarButton icon="checklist" label="Checklist" size={26} />
                 <MacToolbarButton icon="tablecells" label="Table" size={26} />
                 <MacToolbarButton icon="textformat" label="Format" size={26} />
@@ -178,8 +202,14 @@ export default function Notes() {
             </div>
 
             {/* Date */}
-            <div className="px-5 pt-3 pb-1 text-center">
-              <span className="text-[11px] text-white/25">{formatFullDate(activeNote.updated)}</span>
+            <div className="px-5 pt-3 pb-2">
+              <div className="flex items-baseline justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="text-[12px] text-white/55 uppercase tracking-[0.04em]">Note</div>
+                  <div className="text-[18px] font-semibold text-white/92 truncate">{activeNote.title}</div>
+                </div>
+                <span className="text-[11px] text-white/28 shrink-0">{formatFullDate(activeNote.updated)}</span>
+              </div>
             </div>
 
             {/* Editor */}
@@ -203,16 +233,6 @@ export default function Notes() {
           </div>
         )}
       </div>
-
-      {/* New note button (floating) */}
-      <button
-        onClick={createNote}
-        className="absolute bottom-3 right-3 w-[32px] h-[32px] rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-105 active:scale-95 cursor-default"
-        style={{ background: '#0a84ff', zIndex: 5 }}
-        title="New Note"
-      >
-        <SFSymbol name="plus" size={16} color="white" weight={2} />
-      </button>
     </div>
   );
 }

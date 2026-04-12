@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useCallback, useRef } from 'react';
 
 const WindowContext = createContext(null);
@@ -18,35 +19,53 @@ export function WindowProvider({ children }) {
   const [activeWindowId, setActiveWindowId] = useState(null);
   const topZRef = useRef(10);
 
-  const openWindow = useCallback((appId, title, icon) => {
+  const focusWindow = useCallback((id) => {
+    topZRef.current += 1;
+    setWindows(prev => prev.map(w =>
+      w.id === id ? { ...w, zIndex: topZRef.current, minimized: false } : w
+    ));
+    setActiveWindowId(id);
+  }, []);
+
+  const openWindow = useCallback((appId, title, icon, payload = null) => {
     const existing = windows.find(w => w.appId === appId && !w.minimized);
     if (existing) {
       focusWindow(existing.id);
+      if (payload) {
+        setWindows(prev => prev.map(w => w.id === existing.id ? { ...w, payload } : w));
+      }
       return existing.id;
     }
 
     const id = `window-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
     topZRef.current += 1;
 
+    const cascade = windows.length % 8;
+    const defaultWidth = (windowDefaults[appId]?.width) || 800;
+    const defaultHeight = (windowDefaults[appId]?.height) || 520;
+    const x = Math.min(72 + cascade * 34, Math.max(24, window.innerWidth - defaultWidth - 24));
+    const y = Math.min(48 + cascade * 28, Math.max(32, window.innerHeight - defaultHeight - 72));
+
     const newWindow = {
       id,
       appId,
       title,
       icon,
-      x: 120 + Math.random() * 200,
-      y: 60 + Math.random() * 100,
-      width: (windowDefaults[appId]?.width) || 800,
-      height: (windowDefaults[appId]?.height) || 520,
+      x,
+      y,
+      width: defaultWidth,
+      height: defaultHeight,
       zIndex: topZRef.current,
       minimized: false,
       maximized: false,
       prevBounds: null,
+      payload,
     };
 
     setWindows(prev => [...prev, newWindow]);
     setActiveWindowId(id);
     return id;
-  }, [windows]);
+  }, [windows, focusWindow]);
 
   const closeWindow = useCallback((id) => {
     setWindows(prev => prev.filter(w => w.id !== id));
@@ -61,14 +80,6 @@ export function WindowProvider({ children }) {
       return prev;
     });
   }, [windows]);
-
-  const focusWindow = useCallback((id) => {
-    topZRef.current += 1;
-    setWindows(prev => prev.map(w =>
-      w.id === id ? { ...w, zIndex: topZRef.current, minimized: false } : w
-    ));
-    setActiveWindowId(id);
-  }, []);
 
   const minimizeWindow = useCallback((id) => {
     setWindows(prev => prev.map(w =>

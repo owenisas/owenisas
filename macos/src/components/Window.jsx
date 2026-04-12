@@ -14,17 +14,6 @@ export default function Window({ windowData, children, toolbar }) {
 
   const isActive = activeWindowId === windowData.id;
 
-  const onTitleBarDown = useCallback((e) => {
-    if (e.target.closest('.traffic-lights')) return;
-    e.preventDefault();
-    isDragging.current = true;
-    const rect = windowRef.current.getBoundingClientRect();
-    dragOffset.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-    focusWindow(windowData.id);
-    document.addEventListener('pointermove', onDragMove);
-    document.addEventListener('pointerup', onDragUp);
-  }, [windowData.id, focusWindow]);
-
   const onDragMove = useCallback((e) => {
     if (!isDragging.current) return;
     const x = Math.max(0, Math.min(window.innerWidth - 100, e.clientX - dragOffset.current.x));
@@ -35,20 +24,18 @@ export default function Window({ windowData, children, toolbar }) {
   const onDragUp = useCallback(() => {
     isDragging.current = false;
     document.removeEventListener('pointermove', onDragMove);
-    document.removeEventListener('pointerup', onDragUp);
   }, [onDragMove]);
 
-  const onResizeDown = useCallback((e, dir) => {
+  const onTitleBarDown = useCallback((e) => {
+    if (e.target.closest('.traffic-lights')) return;
     e.preventDefault();
-    e.stopPropagation();
-    isResizing.current = true;
-    resizeDir.current = dir;
-    startMouse.current = { x: e.clientX, y: e.clientY };
-    startBounds.current = { x: windowData.x, y: windowData.y, width: windowData.width, height: windowData.height };
+    isDragging.current = true;
+    const rect = windowRef.current.getBoundingClientRect();
+    dragOffset.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
     focusWindow(windowData.id);
-    document.addEventListener('pointermove', onResizeMove);
-    document.addEventListener('pointerup', onResizeUp);
-  }, [windowData, focusWindow]);
+    document.addEventListener('pointermove', onDragMove);
+    document.addEventListener('pointerup', onDragUp, { once: true });
+  }, [windowData.id, focusWindow, onDragMove, onDragUp]);
 
   const onResizeMove = useCallback((e) => {
     if (!isResizing.current) return;
@@ -71,8 +58,19 @@ export default function Window({ windowData, children, toolbar }) {
   const onResizeUp = useCallback(() => {
     isResizing.current = false;
     document.removeEventListener('pointermove', onResizeMove);
-    document.removeEventListener('pointerup', onResizeUp);
   }, [onResizeMove]);
+
+  const onResizeDown = useCallback((e, dir) => {
+    e.preventDefault();
+    e.stopPropagation();
+    isResizing.current = true;
+    resizeDir.current = dir;
+    startMouse.current = { x: e.clientX, y: e.clientY };
+    startBounds.current = { x: windowData.x, y: windowData.y, width: windowData.width, height: windowData.height };
+    focusWindow(windowData.id);
+    document.addEventListener('pointermove', onResizeMove);
+    document.addEventListener('pointerup', onResizeUp, { once: true });
+  }, [windowData, focusWindow, onResizeMove, onResizeUp]);
 
   useEffect(() => {
     return () => {
@@ -81,7 +79,7 @@ export default function Window({ windowData, children, toolbar }) {
       document.removeEventListener('pointermove', onResizeMove);
       document.removeEventListener('pointerup', onResizeUp);
     };
-  }, []);
+  }, [onDragMove, onDragUp, onResizeMove, onResizeUp]);
 
   if (windowData.minimized) return null;
 
@@ -91,7 +89,7 @@ export default function Window({ windowData, children, toolbar }) {
   return (
     <div
       ref={windowRef}
-      className="absolute flex flex-col overflow-hidden"
+      className="absolute flex flex-col overflow-hidden mac-window"
       style={{
         left: windowData.x,
         top: windowData.y,
@@ -99,19 +97,21 @@ export default function Window({ windowData, children, toolbar }) {
         height: windowData.height,
         zIndex: windowData.zIndex,
         borderRadius: windowData.maximized ? 0 : 10,
-        boxShadow: isActive ? '0 0 0 0.5px rgba(255,255,255,0.2), 0 20px 60px rgba(0,0,0,0.5)' : '0 0 0 0.5px rgba(255,255,255,0.1), 0 10px 30px rgba(0,0,0,0.3)',
+        boxShadow: isActive ? 'var(--mac-shadow-window)' : 'var(--mac-shadow-window-inactive)',
         transition: windowData.maximized !== undefined ? 'none' : undefined,
+        background: 'rgba(18,19,23,0.48)',
+        border: '0.5px solid rgba(255,255,255,0.15)',
       }}
       onPointerDown={() => focusWindow(windowData.id)}
     >
       {/* Title Bar */}
       <div
-        className="flex items-center h-[38px] shrink-0 px-[14px] gap-[8px] select-none"
+        className="flex items-center h-[36px] shrink-0 px-[14px] gap-[8px] select-none"
         style={{
-          background: isActive ? 'rgba(50,50,50,0.6)' : 'rgba(40,40,40,0.4)',
-          borderBottom: '0.5px solid rgba(0,0,0,0.2)',
-          backdropFilter: 'blur(50px) saturate(200%)',
-          WebkitBackdropFilter: 'blur(50px) saturate(200%)',
+          background: isActive ? 'rgba(245,248,255,0.12)' : 'rgba(245,248,255,0.07)',
+          borderBottom: '0.5px solid rgba(255,255,255,0.09)',
+          backdropFilter: 'blur(56px) saturate(190%)',
+          WebkitBackdropFilter: 'blur(56px) saturate(190%)',
           cursor: 'default',
         }}
         onPointerDown={onTitleBarDown}
@@ -123,8 +123,9 @@ export default function Window({ windowData, children, toolbar }) {
           onMouseLeave={() => setTrafficHover(false)}
         >
           <button
+            aria-label="Close Window"
             className="w-[12px] h-[12px] rounded-full flex items-center justify-center border-[0.5px] border-black/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]"
-            style={{ background: isActive ? '#ff5f57' : '#4d4d4d' }}
+            style={{ background: isActive ? '#ff5f57' : 'rgba(255,255,255,0.24)', opacity: isActive || trafficHover ? 1 : 0.55 }}
             onClick={() => closeWindow(windowData.id)}
           >
             {trafficHover && (
@@ -134,8 +135,9 @@ export default function Window({ windowData, children, toolbar }) {
             )}
           </button>
           <button
+            aria-label="Minimize Window"
             className="w-[12px] h-[12px] rounded-full flex items-center justify-center border-[0.5px] border-black/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]"
-            style={{ background: isActive ? '#febc2e' : '#4d4d4d' }}
+            style={{ background: isActive ? '#febc2e' : 'rgba(255,255,255,0.24)', opacity: isActive || trafficHover ? 1 : 0.55 }}
             onClick={() => minimizeWindow(windowData.id)}
           >
             {trafficHover && (
@@ -145,8 +147,9 @@ export default function Window({ windowData, children, toolbar }) {
             )}
           </button>
           <button
+            aria-label="Maximize Window"
             className="w-[12px] h-[12px] rounded-full flex items-center justify-center border-[0.5px] border-black/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]"
-            style={{ background: isActive ? '#28c840' : '#4d4d4d' }}
+            style={{ background: isActive ? '#28c840' : 'rgba(255,255,255,0.24)', opacity: isActive || trafficHover ? 1 : 0.55 }}
             onClick={() => maximizeWindow(windowData.id)}
           >
             {trafficHover && (
@@ -156,7 +159,7 @@ export default function Window({ windowData, children, toolbar }) {
             )}
           </button>
         </div>
-        <span className="flex-1 text-center text-[13px] text-white/80 font-semibold tracking-wide truncate pointer-events-none" style={{ textShadow: '0 1px 1px rgba(0,0,0,0.2)' }}>
+        <span className="flex-1 text-center text-[13px] text-white/80 font-medium truncate pointer-events-none" style={{ textShadow: '0 1px 1px rgba(0,0,0,0.22)' }}>
           {windowData.title}
         </span>
         <div className="w-[54px]" />
@@ -167,18 +170,25 @@ export default function Window({ windowData, children, toolbar }) {
         <div
           className="shrink-0"
           style={{
-            background: 'rgba(50,50,50,0.4)',
-            borderBottom: '0.5px solid rgba(255,255,255,0.06)',
-            backdropFilter: 'blur(50px) saturate(200%)',
-            WebkitBackdropFilter: 'blur(50px) saturate(200%)',
+            background: 'rgba(245,248,255,0.08)',
+            borderBottom: '0.5px solid rgba(255,255,255,0.08)',
+            backdropFilter: 'blur(56px) saturate(190%)',
+            WebkitBackdropFilter: 'blur(56px) saturate(190%)',
           }}
         >
           {toolbar}
         </div>
       )}
 
-      {/* Content */}
-      <div className={`flex-1 overflow-hidden ${!toolbar ? 'rounded-b-[10px]' : ''}`} style={{ background: 'rgba(30,30,30,0.85)', backdropFilter: 'blur(80px) saturate(200%)', WebkitBackdropFilter: 'blur(80px) saturate(200%)', borderRadius: windowData.maximized ? 0 : undefined }}>
+      <div
+        className={`flex-1 overflow-hidden ${!toolbar && !windowData.maximized ? 'rounded-b-[10px]' : ''}`}
+        style={{
+          background: 'rgba(28,29,34,0.82)',
+          backdropFilter: 'blur(78px) saturate(190%)',
+          WebkitBackdropFilter: 'blur(78px) saturate(190%)',
+          borderRadius: windowData.maximized ? 0 : undefined,
+        }}
+      >
         {children}
       </div>
 
@@ -189,14 +199,14 @@ export default function Window({ windowData, children, toolbar }) {
           className="absolute"
           style={{
             cursor: cursorMap[dir],
-            ...(dir === 'n' && { top: 0, left: 6, right: 6, height: 4 }),
-            ...(dir === 's' && { bottom: 0, left: 6, right: 6, height: 4 }),
-            ...(dir === 'e' && { right: 0, top: 6, bottom: 6, width: 4 }),
-            ...(dir === 'w' && { left: 0, top: 6, bottom: 6, width: 4 }),
-            ...(dir === 'ne' && { top: 0, right: 0, width: 8, height: 8 }),
-            ...(dir === 'nw' && { top: 0, left: 0, width: 8, height: 8 }),
-            ...(dir === 'se' && { bottom: 0, right: 0, width: 8, height: 8 }),
-            ...(dir === 'sw' && { bottom: 0, left: 0, width: 8, height: 8 }),
+            ...(dir === 'n' && { top: -4, left: 6, right: 6, height: 10 }),
+            ...(dir === 's' && { bottom: -4, left: 6, right: 6, height: 10 }),
+            ...(dir === 'e' && { right: -4, top: 6, bottom: 6, width: 10 }),
+            ...(dir === 'w' && { left: -4, top: 6, bottom: 6, width: 10 }),
+            ...(dir === 'ne' && { top: -6, right: -6, width: 16, height: 16 }),
+            ...(dir === 'nw' && { top: -6, left: -6, width: 16, height: 16 }),
+            ...(dir === 'se' && { bottom: -6, right: -6, width: 16, height: 16 }),
+            ...(dir === 'sw' && { bottom: -6, left: -6, width: 16, height: 16 }),
           }}
           onPointerDown={(e) => onResizeDown(e, dir)}
         />

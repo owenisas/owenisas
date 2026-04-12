@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 // SF Symbol-style icon system — SVG path approximations of common macOS icons
 // Usage: <SFSymbol name="folder.fill" size={16} color="currentColor" />
 

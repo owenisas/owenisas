@@ -1,6 +1,21 @@
 // Shared macOS UI primitives — pixel-perfect Sequoia components
 import SFSymbol from '../icons/SFSymbol';
 
+const toneStyles = {
+  glass: {
+    background: 'var(--mac-glass-clear)',
+    border: '0.5px solid rgba(255,255,255,0.13)',
+  },
+  quiet: {
+    background: 'transparent',
+    border: '0.5px solid transparent',
+  },
+  solid: {
+    background: 'rgba(255,255,255,0.12)',
+    border: '0.5px solid rgba(255,255,255,0.14)',
+  },
+};
+
 // --- Toggle Switch (green when on, like real macOS) ---
 export function MacToggle({ checked, onChange, size = 'default' }) {
   const w = size === 'small' ? 32 : 38;
@@ -68,12 +83,12 @@ export function MacSlider({ value, onChange, min = 0, max = 100, accentColor = '
 }
 
 // --- Segmented Control ---
-export function MacSegmentedControl({ options, value, onChange, size = 'default' }) {
-  const h = size === 'small' ? 22 : 26;
+export function MacSegmentedControl({ options, value, onChange, size = 'default', tone = 'glass' }) {
+  const h = size === 'small' ? 22 : size === 'large' ? 30 : 26;
   return (
     <div
-      className="inline-flex items-center rounded-[6px] p-[2px]"
-      style={{ background: 'rgba(255,255,255,0.08)', height: h }}
+      className="inline-flex items-center rounded-[8px] p-[2px]"
+      style={{ ...toneStyles[tone], height: h, boxShadow: 'inset 0 0.5px 0 rgba(255,255,255,0.08)' }}
     >
       {options.map(opt => {
         const isActive = opt.value === value;
@@ -82,7 +97,7 @@ export function MacSegmentedControl({ options, value, onChange, size = 'default'
             key={opt.value}
             className="relative flex items-center justify-center px-2.5 h-full rounded-[5px] text-[11px] font-medium transition-all duration-150 cursor-default"
             style={{
-              background: isActive ? 'rgba(255,255,255,0.18)' : 'transparent',
+              background: isActive ? 'rgba(255,255,255,0.22)' : 'transparent',
               color: isActive ? '#fff' : 'rgba(255,255,255,0.55)',
               boxShadow: isActive ? '0 0.5px 2px rgba(0,0,0,0.2)' : 'none',
               minWidth: 28,
@@ -99,9 +114,13 @@ export function MacSegmentedControl({ options, value, onChange, size = 'default'
 }
 
 // --- Search Field ---
-export function MacSearchField({ value, onChange, placeholder = 'Search', className = '' }) {
+export function MacSearchField({ value, onChange, placeholder = 'Search', className = '', density = 'default', tone = 'glass' }) {
+  const height = density === 'compact' ? 22 : density === 'spacious' ? 30 : 26;
   return (
-    <div className={`flex items-center gap-1.5 rounded-md px-2 h-[22px] ${className}`} style={{ background: 'rgba(255,255,255,0.08)', border: '0.5px solid rgba(255,255,255,0.1)' }}>
+    <div
+      className={`flex items-center gap-1.5 rounded-[8px] px-2 ${className}`}
+      style={{ ...toneStyles[tone], height, boxShadow: 'inset 0 0.5px 0 rgba(255,255,255,0.08)' }}
+    >
       <SFSymbol name="magnifyingglass" size={11} color="rgba(255,255,255,0.4)" />
       <input
         type="text"
@@ -111,7 +130,7 @@ export function MacSearchField({ value, onChange, placeholder = 'Search', classN
         className="bg-transparent text-[12px] text-white/90 placeholder:text-white/30 outline-none w-full"
       />
       {value && (
-        <button onClick={() => onChange?.('')} className="opacity-40 hover:opacity-70">
+        <button onClick={() => onChange?.('')} className="opacity-45 hover:opacity-80 transition-opacity">
           <SFSymbol name="xmark.circle" size={11} />
         </button>
       )}
@@ -141,18 +160,22 @@ export function MacDropdown({ value, options, onChange, width }) {
 }
 
 // --- Toolbar Button ---
-export function MacToolbarButton({ icon, onClick, active, label, size = 28 }) {
+export function MacToolbarButton({ icon, onClick, active, label, size = 28, variant = 'quiet', tone = 'glass' }) {
+  const base = variant === 'pill'
+    ? { ...toneStyles[tone], borderRadius: 8 }
+    : { background: active ? 'rgba(255,255,255,0.16)' : 'transparent', border: '0.5px solid transparent', borderRadius: 6 };
   return (
     <button
       onClick={onClick}
-      className="flex items-center justify-center rounded-[5px] transition-colors duration-100 cursor-default"
+      className="flex items-center justify-center transition-colors duration-100 cursor-default mac-control"
       style={{
         width: size, height: size,
-        background: active ? 'rgba(255,255,255,0.15)' : 'transparent',
+        ...base,
         color: active ? '#fff' : 'rgba(255,255,255,0.7)',
+        boxShadow: active ? 'inset 0 0.5px 0 rgba(255,255,255,0.12)' : 'none',
       }}
-      onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; }}
-      onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent'; }}
+      onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
+      onMouseLeave={e => { if (!active) e.currentTarget.style.background = variant === 'pill' ? toneStyles[tone].background : 'transparent'; }}
       title={label}
     >
       {typeof icon === 'string' ? <SFSymbol name={icon} size={14} /> : icon}
@@ -161,15 +184,19 @@ export function MacToolbarButton({ icon, onClick, active, label, size = 28 }) {
 }
 
 // --- Sidebar Item ---
-export function MacSidebarItem({ icon, iconColor, label, selected, onClick, badge }) {
+export function MacSidebarItem({ icon, iconColor, label, selected, onClick, badge, density = 'default', tone = 'sidebar' }) {
+  const padY = density === 'compact' ? 2 : density === 'spacious' ? 5 : 3;
   return (
     <button
-      className="flex items-center w-full gap-2 px-2.5 py-[3px] rounded-[5px] text-[13px] cursor-default transition-colors duration-75"
+      className="flex items-center w-full gap-2 px-2.5 rounded-[6px] text-[13px] cursor-default transition-colors duration-75"
       style={{
-        background: selected ? 'rgba(255,255,255,0.12)' : 'transparent',
+        paddingTop: padY + 1.5,
+        paddingBottom: padY + 1.5,
+        background: selected ? (tone === 'source' ? 'rgba(10,132,255,0.82)' : 'rgba(255,255,255,0.14)') : 'transparent',
         color: selected ? '#fff' : 'rgba(255,255,255,0.85)',
+        boxShadow: selected ? 'inset 0 0.5px 0 rgba(255,255,255,0.12)' : 'none',
       }}
-      onMouseEnter={e => { if (!selected) e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; }}
+      onMouseEnter={e => { if (!selected) e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; }}
       onMouseLeave={e => { if (!selected) e.currentTarget.style.background = 'transparent'; }}
       onClick={onClick}
     >
@@ -183,30 +210,39 @@ export function MacSidebarItem({ icon, iconColor, label, selected, onClick, badg
 }
 
 // --- Settings Row ---
-export function MacSettingsRow({ label, description, children, noBorder }) {
+export function MacSettingsRow({ label, description, children, noBorder, density = 'default' }) {
+  const minHeight = density === 'spacious' ? 46 : 42;
   return (
-    <div
-      className="flex items-center justify-between min-h-[38px]"
-      style={{
-        padding: '6px 16px',
-        borderBottom: noBorder ? 'none' : '0.5px solid rgba(255,255,255,0.1)',
-      }}
-    >
-      <div className="flex-1 min-w-0" style={{ marginRight: 16 }}>
-        <div className="text-[13px] text-white/90">{label}</div>
-        {description && <div className="text-[11px] text-white/40 mt-0.5 leading-snug">{description}</div>}
+    <div className="relative">
+      <div
+        className="flex items-center justify-between"
+        style={{
+          minHeight,
+          padding: density === 'spacious' ? '10px 16px' : '8px 16px',
+        }}
+      >
+        <div className="flex-1 min-w-0" style={{ marginRight: 16 }}>
+          <div className="text-[14px] text-black tracking-[-0.01em]">{label}</div>
+          {description && <div className="text-[12px] text-[#86868b] mt-0.5 leading-snug">{description}</div>}
+        </div>
+        <div className="shrink-0 flex items-center gap-2">{children}</div>
       </div>
-      <div className="shrink-0 flex items-center gap-2">{children}</div>
+      {!noBorder && <div className="absolute bottom-0 right-0 h-[0.5px] bg-black/10" style={{ left: 44 }} />}
     </div>
   );
 }
 
 // --- Settings Group Card ---
-export function MacSettingsGroup({ title, children }) {
+export function MacSettingsGroup({ title, children, tone = 'default' }) {
   return (
-    <div style={{ marginBottom: 16 }}>
-      {title && <div className="text-[11px] text-white/40 uppercase tracking-wider" style={{ padding: '0 4px', marginBottom: 6 }}>{title}</div>}
-      <div className="rounded-[10px] overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)', boxShadow: 'inset 0 0 0 0.5px rgba(255,255,255,0.1)' }}>
+    <div style={{ marginBottom: 20 }}>
+      {title && <div className="text-[12px] text-[#86868b] ml-1 mb-1.5">{title}</div>}
+      <div
+        className="rounded-[10px] overflow-hidden bg-white"
+        style={{
+          boxShadow: '0 1px 2px rgba(0,0,0,0.05), inset 0 0 0 0.5px rgba(0,0,0,0.1)',
+        }}
+      >
         {children}
       </div>
     </div>
@@ -228,9 +264,9 @@ export function MacSettingsIcon({ icon, color }) {
 // --- Section Header (for sidebar sections) ---
 export function MacSidebarSection({ title, children }) {
   return (
-    <div className="mb-1">
-      {title && <div className="text-[11px] text-white/40 uppercase tracking-wider px-3 py-1">{title}</div>}
-      <div className="flex flex-col gap-[1px]">{children}</div>
+    <div className="mb-4 mt-1">
+      {title && <div className="text-[11px] font-semibold text-white/40 uppercase tracking-wider px-3 pb-1.5">{title}</div>}
+      <div className="flex flex-col gap-[2px]">{children}</div>
     </div>
   );
 }

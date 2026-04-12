@@ -5,6 +5,7 @@ export default function Calculator() {
   const [operand, setOperand] = useState(null);
   const [operator, setOperator] = useState(null);
   const [waitingForOperand, setWaitingForOperand] = useState(false);
+  const [mode, setMode] = useState('basic');
 
   const inputDigit = useCallback((digit) => {
     if (waitingForOperand) {
@@ -106,16 +107,47 @@ export default function Calculator() {
 
   return (
     <div className="flex flex-col h-full select-none" style={{ background: '#232323' }}>
+      {/* Mode strip */}
+      <div className="flex items-center justify-between px-3 py-2 shrink-0" style={{ background: 'rgba(255,255,255,0.02)', borderBottom: '0.5px solid rgba(255,255,255,0.04)' }}>
+        <div className="flex items-center gap-1 rounded-[6px] p-[2px]" style={{ background: 'rgba(255,255,255,0.06)' }}>
+          {[
+            { id: 'basic', label: 'Basic' },
+            { id: 'scientific', label: 'Scientific' },
+            { id: 'programmer', label: 'Programmer' },
+          ].map(item => (
+            <button
+              key={item.id}
+              onClick={() => setMode(item.id)}
+              className="px-2.5 h-[22px] rounded-[4px] text-[11px] transition-colors cursor-default"
+              style={{
+                background: mode === item.id ? 'rgba(255,255,255,0.16)' : 'transparent',
+                color: mode === item.id ? '#fff' : 'rgba(255,255,255,0.62)',
+                boxShadow: mode === item.id ? 'inset 0 0 0 1px rgba(255,255,255,0.06)' : 'none',
+              }}
+              onMouseEnter={e => {
+                if (mode !== item.id) e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
+              }}
+              onMouseLeave={e => {
+                if (mode !== item.id) e.currentTarget.style.background = 'transparent';
+              }}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+        <div className="text-[10px] uppercase tracking-[0.08em] text-white/35">Mode</div>
+      </div>
+
       {/* Display */}
-      <div className="flex-1 flex items-end justify-end px-5 pb-2 min-h-[80px]" style={{ background: 'linear-gradient(to bottom, #232323, #1e1e1e)' }}>
+      <div className="flex-1 flex items-end justify-end px-5 pb-3 min-h-[96px]" style={{ background: 'linear-gradient(to bottom, #232323, #1d1d1d)' }}>
         <span
-          className="text-white tracking-tight truncate"
+          className="text-white tracking-tight truncate text-right w-full"
           style={{
             fontSize,
             fontWeight: 200,
             fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif',
             lineHeight: 1,
-            letterSpacing: '-0.02em',
+            letterSpacing: 0,
           }}
         >
           {formatDisplay(display)}
@@ -158,6 +190,7 @@ export default function Calculator() {
 }
 
 function CalcBtn({ label, onClick, type = 'number', wide = false, active = false }) {
+  const [pressed, setPressed] = useState(false);
   const colors = {
     number:   { bg: '#505050', hover: '#616161', text: '#fff', fontSize: 22, fontWeight: 300 },
     function: { bg: '#a5a5a5', hover: '#b8b8b8', text: '#000', fontSize: 17, fontWeight: 400 },
@@ -180,11 +213,15 @@ function CalcBtn({ label, onClick, type = 'number', wide = false, active = false
         fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif',
         height: 50,
         borderRadius: 0,
+        boxShadow: pressed ? 'inset 0 2px 6px rgba(0,0,0,0.28)' : 'inset 0 -1px 0 rgba(255,255,255,0.08)',
+        transform: pressed ? 'translateY(1px)' : 'translateY(0)',
       }}
       onMouseEnter={e => e.currentTarget.style.background = hoverBg}
       onMouseLeave={e => e.currentTarget.style.background = bg}
-      onMouseDown={e => e.currentTarget.style.opacity = '0.8'}
-      onMouseUp={e => e.currentTarget.style.opacity = '1'}
+      onPointerDown={() => setPressed(true)}
+      onPointerUp={() => setPressed(false)}
+      onPointerCancel={() => setPressed(false)}
+      onPointerLeave={() => setPressed(false)}
       onClick={onClick}
     >
       {label}

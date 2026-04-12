@@ -4,7 +4,7 @@ import { useWindows } from '../contexts/WindowContext';
 
 const dockApps = [
   { id: 'finder', title: 'Finder' },
-  { id: 'launchpad', title: 'Launchpad' },
+  { id: 'launchpad', title: 'Apps' },
   { id: 'safari', title: 'Safari' },
   { id: 'notes', title: 'Notes' },
   { id: 'terminal', title: 'Terminal' },
@@ -28,7 +28,8 @@ export default function Dock({ onAppLaunch, dockStyle }) {
       const rect = icon.getBoundingClientRect();
       const iconCenterX = rect.left + rect.width / 2;
       const distance = Math.abs(e.clientX - iconCenterX);
-      return 1 + 0.7 * Math.max(0, 1 - (distance / 150) ** 2);
+      const falloff = Math.max(0, 1 - distance / 170);
+      return 1 + 0.56 * Math.sin((falloff * Math.PI) / 2);
     });
     setScales(newScales);
   }, []);
@@ -45,20 +46,25 @@ export default function Dock({ onAppLaunch, dockStyle }) {
       return;
     }
 
-    setBouncingApp(appId);
-    setTimeout(() => setBouncingApp(null), 1600);
+    if (!isAppOpen(appId)) {
+      setBouncingApp(appId);
+      setTimeout(() => setBouncingApp(null), 1600);
+    }
+    
     onAppLaunch(appId, title);
-  }, [onAppLaunch, restoreWindow, windows]);
+  }, [onAppLaunch, restoreWindow, windows, isAppOpen]);
 
   return (
     <div className="fixed bottom-2 left-1/2 -translate-x-1/2 z-[100]" style={dockStyle}>
       <div
         ref={dockRef}
-        className="flex items-end gap-[6px] px-3 py-[6px] rounded-[24px] border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)]"
+        className="flex items-end gap-[6px] px-3 py-[7px] rounded-[24px]"
         style={{
-          background: 'rgba(255, 255, 255, 0.1)',
-          backdropFilter: 'blur(50px) saturate(200%)',
-          WebkitBackdropFilter: 'blur(50px) saturate(200%)',
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1))',
+          border: '0.5px solid rgba(255,255,255,0.18)',
+          boxShadow: '0 16px 44px rgba(0,0,0,0.42), inset 0 1px 1px rgba(255,255,255,0.22)',
+          backdropFilter: 'blur(54px) saturate(190%)',
+          WebkitBackdropFilter: 'blur(54px) saturate(190%)',
         }}
         onMouseMove={onMouseMove}
         onMouseLeave={onMouseLeave}
@@ -66,19 +72,20 @@ export default function Dock({ onAppLaunch, dockStyle }) {
         {dockApps.map((app, i) => (
           <div key={app.id} className="relative flex flex-col items-center">
             {tooltip === app.id && (
-              <div className="absolute -top-11 px-3 py-[6px] rounded-md text-[13px] text-white/90 font-medium whitespace-nowrap shadow-lg border border-black/10"
-                style={{ background: 'rgba(30,30,30,0.6)', backdropFilter: 'blur(40px) saturate(200%)', WebkitBackdropFilter: 'blur(40px) saturate(200%)' }}>
+              <div className="absolute -top-12 px-3 py-[6px] rounded-[8px] text-[13px] text-white/90 font-medium whitespace-nowrap"
+                style={{ background: 'rgba(28,29,34,0.72)', backdropFilter: 'blur(48px) saturate(190%)', WebkitBackdropFilter: 'blur(48px) saturate(190%)', boxShadow: 'var(--mac-shadow-popover)' }}>
                 {app.title}
-                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 transform" style={{ background: 'rgba(30,30,30,0.6)', backdropFilter: 'blur(40px)' }} />
+                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 transform" style={{ background: 'rgba(28,29,34,0.72)' }} />
               </div>
             )}
             <div
-              className="dock-icon w-[50px] h-[50px] cursor-pointer transition-transform duration-100 ease-out"
+              className="dock-icon w-[50px] h-[50px] cursor-pointer transition-transform duration-150 ease-out"
               style={{
                 transform: `scale(${scales[i]})${bouncingApp === app.id ? '' : ''}`,
                 transformOrigin: 'bottom center',
                 animation: bouncingApp === app.id ? 'dock-bounce 0.8s ease 2' : 'none',
-                marginBottom: (scales[i] - 1) * 25,
+                marginBottom: (scales[i] - 1) * 22,
+                filter: 'drop-shadow(0 8px 10px rgba(0,0,0,0.24))',
               }}
               onClick={() => handleClick(app.id, app.title)}
               onMouseEnter={() => setTooltip(app.id)}
@@ -87,24 +94,24 @@ export default function Dock({ onAppLaunch, dockStyle }) {
               {appIcons[app.id]}
             </div>
             {isAppOpen(app.id) && (
-              <div className="w-[4px] h-[4px] rounded-full bg-white/80 mt-1 absolute -bottom-1 shadow-sm" />
+              <div className="w-[4px] h-[4px] rounded-full bg-white/85 mt-1 absolute -bottom-[3px] shadow-sm" />
             )}
           </div>
         ))}
 
         {/* Separator before Trash */}
-        <div className="w-px h-11 bg-white/20 mx-1 self-center shadow-[1px_0_0_rgba(0,0,0,0.1)] rounded-full" />
+        <div className="w-px h-11 bg-white/24 mx-1 self-center shadow-[1px_0_0_rgba(0,0,0,0.12)] rounded-full" />
         <div className="relative flex flex-col items-center">
           {tooltip === 'trash' && (
-            <div className="absolute -top-11 px-3 py-[6px] rounded-md text-[13px] text-white/90 font-medium whitespace-nowrap shadow-lg border border-black/10"
-              style={{ background: 'rgba(30,30,30,0.6)', backdropFilter: 'blur(40px) saturate(200%)', WebkitBackdropFilter: 'blur(40px) saturate(200%)' }}>
+            <div className="absolute -top-12 px-3 py-[6px] rounded-[8px] text-[13px] text-white/90 font-medium whitespace-nowrap"
+              style={{ background: 'rgba(28,29,34,0.72)', backdropFilter: 'blur(48px) saturate(190%)', WebkitBackdropFilter: 'blur(48px) saturate(190%)', boxShadow: 'var(--mac-shadow-popover)' }}>
               Trash
-              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 transform" style={{ background: 'rgba(30,30,30,0.6)', backdropFilter: 'blur(40px)' }} />
+              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 transform" style={{ background: 'rgba(28,29,34,0.72)' }} />
             </div>
           )}
           <div
-            className="dock-icon w-[50px] h-[50px] cursor-pointer transition-transform duration-100 ease-out"
-            style={{ transform: `scale(${scales[dockApps.length] || 1})`, transformOrigin: 'bottom center' }}
+            className="dock-icon w-[50px] h-[50px] cursor-pointer transition-transform duration-150 ease-out"
+            style={{ transform: `scale(${scales[dockApps.length] || 1})`, transformOrigin: 'bottom center', filter: 'drop-shadow(0 8px 10px rgba(0,0,0,0.24))' }}
             onMouseEnter={() => setTooltip('trash')}
             onMouseLeave={() => setTooltip(null)}
           >

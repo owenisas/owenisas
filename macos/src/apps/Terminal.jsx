@@ -55,31 +55,49 @@ drwxr-xr-x   4 thomas  staff   128 Mar 15 10:00 Public`;
 
 function parseAnsi(text) {
   const parts = [];
-  const regex = /\x1b\[(\d+)m/g;
-  let lastIndex = 0;
   let currentColor = null;
-  let match;
-  while ((match = regex.exec(text)) !== null) {
-    if (match.index > lastIndex) {
-      parts.push({ text: text.slice(lastIndex, match.index), color: currentColor });
+  let index = 0;
+  while (index < text.length) {
+    const escIndex = text.indexOf('\u001b[', index);
+    if (escIndex === -1) {
+      parts.push({ text: text.slice(index), color: currentColor });
+      break;
     }
-    const code = match[1];
+    if (escIndex > index) {
+      parts.push({ text: text.slice(index, escIndex), color: currentColor });
+    }
+    const codeEnd = text.indexOf('m', escIndex);
+    if (codeEnd === -1) {
+      parts.push({ text: text.slice(escIndex), color: currentColor });
+      break;
+    }
+    const code = text.slice(escIndex + 2, codeEnd);
     if (code === '0') currentColor = null;
     else if (code === '36') currentColor = '#56C8D8';
     else if (code === '32') currentColor = '#28c840';
     else if (code === '31') currentColor = '#ff5f57';
     else if (code === '33') currentColor = '#febc2e';
-    lastIndex = regex.lastIndex;
-  }
-  if (lastIndex < text.length) {
-    parts.push({ text: text.slice(lastIndex), color: currentColor });
+    index = codeEnd + 1;
   }
   return parts;
 }
 
+const LAST_LOGIN_TEXT = `Last login: ${new Date(Date.now() - 3600000).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', year: 'numeric' })} on ttys000`;
+
+const TerminalPrompt = () => (
+  <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+    <span className="inline-flex items-center gap-1">
+      <span className="w-1.5 h-1.5 rounded-full bg-[#28c840]" />
+      <span style={{ color: '#8fe28f' }}>thomas@MacBook-Pro</span>
+    </span>
+    <span style={{ color: '#56C8D8' }}>~</span>
+    <span className="text-white/80">%</span>
+  </span>
+);
+
 export default function Terminal() {
   const [lines, setLines] = useState([
-    { type: 'output', text: `Last login: ${new Date(Date.now() - 3600000).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', year: 'numeric' })} on ttys000` },
+    { type: 'output', text: LAST_LOGIN_TEXT },
   ]);
   const [input, setInput] = useState('');
   const [history, setHistory] = useState([]);
@@ -169,27 +187,23 @@ export default function Terminal() {
     ));
   };
 
-  const Prompt = () => (
-    <>
-      <span style={{ color: '#28c840' }}>thomas@MacBook-Pro</span>
-      <span className="text-white"> </span>
-      <span style={{ color: '#56C8D8' }}>~</span>
-      <span className="text-white"> % </span>
-    </>
-  );
-
   // Tab bar component
   const tabBar = (
-    <div className="flex items-center h-[28px] px-2 gap-1" style={{ background: 'rgba(60,60,60,0.5)' }}>
+    <div className="flex items-center justify-between h-[34px] px-2.5 gap-2" style={{ background: 'rgba(44,44,46,0.78)', borderBottom: '0.5px solid rgba(255,255,255,0.06)' }}>
       <div
-        className="flex items-center gap-1.5 px-3 h-[22px] rounded-[5px] text-[11px] text-white/90"
-        style={{ background: 'rgba(255,255,255,0.1)' }}
+        className="flex items-center gap-1.5 px-3 h-[24px] rounded-[6px] text-[11px] text-white/90"
+        style={{ background: 'rgba(255,255,255,0.08)', boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.04)' }}
       >
         <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5">
           <rect x="2" y="2" width="12" height="12" rx="2" />
           <path d="M2 6h12" />
         </svg>
         <span>zsh</span>
+      </div>
+      <div className="flex items-center gap-1.5 text-[10px] text-white/45 uppercase tracking-[0.08em]">
+        <span className="px-2 py-1 rounded-full bg-white/6 text-white/65">Default</span>
+        <span>UTF-8</span>
+        <span>80x24</span>
       </div>
     </div>
   );
@@ -205,15 +219,15 @@ export default function Terminal() {
           background: 'rgba(0,0,0,0.88)',
           fontFamily: '"SF Mono", "Menlo", "Monaco", "Courier New", monospace',
           fontSize: 13,
-          lineHeight: 1.4,
+          lineHeight: 1.5,
         }}
         onClick={() => inputRef.current?.focus()}
       >
-        <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 pt-2 pb-1">
+        <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 pt-3 pb-2">
           {lines.map((line, i) => (
-            <div key={i} className="whitespace-pre-wrap break-all">
+            <div key={i} className="whitespace-pre-wrap break-all mb-[2px]">
               {line.type === 'prompt' ? (
-                <span><Prompt /><span className="text-white">{line.text}</span></span>
+                <span className="inline-flex items-start gap-1.5"><TerminalPrompt /><span className="text-white">{line.text}</span></span>
               ) : (
                 <span className="text-[#c7c7c7]">{renderText(line.text)}</span>
               )}
@@ -221,15 +235,15 @@ export default function Terminal() {
           ))}
 
           {/* Active input line */}
-          <form onSubmit={handleSubmit} className="flex items-center whitespace-pre">
-            <Prompt />
+          <form onSubmit={handleSubmit} className="flex items-center whitespace-pre pt-1">
+            <TerminalPrompt />
             <input
               ref={inputRef}
               type="text"
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="flex-1 bg-transparent text-white outline-none caret-[#c7c7c7]"
+              className="flex-1 min-w-0 bg-transparent text-white outline-none caret-[#c7c7c7] ml-1"
               style={{ fontFamily: 'inherit', fontSize: 'inherit', lineHeight: 'inherit' }}
               autoFocus
               spellCheck={false}

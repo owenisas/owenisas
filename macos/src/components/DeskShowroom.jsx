@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, forwardRef, useImperativeHandle } from 'react';
+import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
@@ -187,6 +187,9 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
 
     function loadModel(asset, config) {
       const model = config.type === 'fbx' ? asset : asset.scene;
+      if (config.type === 'fbx' && config.animation === 'typingBurst') {
+        model.rotation.x = -Math.PI / 2;
+      }
       model.updateMatrixWorld(true);
       const box = new THREE.Box3().setFromObject(model);
       const center = box.getCenter(new THREE.Vector3());
@@ -311,18 +314,22 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
         }
         case 'typingBurst': {
           model.traverse(child => { if (child.name === 'SM_KeychronK8_misc') child.visible = false; });
-          let xMin = Infinity, xMax = -Infinity, yMin = Infinity, yMax = -Infinity;
+          let xMin = Infinity, xMax = -Infinity, yMin = Infinity, yMax = -Infinity, zMax = -Infinity;
+          let keyboardMesh = null;
           model.traverse(child => {
             if (child.isMesh && child.material) {
+              if (child.name === 'SM_KeychronK8' || !keyboardMesh) keyboardMesh = child;
               const pos = child.geometry.attributes.position;
               if (pos) {
                 for (let i = 0; i < pos.count; i++) {
                   const x = pos.getX(i);
                   const y = pos.getY(i);
+                  const z = pos.getZ(i);
                   if (x < xMin) xMin = x;
                   if (x > xMax) xMax = x;
                   if (y < yMin) yMin = y;
                   if (y > yMax) yMax = y;
+                  if (z > zMax) zMax = z;
                 }
               }
             }
@@ -340,11 +347,20 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
             { count: 9, y: yMin + yInset, offset: 0.22 },
           ];
           const keyCenters = [];
+          const keySpecs = [];
           rowSpecs.forEach(({ count, y, offset }) => {
             const rowStart = xMin + xInset + xRange * offset;
             const rowEnd = xMax - xInset;
             const step = (rowEnd - rowStart) / Math.max(count - 1, 1);
-            for (let i = 0; i < count; i++) keyCenters.push(new THREE.Vector2(rowStart + step * i, y));
+            for (let i = 0; i < count; i++) {
+              const center = new THREE.Vector2(rowStart + step * i, y);
+              keyCenters.push(center);
+              keySpecs.push({
+                center,
+                width: step * 0.72,
+                depth: yRange * 0.085,
+              });
+            }
           });
 
           const typingOrder = [
@@ -362,6 +378,8 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
           state.keyRadius = Math.min(xRange / 28, yRange / 12);
           state.keyPressDepth = 7.5;
           state.burstIndex = 0;
+          state.keyMeshes = [];
+          state.keyRestZ = zMax + 3.5;
 
           model.traverse(child => {
             if (child.isMesh && child.material) {
@@ -387,6 +405,28 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
               }
             }
           });
+
+          if (keyboardMesh) {
+            const keyGroup = new THREE.Group();
+            keyGroup.name = 'KeyPressOverlay';
+            const keyCapMaterial = new THREE.MeshStandardMaterial({
+              color: 0xf2f2f2,
+              roughness: 0.6,
+              metalness: 0.02,
+              emissive: new THREE.Color(0x08142a),
+              emissiveIntensity: 0.08,
+            });
+            keySpecs.forEach(({ center, width, depth }, index) => {
+              const geometry = new THREE.BoxGeometry(width, depth, 4.2);
+              const keyCap = new THREE.Mesh(geometry, keyCapMaterial.clone());
+              keyCap.name = `PressableKey_${index}`;
+              keyCap.position.set(center.x, center.y, state.keyRestZ);
+              keyCap.userData.restZ = state.keyRestZ;
+              keyGroup.add(keyCap);
+              state.keyMeshes.push(keyCap);
+            });
+            keyboardMesh.add(keyGroup);
+          }
           state.active = false; state.t = 0; break;
         }
         case 'rgbBurst': {
@@ -492,6 +532,8 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
               const pressDur = 0.22;
               let pressCount = 0;
               if (state.t < dur) {
+                state.keyPresses.forEach((keyPress) => keyPress.set(0, 0, 1, 0));
+                const activeKeyMeshes = new Set();
                 for (let i = 0; i < state.typingOrder.length && pressCount < MAX_KEY_PRESSES; i++) {
                   const start = i * interval;
                   const localT = state.t - start;
@@ -501,13 +543,32 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
                   const progress = localT / pressDur;
                   const press = Math.sin(progress * Math.PI);
                   state.keyPresses[pressCount].set(center.x, center.y, state.keyRadius, state.keyPressDepth * press);
+                  const keyMesh = state.keyMeshes[keyIndex];
+                  if (keyMesh) {
+                    keyMesh.position.z = keyMesh.userData.restZ - state.keyPressDepth * 1.6 * press;
+                    keyMesh.scale.z = 1 - 0.18 * press;
+                    keyMesh.material.emissiveIntensity = 0.08 + 0.28 * press;
+                    activeKeyMeshes.add(keyMesh);
+                  }
                   pressCount++;
                 }
                 state.pressCount.value = pressCount;
+                state.keyMeshes.forEach((keyMesh) => {
+                  if (keyMesh.position.z !== keyMesh.userData.restZ && !activeKeyMeshes.has(keyMesh)) {
+                    keyMesh.position.z += (keyMesh.userData.restZ - keyMesh.position.z) * 0.45;
+                    keyMesh.scale.z += (1 - keyMesh.scale.z) * 0.45;
+                    keyMesh.material.emissiveIntensity += (0.08 - keyMesh.material.emissiveIntensity) * 0.45;
+                  }
+                });
               } else {
                 state.active = false;
                 state.t = 0;
                 state.pressCount.value = 0;
+                state.keyMeshes.forEach((keyMesh) => {
+                  keyMesh.position.z = keyMesh.userData.restZ;
+                  keyMesh.scale.z = 1;
+                  keyMesh.material.emissiveIntensity = 0.08;
+                });
                 state.burstIndex = (state.burstIndex + 7) % state.typingOrder.length;
               }
             }
@@ -624,13 +685,20 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
       return null;
     }
 
-    const onMouseMove = (e) => {
-      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    function getEntryAtClientPoint(clientX, clientY) {
+      mouse.x = (clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(clientY / window.innerHeight) * 2 + 1;
       raycaster.setFromCamera(mouse, camera);
       const hits = raycaster.intersectObjects(scene.children, true);
-      let found = null;
-      for (const h of hits) { const en = getEntryFromMesh(h.object); if (en) { found = en; break; } }
+      for (const h of hits) {
+        const entry = getEntryFromMesh(h.object);
+        if (entry) return entry;
+      }
+      return null;
+    }
+
+    const onMouseMove = (e) => {
+      const found = getEntryAtClientPoint(e.clientX, e.clientY);
       if (found) {
         hoveredEntry = found;
         if (tooltipNameEl) tooltipNameEl.textContent = found.config.name;
@@ -643,18 +711,19 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
       }
     };
 
-    const onClick = () => {
-      if (!hoveredEntry) return;
-      if (hoveredEntry.config.animation === 'zoomToScreen' && zoomState === 'idle') {
-        startZoomIn(hoveredEntry);
-      } else if (hoveredEntry.config.animation !== 'none' && hoveredEntry.config.animation !== 'zoomToScreen' && !hoveredEntry.state.active && zoomState === 'idle') {
-        hoveredEntry.state.active = true;
-        hoveredEntry.state.t = 0;
+    const onClick = (e) => {
+      const clickedEntry = getEntryAtClientPoint(e.clientX, e.clientY) || hoveredEntry;
+      if (!clickedEntry) return;
+      if (clickedEntry.config.animation === 'zoomToScreen' && zoomState === 'idle') {
+        startZoomIn(clickedEntry);
+      } else if (clickedEntry.config.animation !== 'none' && clickedEntry.config.animation !== 'zoomToScreen' && !clickedEntry.state.active && zoomState === 'idle') {
+        clickedEntry.state.active = true;
+        clickedEntry.state.t = 0;
         // For nixie: pick next world line + flash image
-        if (hoveredEntry.config.animation === 'nixieFlicker' && hoveredEntry.state.worldLines) {
+        if (clickedEntry.config.animation === 'nixieFlicker' && clickedEntry.state.worldLines) {
           let next;
-          do { next = Math.floor(Math.random() * hoveredEntry.state.worldLines.length); } while (next === hoveredEntry.state.currentLine && hoveredEntry.state.worldLines.length > 1);
-          hoveredEntry.state.targetLine = next;
+          do { next = Math.floor(Math.random() * clickedEntry.state.worldLines.length); } while (next === clickedEntry.state.currentLine && clickedEntry.state.worldLines.length > 1);
+          clickedEntry.state.targetLine = next;
         }
       }
     };

@@ -17,6 +17,9 @@ import Safari from './apps/Safari';
 import Settings from './apps/Settings';
 import TextEdit from './apps/TextEdit';
 import Photos from './apps/Photos';
+import Messages from './apps/Messages';
+import Weather from './apps/Weather';
+import Calendar from './apps/Calendar';
 
 const appComponents = {
   calculator: Calculator,
@@ -27,7 +30,64 @@ const appComponents = {
   settings: Settings,
   textedit: TextEdit,
   photos: Photos,
+  messages: Messages,
+  weather: Weather,
+  calendar: Calendar,
 };
+
+
+
+function DraggableDesktopIcon({ icon, label, onDoubleClick }) {
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const startPos = useRef({ x: 0, y: 0 });
+  const hasMoved = useRef(false);
+
+  const handlePointerDown = (e) => {
+    setIsDragging(true);
+    hasMoved.current = false;
+    startPos.current = { x: e.clientX - offset.x, y: e.clientY - offset.y };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e) => {
+    if (!isDragging) return;
+    const newX = e.clientX - startPos.current.x;
+    const newY = e.clientY - startPos.current.y;
+    if (Math.abs(newX - offset.x) > 2 || Math.abs(newY - offset.y) > 2) {
+      hasMoved.current = true;
+    }
+    setOffset({ x: newX, y: newY });
+  };
+
+  const handlePointerUp = (e) => {
+    setIsDragging(false);
+    e.currentTarget.releasePointerCapture(e.pointerId);
+  };
+
+  return (
+    <button
+      className="flex flex-col items-center gap-[2px] p-2 rounded-[6px] hover:bg-white/10 focus:bg-white/20 outline-none w-[80px] desktop-icon group relative"
+      style={{ 
+        transform: `translate(${offset.x}px, ${offset.y}px)`, 
+        zIndex: isDragging ? 50 : 1,
+      }}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onDoubleClick={(e) => {
+        if (!hasMoved.current && onDoubleClick) onDoubleClick(e);
+      }}
+    >
+      <div className="w-[56px] h-[56px] drop-shadow-md flex items-center justify-center transition-transform group-hover:-translate-y-0.5">
+        {icon}
+      </div>
+      <span className="text-[12px] text-white text-center font-medium leading-tight px-1 rounded-sm group-focus:bg-[#0058d0] mt-1" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.8), 0 1px 4px rgba(0,0,0,0.6)' }}>
+        {label}
+      </span>
+    </button>
+  );
+}
 
 function Desktop() {
   const { windows, openWindow } = useWindows();
@@ -38,12 +98,12 @@ function Desktop() {
   const [desktopVisible, setDesktopVisible] = useState(false);
   const showroomRef = useRef(null);
 
-  const handleAppLaunch = useCallback((appId, title) => {
+  const handleAppLaunch = useCallback((appId, title, payload) => {
     if (appId === 'launchpad') {
       setLaunchpadOpen(prev => !prev);
       return;
     }
-    openWindow(appId, title, appIcons[appId]);
+    openWindow(appId, title, appIcons[appId], payload);
   }, [openWindow]);
 
   const handleContextMenu = useCallback((e) => {
@@ -89,7 +149,14 @@ function Desktop() {
   return (
     <>
       {/* 3D Desk Showroom — always mounted, behind desktop */}
-      <div style={{ pointerEvents: view === 'desktop' ? 'none' : 'auto' }}>
+      <div
+        style={{
+          opacity: desktopVisible ? 0 : 1,
+          visibility: desktopVisible ? 'hidden' : 'visible',
+          pointerEvents: view === 'desktop' ? 'none' : 'auto',
+          transition: 'opacity 0.45s ease, visibility 0s linear 0.45s',
+        }}
+      >
         <DeskShowroom
           ref={showroomRef}
           onEnterScreen={() => {
@@ -131,18 +198,34 @@ function Desktop() {
       }} />
 
       {/* Desktop Icons — fade in with delay */}
-      <div className="absolute top-[40px] right-4 flex flex-col items-center gap-4 z-[5]" style={{
+      <div className="absolute top-[40px] right-4 flex flex-col items-start gap-3 z-[5]" style={{
         opacity: desktopVisible ? 1 : 0,
         transform: desktopVisible ? 'translateY(0)' : 'translateY(10px)',
         transition: 'opacity 0.5s ease 0.5s, transform 0.5s ease 0.5s',
       }}>
-        <button
-          className="flex flex-col items-center gap-[2px] p-2 rounded-[6px] hover:bg-white/10 focus:bg-[#0058d0]/60 outline-none w-[80px] transition-colors desktop-icon group"
-          onDoubleClick={() => handleAppLaunch('finder', 'Finder')}
-        >
-          <div className="w-[56px] h-[56px] drop-shadow-md transition-transform group-hover:-translate-y-0.5">{desktopIcons.macintoshHD}</div>
-          <span className="text-[12px] text-white text-center font-medium leading-tight px-1 rounded-sm group-focus:bg-[#0058d0] mt-1" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.8), 0 1px 4px rgba(0,0,0,0.6)' }}>Macintosh HD</span>
-        </button>
+        <DraggableDesktopIcon 
+          icon={desktopIcons.macintoshHD} 
+          label="Macintosh HD" 
+          onDoubleClick={() => handleAppLaunch('finder', 'Finder')} 
+        />
+        
+        <DraggableDesktopIcon 
+          icon={desktopIcons.github} 
+          label="GitHub" 
+          onDoubleClick={() => handleAppLaunch('safari', 'Safari', { url: 'https://github.com/owenisas', ts: Date.now() })} 
+        />
+        
+        <DraggableDesktopIcon 
+          icon={desktopIcons.linkedin} 
+          label="LinkedIn" 
+          onDoubleClick={() => handleAppLaunch('safari', 'Safari', { url: 'https://www.linkedin.com/in/thomas-suen-84776a262/', ts: Date.now() })} 
+        />
+        
+        <DraggableDesktopIcon 
+          icon={desktopIcons.x} 
+          label="X" 
+          onDoubleClick={() => handleAppLaunch('safari', 'Safari', { url: 'https://x.com/ThomasSuen6', ts: Date.now() })} 
+        />
       </div>
 
       {/* Windows */}
@@ -151,7 +234,7 @@ function Desktop() {
         if (!AppComponent) return null;
         return (
           <Window key={win.id} windowData={win}>
-            <AppComponent />
+            <AppComponent windowData={win} />
           </Window>
         );
       })}
