@@ -1,0 +1,23 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v3.1.267422042)
+
+newmtl Grain
+kd 0.0352175 0.0352175 0.0352175
+illum 1
+
+newmtl Gloss
+kd 0.0100216 0.0100216 0.0100216
+illum 1
+
+newmtl Green
+kd 0.0146075 0.8 0.0027216
+illum 1
+
+newmtl Skates
+kd 0.8 0.8 0.8
+illum 1
+
+newmtl Rubber
+kd 0 0 0
+illum 1
+
