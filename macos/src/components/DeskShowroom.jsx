@@ -1,14 +1,16 @@
 import { useEffect, useRef, useCallback, forwardRef, useImperativeHandle } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 const DESK_REAL_WIDTH = 120;
+const MAX_KEY_PRESSES = 8;
 
 const MODELS = [
   { name: 'Computer Desk', path: '/assets/computer_desk.glb', realWidth: DESK_REAL_WIDTH, onDesk: false, deskPos: [0,0,0], rotationY: Math.PI, animation: 'none' },
   { name: 'MacBook Pro M3', path: '/assets/macbook_pro_m3_16_inch_2024.glb', realWidth: 35.6, onDesk: true, deskPos: [-0.08,0,0.0], rotationY: Math.PI/2, animation: 'zoomToScreen' },
-  { name: 'Keychron K8', path: '/assets/keychron_k8.glb', realWidth: 35.9, onDesk: true, deskPos: [0.1,0,0.0], rotationY: Math.PI/2, animation: 'typingBurst' },
+  { name: 'Keychron K8', path: '/assets/keychron-k8/source/KeychronK8_01.fbx', type: 'fbx', realWidth: 35.9, onDesk: true, deskPos: [0.1,0,0.0], rotationY: Math.PI/2, animation: 'typingBurst' },
   { name: 'Razer Viper Mini', path: '/assets/razer_viper_mini.glb', realWidth: 11.8, onDesk: true, deskPos: [0.07,0,-0.25], rotationY: Math.PI*240/180 - Math.PI/6, animation: 'rgbBurst' },
   { name: 'DJI Mavic 3', path: '/assets/dji-mavic-3/source/DJI-Mavic_3.glb', realWidth: 35, onDesk: true, deskPos: [0.08,0,0.35], rotationY: Math.PI/2+0.3, animation: 'propellerSpin' },
   { name: 'Divergence Meter', path: '/assets/divergence_meter_steinsgate.glb', realWidth: 25, onDesk: true, deskPos: [-0.1,0,0.3], rotationY: Math.PI/2+0.5, animation: 'nixieFlicker' },
@@ -146,6 +148,17 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
 
     // ── State ──
     const gltfLoader = new GLTFLoader();
+    const keychronAssetManager = new THREE.LoadingManager();
+    keychronAssetManager.setURLModifier((url) => {
+      const filename = url.split(/[\\/]/).pop();
+      if (!filename?.startsWith('T_KeychronK8_')) return url;
+      const textureName = filename === 'T_KeychronK8_01_Roughness.png'
+        ? 'T_KeychronK8_02_Roughness.png'
+        : filename;
+      return `/assets/keychron-k8/textures/${textureName}`;
+    });
+    const fbxLoader = new FBXLoader(keychronAssetManager);
+    fbxLoader.setResourcePath('/assets/keychron-k8/textures/');
     const entries = [];
     let deskWorldWidth = 1, deskSurfaceY = 0;
     const origCamPos = camera.position.clone();
@@ -172,8 +185,8 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
     const tooltipEl = container.querySelector('.showroom-tooltip');
     const tooltipNameEl = tooltipEl?.querySelector('.name');
 
-    function loadModel(gltf, config) {
-      const model = gltf.scene;
+    function loadModel(asset, config) {
+      const model = config.type === 'fbx' ? asset : asset.scene;
       model.updateMatrixWorld(true);
       const box = new THREE.Box3().setFromObject(model);
       const center = box.getCenter(new THREE.Vector3());
@@ -297,23 +310,84 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
           state.active = false; state.t = 0; break;
         }
         case 'typingBurst': {
-          state.waveX = { value: -9999.0 }; state.waveStrength = { value: 0.0 };
           model.traverse(child => { if (child.name === 'SM_KeychronK8_misc') child.visible = false; });
-          let xMin = Infinity, xMax = -Infinity;
+          let xMin = Infinity, xMax = -Infinity, yMin = Infinity, yMax = -Infinity;
           model.traverse(child => {
             if (child.isMesh && child.material) {
               const pos = child.geometry.attributes.position;
-              if (pos) { for (let i = 0; i < pos.count; i++) { const x = pos.getX(i); if (x < xMin) xMin = x; if (x > xMax) xMax = x; } }
-              child.material = child.material.clone();
-              const wX = state.waveX, wS = state.waveStrength;
-              child.material.onBeforeCompile = (shader) => {
-                shader.uniforms.uWaveX = wX; shader.uniforms.uWaveStrength = wS;
-                shader.vertexShader = shader.vertexShader.replace('void main() {', `uniform float uWaveX;\nuniform float uWaveStrength;\nvoid main() {`);
-                shader.vertexShader = shader.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>\nfloat waveDist = position.x - uWaveX;\nfloat waveW = 20.0;\nfloat press = exp(-(waveDist*waveDist)/(2.0*waveW*waveW));\ntransformed.y -= press * uWaveStrength;`);
-              };
+              if (pos) {
+                for (let i = 0; i < pos.count; i++) {
+                  const x = pos.getX(i);
+                  const y = pos.getY(i);
+                  if (x < xMin) xMin = x;
+                  if (x > xMax) xMax = x;
+                  if (y < yMin) yMin = y;
+                  if (y > yMax) yMax = y;
+                }
+              }
             }
           });
-          state.xMin = xMin; state.xMax = xMax; state.active = false; state.t = 0; break;
+
+          const xRange = xMax - xMin;
+          const yRange = yMax - yMin;
+          const xInset = xRange * 0.075;
+          const yInset = yRange * 0.19;
+          const rowSpecs = [
+            { count: 14, y: yMax - yInset, offset: 0.00 },
+            { count: 14, y: yMax - yInset - yRange * 0.16, offset: 0.03 },
+            { count: 13, y: yMax - yInset - yRange * 0.32, offset: 0.075 },
+            { count: 12, y: yMax - yInset - yRange * 0.48, offset: 0.125 },
+            { count: 9, y: yMin + yInset, offset: 0.22 },
+          ];
+          const keyCenters = [];
+          rowSpecs.forEach(({ count, y, offset }) => {
+            const rowStart = xMin + xInset + xRange * offset;
+            const rowEnd = xMax - xInset;
+            const step = (rowEnd - rowStart) / Math.max(count - 1, 1);
+            for (let i = 0; i < count; i++) keyCenters.push(new THREE.Vector2(rowStart + step * i, y));
+          });
+
+          const typingOrder = [
+            28, 18, 29, 33, 20, 36, 30, 45,
+            15, 25, 34, 21, 37, 46, 31, 19,
+            40, 52, 41, 53, 42, 54, 43, 55,
+            7, 8, 22, 23, 38, 39, 50, 51,
+            13, 27, 35, 49, 57, 58, 59, 60,
+          ].filter(index => index < keyCenters.length);
+
+          state.keyPresses = Array.from({ length: MAX_KEY_PRESSES }, () => new THREE.Vector4(0, 0, 1, 0));
+          state.pressCount = { value: 0 };
+          state.keyCenters = keyCenters;
+          state.typingOrder = typingOrder;
+          state.keyRadius = Math.min(xRange / 28, yRange / 12);
+          state.keyPressDepth = 7.5;
+          state.burstIndex = 0;
+
+          model.traverse(child => {
+            if (child.isMesh && child.material) {
+              const keyPresses = state.keyPresses;
+              const pressCount = state.pressCount;
+              const applyKeyPressShader = (material) => {
+                material.onBeforeCompile = (shader) => {
+                  shader.uniforms.uKeyPresses = { value: keyPresses };
+                  shader.uniforms.uPressCount = pressCount;
+                  shader.vertexShader = shader.vertexShader.replace('void main() {', `uniform vec4 uKeyPresses[${MAX_KEY_PRESSES}];\nuniform float uPressCount;\nvoid main() {`);
+                  shader.vertexShader = shader.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>\nfor (int i = 0; i < ${MAX_KEY_PRESSES}; i++) {\n  if (float(i) >= uPressCount) { break; }\n  vec4 keyPress = uKeyPresses[i];\n  float keyDist = distance(position.xy, keyPress.xy);\n  float keyShape = smoothstep(keyPress.z, 0.0, keyDist);\n  transformed.z -= keyShape * keyPress.w;\n}`);
+                };
+              };
+              if (Array.isArray(child.material)) {
+                child.material = child.material.map((material) => {
+                  const cloned = material.clone();
+                  applyKeyPressShader(cloned);
+                  return cloned;
+                });
+              } else {
+                child.material = child.material.clone();
+                applyKeyPressShader(child.material);
+              }
+            }
+          });
+          state.active = false; state.t = 0; break;
         }
         case 'rgbBurst': {
           state.rgbMats = [];
@@ -411,7 +485,32 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
             break;
           }
           case 'typingBurst': {
-            if (state.active) { state.t += delta; if (state.t < 2.5) { const xR = state.xMax-state.xMin; const pt=0.7; const pi=Math.floor(state.t/pt); const pp=(state.t%pt)/pt; const wp = pi%2===0?pp:1-pp; state.waveX.value = state.xMin+wp*xR; state.waveStrength.value = 10.0; } else { state.active=false; state.waveX.value=-9999; state.waveStrength.value=0; } }
+            if (state.active) {
+              state.t += Math.min(delta, 1 / 30);
+              const dur = 3.0;
+              const interval = 0.055;
+              const pressDur = 0.22;
+              let pressCount = 0;
+              if (state.t < dur) {
+                for (let i = 0; i < state.typingOrder.length && pressCount < MAX_KEY_PRESSES; i++) {
+                  const start = i * interval;
+                  const localT = state.t - start;
+                  if (localT < 0 || localT > pressDur) continue;
+                  const keyIndex = state.typingOrder[(i + state.burstIndex) % state.typingOrder.length];
+                  const center = state.keyCenters[keyIndex];
+                  const progress = localT / pressDur;
+                  const press = Math.sin(progress * Math.PI);
+                  state.keyPresses[pressCount].set(center.x, center.y, state.keyRadius, state.keyPressDepth * press);
+                  pressCount++;
+                }
+                state.pressCount.value = pressCount;
+              } else {
+                state.active = false;
+                state.t = 0;
+                state.pressCount.value = 0;
+                state.burstIndex = (state.burstIndex + 7) % state.typingOrder.length;
+              }
+            }
             break;
           }
           case 'rgbBurst': {
@@ -582,8 +681,10 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
         const cfg = MODELS[i];
         if (textEl) textEl.textContent = `Loading ${cfg.name}...`;
         try {
-          const gltf = await gltfLoader.loadAsync(cfg.path);
-          const entry = loadModel(gltf, cfg);
+          const asset = cfg.type === 'fbx'
+            ? await fbxLoader.loadAsync(cfg.path)
+            : await gltfLoader.loadAsync(cfg.path);
+          const entry = loadModel(asset, cfg);
           if (entry) { initAnimation(entry); entries.push(entry); }
         } catch (err) { console.error(`Failed to load ${cfg.name}:`, err); }
         loadedCount++;
