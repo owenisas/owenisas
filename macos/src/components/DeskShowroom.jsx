@@ -72,10 +72,12 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
     topSpot.position.set(0, 4, 0);
     presetB.add(topSpot);
     presetB.add(new THREE.AmbientLight(0x111122, 0.3));
-    presetB.visible = false;
     scene.add(presetB);
 
-    let activePreset = 0;
+    presetA.visible = false;
+    presetB.visible = true;
+
+    let activePreset = 1;
     const presets = [presetA, presetB];
     const presetNames = ['Cool Blue', 'Spotlight'];
     function togglePreset() {
@@ -882,7 +884,7 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
         onClick={() => cleanupRef.current?.togglePreset?.()}
         style={{ position:'fixed', bottom:20, left:20, zIndex:50, padding:'6px 14px', background:'rgba(0,0,0,0.6)', backdropFilter:'blur(10px)', border:'1px solid rgba(255,255,255,0.15)', borderRadius:6, color:'rgba(255,255,255,0.7)', fontSize:'0.75rem', fontWeight:400, cursor:'pointer', letterSpacing:'0.03em', transition:'all 0.2s' }}
       >
-        <span className="preset-label">Cool Blue</span>
+        <span className="preset-label">Spotlight</span>
         <span style={{ opacity:0.35, marginLeft:8, fontSize:'0.65rem' }}>L</span>
       </button>
     </div>
