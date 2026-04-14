@@ -1,9 +1,19 @@
 {
-  "version": 2,
-  "installCommand": "cd macos && npm ci",
-  "buildCommand": "cd macos && npm run build",
-  "outputDirectory": "macos/dist",
-  "functions": {
-    "api/*.js": {}
-  }
+  "builds": [
+    {
+      "src": "macos/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    },
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/(.*)", "dest": "/macos/$1" }
+  ]
 }
