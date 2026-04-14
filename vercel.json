@@ -1,8 +1,8 @@
 {
   "version": 2,
   "framework": "vite",
-  "installCommand": "cd macos && npm install",
-  "buildCommand": "cd macos && npm run build",
+  "installCommand": "npm install --prefix macos",
+  "buildCommand": "npm run build --prefix macos",
   "outputDirectory": "macos/dist",
   "functions": {
     "api/*.js": {}
