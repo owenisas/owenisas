@@ -858,10 +858,14 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
           mouseParallax.x += (gyroInput.x * 0.8 - mouseParallax.x) * lerp;
           mouseParallax.y += (gyroInput.y * 0.5 - mouseParallax.y) * lerp;
 
+          // Clamp to keep the desk in view
+          const clampedX = Math.max(-0.6, Math.min(0.6, mouseParallax.x));
+          const clampedY = Math.max(-0.3, Math.min(0.4, mouseParallax.y));
+
           if (zoomState === 'idle') {
-            // Offset the look-at target based on gyro tilt
-            controls.target.x = origCamTarget.x + mouseParallax.x;
-            controls.target.y = origCamTarget.y - mouseParallax.y * 0.5;
+            // Offset the look-at target based on gyro tilt (clamped)
+            controls.target.x = origCamTarget.x + clampedX;
+            controls.target.y = origCamTarget.y - clampedY * 0.5;
           }
         } else {
           // Desktop: move camera position with mouse parallax
