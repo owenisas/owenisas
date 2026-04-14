@@ -851,24 +851,34 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
         animId = requestAnimationFrame(animate);
         const delta = clock.getDelta();
 
-        // Smooth parallax - use gyroscope on mobile, mouse on desktop
         const lerp = 1 - Math.pow(0.05, delta);
-        const inputX = (isMobile && gyroEnabled) ? gyroInput.x : mouse.x;
-        const inputY = (isMobile && gyroEnabled) ? gyroInput.y : mouse.y;
-        mouseParallax.x += (inputX * 0.3 - mouseParallax.x) * lerp;
-        mouseParallax.y += (inputY * 0.15 - mouseParallax.y) * lerp;
 
-        // Apply parallax offset to camera (only when not zoomed)
-        if (zoomState === 'idle') {
-          camera.position.x = origCamPos.x + mouseParallax.x;
-          camera.position.y = origCamPos.y + mouseParallax.y;
+        if (isMobile && gyroEnabled) {
+          // Mobile: keep camera position fixed, rotate look direction with gyroscope
+          mouseParallax.x += (gyroInput.x * 0.8 - mouseParallax.x) * lerp;
+          mouseParallax.y += (gyroInput.y * 0.5 - mouseParallax.y) * lerp;
+
+          if (zoomState === 'idle') {
+            // Offset the look-at target based on gyro tilt
+            controls.target.x = origCamTarget.x + mouseParallax.x;
+            controls.target.y = origCamTarget.y - mouseParallax.y * 0.5;
+          }
+        } else {
+          // Desktop: move camera position with mouse parallax
+          mouseParallax.x += (mouse.x * 0.3 - mouseParallax.x) * lerp;
+          mouseParallax.y += (mouse.y * 0.15 - mouseParallax.y) * lerp;
+
+          if (zoomState === 'idle') {
+            camera.position.x = origCamPos.x + mouseParallax.x;
+            camera.position.y = origCamPos.y + mouseParallax.y;
+          }
         }
 
-        // Move 3D mouse model to mirror input (gyro on mobile, cursor on desktop)
-        if (mouseEntry && zoomState === 'idle') {
+        // Move 3D mouse model (desktop only - no cursor on mobile)
+        if (mouseEntry && zoomState === 'idle' && !isMobile) {
           const range = 0.4;
-          const targetX = -inputY * range;
-          const targetZ = -inputX * range;
+          const targetX = -mouse.y * range;
+          const targetZ = -mouse.x * range;
           mouseModelOffset.x += (targetX - mouseModelOffset.x) * lerp;
           mouseModelOffset.z += (targetZ - mouseModelOffset.z) * lerp;
           const baseX = mouseEntry.config.deskPos[0] * deskWorldWidth;
