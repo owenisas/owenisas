@@ -1,4 +1,4 @@
-import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
+import { useEffect, useRef, forwardRef, useImperativeHandle, useState } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
@@ -16,9 +16,20 @@ const MODELS = [
   { name: 'Divergence Meter', path: '/assets/divergence_meter_steinsgate.glb', realWidth: 25, onDesk: true, deskPos: [-0.1,0,0.3], rotationY: Math.PI/2+0.5, animation: 'nixieFlicker' },
 ];
 
+// Check WebGL support
+function isWebGLAvailable() {
+  try {
+    const canvas = document.createElement('canvas');
+    return !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+  } catch (e) {
+    return false;
+  }
+}
+
 const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
   const containerRef = useRef(null);
   const cleanupRef = useRef(null);
+  const [webglError, setWebglError] = useState(null);
 
   const onEnterScreenRef = useRef(onEnterScreen);
   onEnterScreenRef.current = onEnterScreen;
@@ -28,8 +39,20 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
     if (!container) return;
     const isDev = import.meta.env.DEV;
 
+    // ── Check WebGL ──
+    if (!isWebGLAvailable()) {
+      setWebglError('WebGL is not supported in your browser. Please try a different browser or enable hardware acceleration.');
+      return;
+    }
+
     // ── Renderer ──
-    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+    } catch (e) {
+      setWebglError('Failed to initialize WebGL. Please enable hardware acceleration or try a different browser.');
+      return;
+    }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -840,6 +863,21 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
   useImperativeHandle(ref, () => ({
     __zoomOut: () => cleanupRef.current?.zoomOut(),
   }));
+
+  // WebGL error fallback
+  if (webglError) {
+    return (
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, background: '#0a0a0c', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', textAlign: 'center', padding: 40 }}>
+        <div>
+          <h2 style={{ fontSize: '1.5rem', marginBottom: 16, opacity: 0.9 }}>3D View Unavailable</h2>
+          <p style={{ fontSize: '0.9rem', opacity: 0.6, maxWidth: 400, lineHeight: 1.6 }}>{webglError}</p>
+          <p style={{ fontSize: '0.8rem', opacity: 0.4, marginTop: 24 }}>
+            Try Chrome, Firefox, or Safari with hardware acceleration enabled.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div ref={containerRef} style={{ position: 'fixed', inset: 0, zIndex: 0 }}>
