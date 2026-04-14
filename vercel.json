@@ -1,20 +1,13 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "macos/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    },
-    {
-      "src": "api/*.js",
-      "use": "@vercel/node"
+  "buildCommand": "cd macos && npm install && npm run build",
+  "outputDirectory": "macos/dist",
+  "functions": {
+    "api/*.js": {
+      "runtime": "@vercel/node@3"
     }
-  ],
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/(.*)", "dest": "/macos/$1" }
+  },
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api/:path*" }
   ]
 }
