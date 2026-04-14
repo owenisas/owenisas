@@ -369,12 +369,13 @@ export default function Finder() {
                     {renderFileGlyph(file, file.iconPath ? 46 : 42, 'rgba(255,255,255,0.75)')}
                   </div>
                   <span
-                    className="text-[12px] text-center break-all leading-snug max-w-[90px]"
+                    className="text-[11px] text-center leading-tight max-w-[80px] line-clamp-2"
                     style={{
                       color: selected.has(file.name) ? '#fff' : 'rgba(255,255,255,0.95)',
                       background: selected.has(file.name) ? '#0A84FF' : 'transparent',
                       borderRadius: 4,
-                      padding: '2px 5px',
+                      padding: '2px 4px',
+                      wordBreak: 'break-word',
                     }}
                   >
                     {file.name}

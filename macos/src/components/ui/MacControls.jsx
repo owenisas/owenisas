@@ -192,7 +192,7 @@ export function MacSidebarItem({ icon, iconColor, label, selected, onClick, badg
       style={{
         paddingTop: padY + 1.5,
         paddingBottom: padY + 1.5,
-        background: selected ? (tone === 'source' ? 'rgba(10,132,255,0.82)' : 'rgba(255,255,255,0.14)') : 'transparent',
+        background: selected ? (tone === 'source' ? 'rgba(10,132,255,0.82)' : 'rgba(255,255,255,0.2)') : 'transparent',
         color: selected ? '#fff' : 'rgba(255,255,255,0.85)',
         boxShadow: selected ? 'inset 0 0.5px 0 rgba(255,255,255,0.12)' : 'none',
       }}

@@ -47,6 +47,7 @@ html, body, #root {
   -moz-osx-font-smoothing: grayscale;
   user-select: none;
   -webkit-user-select: none;
+  background: #0a0a0c;
 }
 
 button, input, textarea, select {
@@ -80,6 +81,30 @@ button, input, textarea, select {
 
 .mac-control:hover {
   background: var(--mac-glass-hover);
+}
+
+/* Focus states for keyboard navigation */
+button:focus-visible,
+[role="button"]:focus-visible,
+.focusable:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Inputs handle their own focus styling */
+input:focus,
+input:focus-visible,
+textarea:focus,
+textarea:focus-visible {
+  outline: none;
+}
+
+/* Subtle focus for dock/launchpad items */
+.dock-icon:focus-visible,
+.app-tile:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+  border-radius: 12px;
 }
 
 ::-webkit-scrollbar { width: 8px; height: 8px; }

@@ -1,12 +1,13 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef, lazy, Suspense } from 'react';
 import { WindowProvider, useWindows } from './contexts/WindowContext';
 import MenuBar from './components/MenuBar';
 import Dock from './components/Dock';
 import Window from './components/Window';
 import ContextMenu from './components/ContextMenu';
 import Spotlight from './components/Spotlight';
-import DeskShowroom from './components/DeskShowroom';
 import Launchpad from './components/Launchpad';
+
+const DeskShowroom = lazy(() => import('./components/DeskShowroom'));
 import { appIcons, desktopIcons } from './components/Icons';
 
 import Calculator from './apps/Calculator';
@@ -20,6 +21,7 @@ import Photos from './apps/Photos';
 import Messages from './apps/Messages';
 import Weather from './apps/Weather';
 import Calendar from './apps/Calendar';
+import AboutThisMac from './apps/AboutThisMac';
 
 const appComponents = {
   calculator: Calculator,
@@ -33,11 +35,12 @@ const appComponents = {
   messages: Messages,
   weather: Weather,
   calendar: Calendar,
+  aboutthismac: AboutThisMac,
 };
 
 
 
-function DraggableDesktopIcon({ icon, label, onDoubleClick }) {
+function DraggableDesktopIcon({ icon, label, onDoubleClick, isSelected, onSelect }) {
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const startPos = useRef({ x: 0, y: 0 });
@@ -65,16 +68,23 @@ function DraggableDesktopIcon({ icon, label, onDoubleClick }) {
     e.currentTarget.releasePointerCapture(e.pointerId);
   };
 
+  const handleClick = (e) => {
+    if (!hasMoved.current && onSelect) {
+      onSelect(e);
+    }
+  };
+
   return (
     <button
-      className="flex flex-col items-center gap-[2px] p-2 rounded-[6px] hover:bg-white/10 focus:bg-white/20 outline-none w-[80px] desktop-icon group relative"
-      style={{ 
-        transform: `translate(${offset.x}px, ${offset.y}px)`, 
+      className={`flex flex-col items-center gap-[2px] p-2 rounded-[6px] outline-none w-[90px] desktop-icon group relative ${isSelected ? 'bg-white/20' : 'hover:bg-white/10'}`}
+      style={{
+        transform: `translate(${offset.x}px, ${offset.y}px)`,
         zIndex: isDragging ? 50 : 1,
       }}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
+      onClick={handleClick}
       onDoubleClick={(e) => {
         if (!hasMoved.current && onDoubleClick) onDoubleClick(e);
       }}
@@ -82,7 +92,13 @@ function DraggableDesktopIcon({ icon, label, onDoubleClick }) {
       <div className="w-[56px] h-[56px] drop-shadow-md flex items-center justify-center transition-transform group-hover:-translate-y-0.5">
         {icon}
       </div>
-      <span className="text-[12px] text-white text-center font-medium leading-tight px-1 rounded-sm group-focus:bg-[#0058d0] mt-1" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.8), 0 1px 4px rgba(0,0,0,0.6)' }}>
+      <span
+        className="text-[12px] text-white text-center font-medium leading-tight px-1.5 rounded-sm mt-1 max-w-full truncate"
+        style={{
+          textShadow: isSelected ? 'none' : '0 1px 2px rgba(0,0,0,0.8), 0 1px 4px rgba(0,0,0,0.6)',
+          background: isSelected ? '#0058d0' : 'transparent',
+        }}
+      >
         {label}
       </span>
     </button>
@@ -96,6 +112,7 @@ function Desktop() {
   const [launchpadOpen, setLaunchpadOpen] = useState(false);
   const [view, setView] = useState('showroom'); // 'showroom' | 'transitioning' | 'desktop'
   const [desktopVisible, setDesktopVisible] = useState(false);
+  const [selectedIcon, setSelectedIcon] = useState(null);
   const showroomRef = useRef(null);
 
   const handleAppLaunch = useCallback((appId, title, payload) => {
@@ -148,7 +165,7 @@ function Desktop() {
 
   return (
     <>
-      {/* 3D Desk Showroom — always mounted, behind desktop */}
+      {/* 3D Desk Showroom — lazy loaded, behind desktop */}
       <div
         style={{
           opacity: desktopVisible ? 0 : 1,
@@ -157,15 +174,17 @@ function Desktop() {
           transition: 'opacity 0.45s ease, visibility 0s linear 0.45s',
         }}
       >
-        <DeskShowroom
-          ref={showroomRef}
-          onEnterScreen={() => {
-            setView('desktop');
-            requestAnimationFrame(() => {
-              requestAnimationFrame(() => setDesktopVisible(true));
-            });
-          }}
-        />
+        <Suspense fallback={<div className="fixed inset-0 bg-[#0a0a0c]" />}>
+          <DeskShowroom
+            ref={showroomRef}
+            onEnterScreen={() => {
+              setView('desktop');
+              requestAnimationFrame(() => {
+                requestAnimationFrame(() => setDesktopVisible(true));
+              });
+            }}
+          />
+        </Suspense>
       </div>
 
       {/* Desktop — always mounted, fades in/out with CSS transition */}
@@ -187,7 +206,7 @@ function Desktop() {
           transition: 'opacity 0.8s ease',
         }}
         onContextMenu={handleContextMenu}
-        onClick={() => setContextMenu(null)}
+        onClick={() => { setContextMenu(null); setSelectedIcon(null); }}
       />
 
       {/* Menu Bar — slides down from top */}
@@ -203,28 +222,36 @@ function Desktop() {
         transform: desktopVisible ? 'translateY(0)' : 'translateY(10px)',
         transition: 'opacity 0.5s ease 0.5s, transform 0.5s ease 0.5s',
       }}>
-        <DraggableDesktopIcon 
-          icon={desktopIcons.macintoshHD} 
-          label="Macintosh HD" 
-          onDoubleClick={() => handleAppLaunch('finder', 'Finder')} 
+        <DraggableDesktopIcon
+          icon={desktopIcons.macintoshHD}
+          label="Macintosh HD"
+          isSelected={selectedIcon === 'macintoshHD'}
+          onSelect={() => setSelectedIcon('macintoshHD')}
+          onDoubleClick={() => handleAppLaunch('finder', 'Finder')}
         />
-        
-        <DraggableDesktopIcon 
-          icon={desktopIcons.github} 
-          label="GitHub" 
-          onDoubleClick={() => handleAppLaunch('safari', 'Safari', { url: 'https://github.com/owenisas', ts: Date.now() })} 
+
+        <DraggableDesktopIcon
+          icon={desktopIcons.github}
+          label="GitHub"
+          isSelected={selectedIcon === 'github'}
+          onSelect={() => setSelectedIcon('github')}
+          onDoubleClick={() => window.open('https://github.com/owenisas', '_blank')}
         />
-        
-        <DraggableDesktopIcon 
-          icon={desktopIcons.linkedin} 
-          label="LinkedIn" 
-          onDoubleClick={() => handleAppLaunch('safari', 'Safari', { url: 'https://www.linkedin.com/in/thomas-suen-84776a262/', ts: Date.now() })} 
+
+        <DraggableDesktopIcon
+          icon={desktopIcons.linkedin}
+          label="LinkedIn"
+          isSelected={selectedIcon === 'linkedin'}
+          onSelect={() => setSelectedIcon('linkedin')}
+          onDoubleClick={() => window.open('https://www.linkedin.com/in/thomas-suen-84776a262/', '_blank')}
         />
-        
-        <DraggableDesktopIcon 
-          icon={desktopIcons.x} 
-          label="X" 
-          onDoubleClick={() => handleAppLaunch('safari', 'Safari', { url: 'https://x.com/ThomasSuen6', ts: Date.now() })} 
+
+        <DraggableDesktopIcon
+          icon={desktopIcons.x}
+          label="X"
+          isSelected={selectedIcon === 'x'}
+          onSelect={() => setSelectedIcon('x')}
+          onDoubleClick={() => window.open('https://x.com/ThomasSuen6', '_blank')}
         />
       </div>
 
@@ -234,7 +261,7 @@ function Desktop() {
         if (!AppComponent) return null;
         return (
           <Window key={win.id} windowData={win}>
-            <AppComponent windowData={win} />
+            <AppComponent windowData={win} onAppLaunch={handleAppLaunch} />
           </Window>
         );
       })}

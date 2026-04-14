@@ -112,8 +112,8 @@ export default function Calculator() {
         <div className="flex items-center gap-1 rounded-[6px] p-[2px]" style={{ background: 'rgba(255,255,255,0.06)' }}>
           {[
             { id: 'basic', label: 'Basic' },
-            { id: 'scientific', label: 'Scientific' },
-            { id: 'programmer', label: 'Programmer' },
+            { id: 'scientific', label: 'Sci' },
+            { id: 'programmer', label: 'Prog' },
           ].map(item => (
             <button
               key={item.id}
@@ -155,7 +155,7 @@ export default function Calculator() {
       </div>
 
       {/* Button Grid — exact macOS layout */}
-      <div className="grid grid-cols-4 gap-[1px] p-[1px]" style={{ background: '#131313' }}>
+      <div className="grid grid-cols-4" style={{ background: '#232323' }}>
         {/* Row 1: AC, +/−, %, ÷ */}
         <CalcBtn label={display !== '0' ? 'C' : 'AC'} onClick={clearAll} type="function" />
         <CalcBtn label="⁺∕₋" onClick={toggleSign} type="function" />
@@ -172,7 +172,7 @@ export default function Calculator() {
         <CalcBtn label="4" onClick={() => inputDigit(4)} />
         <CalcBtn label="5" onClick={() => inputDigit(5)} />
         <CalcBtn label="6" onClick={() => inputDigit(6)} />
-        <CalcBtn label="−" onClick={() => performOperation('-')} type="operator" active={isActive('-')} />
+        <CalcBtn label="–" onClick={() => performOperation('-')} type="operator" active={isActive('-')} />
 
         {/* Row 4 */}
         <CalcBtn label="1" onClick={() => inputDigit(1)} />
@@ -213,7 +213,8 @@ function CalcBtn({ label, onClick, type = 'number', wide = false, active = false
         fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif',
         height: 50,
         borderRadius: 0,
-        boxShadow: pressed ? 'inset 0 2px 6px rgba(0,0,0,0.28)' : 'inset 0 -1px 0 rgba(255,255,255,0.08)',
+        border: '0.5px solid rgba(0,0,0,0.15)',
+        boxShadow: pressed ? 'inset 0 2px 6px rgba(0,0,0,0.28)' : 'inset 0 1px 0 rgba(255,255,255,0.12)',
         transform: pressed ? 'translateY(1px)' : 'translateY(0)',
       }}
       onMouseEnter={e => e.currentTarget.style.background = hoverBg}

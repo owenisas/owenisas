@@ -1,6 +1,102 @@
 import { useState, useEffect, useRef } from 'react';
 import { useWindows } from '../contexts/WindowContext';
 
+const menuContents = {
+  File: [
+    { label: 'New Window', shortcut: '⌘N' },
+    { label: 'New Tab', shortcut: '⌘T' },
+    '-',
+    { label: 'Open...', shortcut: '⌘O' },
+    { label: 'Open Recent', arrow: true },
+    '-',
+    { label: 'Close Window', shortcut: '⌘W' },
+    { label: 'Save', shortcut: '⌘S', disabled: true },
+    '-',
+    { label: 'Print...', shortcut: '⌘P' },
+  ],
+  Edit: [
+    { label: 'Undo', shortcut: '⌘Z' },
+    { label: 'Redo', shortcut: '⇧⌘Z' },
+    '-',
+    { label: 'Cut', shortcut: '⌘X' },
+    { label: 'Copy', shortcut: '⌘C' },
+    { label: 'Paste', shortcut: '⌘V' },
+    { label: 'Select All', shortcut: '⌘A' },
+    '-',
+    { label: 'Find', arrow: true },
+  ],
+  View: [
+    { label: 'Show Toolbar', shortcut: '⌥⌘T' },
+    { label: 'Show Sidebar', shortcut: '⌥⌘S' },
+    '-',
+    { label: 'Enter Full Screen', shortcut: '⌃⌘F' },
+  ],
+  Go: [
+    { label: 'Back', shortcut: '⌘[' },
+    { label: 'Forward', shortcut: '⌘]' },
+    '-',
+    { label: 'Recents', shortcut: '⇧⌘F' },
+    { label: 'Documents', shortcut: '⇧⌘O' },
+    { label: 'Desktop', shortcut: '⇧⌘D' },
+    { label: 'Downloads', shortcut: '⌥⌘L' },
+    { label: 'Home', shortcut: '⇧⌘H' },
+    '-',
+    { label: 'Go to Folder...', shortcut: '⇧⌘G' },
+  ],
+  Window: [
+    { label: 'Minimize', shortcut: '⌘M' },
+    { label: 'Zoom' },
+    '-',
+    { label: 'Bring All to Front' },
+  ],
+  Help: [
+    { label: 'Search', disabled: true },
+    '-',
+    { label: 'macOS Help' },
+  ],
+  History: [
+    { label: 'Show All History', shortcut: '⌘Y' },
+    '-',
+    { label: 'Clear History...' },
+  ],
+  Bookmarks: [
+    { label: 'Show Bookmarks', shortcut: '⌥⌘B' },
+    { label: 'Add Bookmark...', shortcut: '⌘D' },
+  ],
+  Format: [
+    { label: 'Font', arrow: true },
+    { label: 'Text', arrow: true },
+    '-',
+    { label: 'Make Rich Text', shortcut: '⇧⌘T' },
+  ],
+  Shell: [
+    { label: 'New Window', shortcut: '⌘N' },
+    { label: 'New Tab', shortcut: '⌘T' },
+    '-',
+    { label: 'Close Window', shortcut: '⌘W' },
+  ],
+  Profiles: [
+    { label: 'Default' },
+    { label: 'Basic' },
+    { label: 'Grass' },
+    { label: 'Homebrew' },
+  ],
+  Convert: [
+    { label: 'Temperature' },
+    { label: 'Length' },
+    { label: 'Area' },
+    { label: 'Volume' },
+    { label: 'Weight' },
+  ],
+  Image: [
+    { label: 'Rotate Left', shortcut: '⌘L' },
+    { label: 'Rotate Right', shortcut: '⌘R' },
+    '-',
+    { label: 'Flip Horizontal' },
+    { label: 'Flip Vertical' },
+  ],
+};
+
 const appMenus = {
   finder:     ['File', 'Edit', 'View', 'Go', 'Window', 'Help'],
   safari:     ['File', 'Edit', 'View', 'History', 'Bookmarks', 'Window', 'Help'],
@@ -20,7 +116,9 @@ export default function MenuBar({ onSpotlightToggle, onAppLaunch, barStyle }) {
   const { activeApp } = useWindows();
   const [time, setTime] = useState('');
   const [appleMenuOpen, setAppleMenuOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState(null);
   const menuRef = useRef(null);
+  const menuBarRef = useRef(null);
 
   useEffect(() => {
     const update = () => {
@@ -37,6 +135,9 @@ export default function MenuBar({ onSpotlightToggle, onAppLaunch, barStyle }) {
     const handler = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
         setAppleMenuOpen(false);
+      }
+      if (menuBarRef.current && !menuBarRef.current.contains(e.target)) {
+        setOpenMenu(null);
       }
     };
     document.addEventListener('mousedown', handler);
@@ -74,7 +175,7 @@ export default function MenuBar({ onSpotlightToggle, onAppLaunch, barStyle }) {
               }}
             >
               {[
-                { label: 'About This Mac', action: () => onAppLaunch?.('settings', 'System Settings') },
+                { label: 'About This Mac', action: () => onAppLaunch?.('aboutthismac', 'About This Mac') },
                 '-',
                 { label: 'System Settings...', action: () => onAppLaunch?.('settings', 'System Settings'), shortcut: '⌘,' },
                 { label: 'App Store...', action: null },
@@ -114,9 +215,57 @@ export default function MenuBar({ onSpotlightToggle, onAppLaunch, barStyle }) {
           )}
         </div>
         <button className="h-[22px] hover:bg-white/15 transition-colors rounded-[6px] font-semibold text-white" style={{ padding: '0 10px' }}>{activeApp?.title || 'Finder'}</button>
-        {getMenuItems(activeApp?.appId).map(item => (
-          <button key={item} className="h-[22px] hover:bg-white/15 transition-colors rounded-[6px] text-white/80" style={{ padding: '0 9px' }}>{item}</button>
-        ))}
+        <div ref={menuBarRef} className="flex items-center">
+          {getMenuItems(activeApp?.appId).map(item => (
+            <div key={item} className="relative">
+              <button
+                className="h-[22px] hover:bg-white/15 transition-colors rounded-[6px] text-white/80"
+                style={{ padding: '0 9px', background: openMenu === item ? 'rgba(255,255,255,0.15)' : undefined }}
+                onClick={() => setOpenMenu(openMenu === item ? null : item)}
+                onMouseEnter={() => openMenu && setOpenMenu(item)}
+              >
+                {item}
+              </button>
+              {openMenu === item && menuContents[item] && (
+                <div
+                  className="absolute top-[24px] left-0 rounded-[8px] overflow-hidden"
+                  style={{
+                    background: 'rgba(34,35,40,0.76)',
+                    backdropFilter: 'blur(70px) saturate(200%)',
+                    WebkitBackdropFilter: 'blur(70px) saturate(200%)',
+                    boxShadow: 'var(--mac-shadow-popover)',
+                    minWidth: 200,
+                    padding: '4px 0',
+                    zIndex: 1000,
+                  }}
+                >
+                  {menuContents[item].map((menuItem, i) => menuItem === '-' ? (
+                    <div key={i} style={{ height: 1, background: 'rgba(255,255,255,0.1)', margin: '4px 0' }} />
+                  ) : (
+                    <button
+                      key={i}
+                      className="flex items-center justify-between w-full text-left cursor-default"
+                      style={{
+                        padding: '2px 12px 2px 20px',
+                        fontSize: 13,
+                        color: menuItem.disabled ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.9)',
+                        lineHeight: '20px',
+                        pointerEvents: menuItem.disabled ? 'none' : 'auto',
+                      }}
+                      onMouseEnter={e => { if (!menuItem.disabled) { e.currentTarget.style.background = '#0a84ff'; e.currentTarget.style.color = '#fff'; }}}
+                      onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = menuItem.disabled ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.9)'; }}
+                      onClick={() => setOpenMenu(null)}
+                    >
+                      <span>{menuItem.label}</span>
+                      {menuItem.shortcut && <span style={{ fontSize: 12, opacity: 0.45, marginLeft: 24 }}>{menuItem.shortcut}</span>}
+                      {menuItem.arrow && <span style={{ fontSize: 10, opacity: 0.4, marginLeft: 24 }}>▶</span>}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
       <div className="flex items-center text-white/90" style={{ gap: 3 }}>
         {/* Spotlight */}

@@ -106,6 +106,7 @@ const batteryHistory = [18, 19, 21, 22, 24, 23, 22, 20, 19, 20, 23, 28, 32, 36, 
 
 export default function Settings() {
   const [active, setActive] = useState('general');
+  const [subPanel, setSubPanel] = useState(null); // 'about', 'storage', etc.
   const [search, setSearch] = useState('');
   const [s, setS] = useState({
     handoff: true, askKeepChanges: true, closeWindows: false,
@@ -126,20 +127,123 @@ export default function Settings() {
   const filtered = search ? categories.filter(c => c.label.toLowerCase().includes(search.toLowerCase())) : categories;
   const selectedWallpaper = wallpaperPresets.find(w => w.id === s.wallpaperId) ?? wallpaperPresets[0];
 
-  const NavRow = ({ icon, color, label, noBorder }) => (
-    <MacSettingsRow
-      label={
-        <div className="flex items-center gap-3">
-          <div className="w-[24px] h-[24px] rounded-[6px] flex items-center justify-center shrink-0" style={{ background: color }}>
-            <SFSymbol name={icon} size={14} color="white" />
-          </div>
-          <span>{label}</span>
-        </div>
-      }
-      noBorder={noBorder}
+  const NavRow = ({ icon, color, label, noBorder, onClick }) => (
+    <button
+      className="w-full text-left hover:bg-black/[0.03] transition-colors"
+      onClick={onClick}
     >
-      <SFSymbol name="chevron.right" size={14} color="#C7C7CC" />
-    </MacSettingsRow>
+      <MacSettingsRow
+        label={
+          <div className="flex items-center gap-3">
+            <div className="w-[24px] h-[24px] rounded-[6px] flex items-center justify-center shrink-0" style={{ background: color }}>
+              <SFSymbol name={icon} size={14} color="white" />
+            </div>
+            <span>{label}</span>
+          </div>
+        }
+        noBorder={noBorder}
+      >
+        <SFSymbol name="chevron.right" size={14} color="#C7C7CC" />
+      </MacSettingsRow>
+    </button>
+  );
+
+  const ContentHeader = ({ title, onBack }) => (
+    <div className="flex items-center h-[52px] px-4 border-b border-black/5 bg-[#f5f5f7]/80 sticky top-0 z-10 backdrop-blur-xl">
+      <div className="flex items-center gap-2">
+        <button
+          className="w-[28px] h-[28px] rounded-[6px] flex items-center justify-center hover:bg-black/5 transition-colors"
+          onClick={onBack}
+        >
+          <SFSymbol name="chevron.left" size={16} color="#007AFF" weight={2} />
+        </button>
+        <button
+          className="w-[28px] h-[28px] rounded-[6px] flex items-center justify-center opacity-30 cursor-default"
+          disabled
+        >
+          <SFSymbol name="chevron.right" size={16} color="#007AFF" weight={2} />
+        </button>
+      </div>
+      {title && <span className="ml-4 text-[13px] font-semibold text-black">{title}</span>}
+    </div>
+  );
+
+  const AboutPanel = () => (
+    <div className="pb-8">
+      <ContentHeader title="About" onBack={() => setSubPanel(null)} />
+      <div className="px-10">
+      <div className="flex flex-col items-center pt-8 pb-6">
+        {/* MacBook Pro Image */}
+        <div className="w-[120px] h-[80px] relative mb-4">
+          <div className="absolute inset-x-0 top-0 h-[65px] bg-gradient-to-b from-[#2d2d2d] to-[#1a1a1a] rounded-t-[6px] border border-[#3a3a3a] overflow-hidden">
+            <div className="absolute inset-[3px] bg-[#4a9eff] rounded-[3px]" />
+          </div>
+          <div className="absolute bottom-0 inset-x-[-8px] h-[12px] bg-gradient-to-b from-[#c4c4c4] to-[#a8a8a8] rounded-[2px]" />
+          <div className="absolute bottom-[2px] left-1/2 -translate-x-1/2 w-[20px] h-[4px] bg-[#8a8a8a] rounded-full" />
+        </div>
+        <h2 className="text-[28px] font-bold text-black">MacBook Pro</h2>
+        <p className="text-[13px] text-[#86868B] mt-1">14-inch, 2023</p>
+      </div>
+
+      <MacSettingsGroup>
+        <MacSettingsRow label="Name" noBorder={false}>
+          <span className="text-[14px] text-black/80">User's MacBook Pro</span>
+        </MacSettingsRow>
+        <MacSettingsRow label="Chip" noBorder={false}>
+          <span className="text-[14px] text-black/80">Apple M3 Pro</span>
+        </MacSettingsRow>
+        <MacSettingsRow label="Memory" noBorder={false}>
+          <span className="text-[14px] text-black/80">18 GB</span>
+        </MacSettingsRow>
+        <MacSettingsRow label="Serial number" noBorder={false}>
+          <span className="text-[14px] text-black/80">XXXX1234ABCD</span>
+        </MacSettingsRow>
+        <MacSettingsRow label="Coverage Expired" noBorder>
+          <button className="px-3 py-1 text-[12px] text-black/80 bg-black/5 rounded-[6px] border border-black/10 hover:bg-black/10 transition-colors">
+            Details...
+          </button>
+        </MacSettingsRow>
+      </MacSettingsGroup>
+
+      <div className="mt-6 mb-2">
+        <span className="text-[13px] font-semibold text-black">macOS</span>
+      </div>
+      <MacSettingsGroup>
+        <MacSettingsRow
+          label={
+            <div className="flex items-center gap-3">
+              <div className="w-[36px] h-[36px] rounded-[8px] bg-gradient-to-br from-[#ffd700] via-[#ff6b00] to-[#ff1493] flex items-center justify-center">
+                <span className="text-white text-[18px] font-bold">S</span>
+              </div>
+              <span className="text-[14px]">macOS Sequoia</span>
+            </div>
+          }
+          noBorder
+        >
+          <span className="text-[13px] text-black/60">Version 15.0</span>
+        </MacSettingsRow>
+      </MacSettingsGroup>
+
+      <div className="mt-6 mb-2">
+        <span className="text-[13px] font-semibold text-black">Displays</span>
+      </div>
+      <MacSettingsGroup>
+        <MacSettingsRow
+          label={
+            <div className="flex items-center gap-3">
+              <div className="w-[32px] h-[22px] bg-gradient-to-b from-[#e8e8e8] to-[#d0d0d0] rounded-[3px] border border-black/10 flex items-center justify-center">
+                <div className="w-[26px] h-[16px] bg-[#4a9eff] rounded-[1px]" />
+              </div>
+              <span className="text-[14px]">Built-in Liquid Retina XDR Display</span>
+            </div>
+          }
+          noBorder
+        >
+          <span className="text-[13px] text-black/60">14-inch (3024 × 1964)</span>
+        </MacSettingsRow>
+      </MacSettingsGroup>
+      </div>
+    </div>
   );
 
   const panels = {
@@ -156,10 +260,16 @@ export default function Settings() {
         </div>
 
         <MacSettingsGroup>
-          <NavRow icon="display" color="#8E8E93" label="About" />
+          <NavRow icon="display" color="#8E8E93" label="About" onClick={() => setSubPanel('about')} />
           <NavRow icon="gear" color="#8E8E93" label="Software Update" />
-          <NavRow icon="internaldrive" color="#8E8E93" label="Storage" />
-          <NavRow icon="applelogo" color="#FF3B30" label="AppleCare & Warranty" />
+          <NavRow icon="internaldrive" color="#8E8E93" label="Storage" noBorder />
+        </MacSettingsGroup>
+
+        <MacSettingsGroup>
+          <NavRow icon="applelogo" color="#FF3B30" label="AppleCare & Warranty" noBorder />
+        </MacSettingsGroup>
+
+        <MacSettingsGroup>
           <NavRow icon="wifi" color="#007AFF" label="AirDrop & Continuity" />
           <NavRow icon="key" color="#8E8E93" label="AutoFill & Passwords" />
           <NavRow icon="calendar" color="#007AFF" label="Date & Time" />
@@ -613,7 +723,7 @@ export default function Settings() {
                 }}
                 onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = 'rgba(0,0,0,0.05)'; }}
                 onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
-                onClick={() => setActive(cat.id)}
+                onClick={() => { setActive(cat.id); setSubPanel(null); }}
               >
                 <div className="w-[22px] h-[22px] rounded-[5px] flex items-center justify-center shrink-0" style={{ background: cat.color }}>
                   <SFSymbol name={cat.icon} size={13} color="white" />
@@ -625,9 +735,13 @@ export default function Settings() {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto" style={{ padding: '0 40px' }}>
+      <div className="flex-1 overflow-y-auto" style={{ padding: subPanel ? '0' : '0 40px' }}>
         <div style={{ maxWidth: 580, margin: '0 auto' }}>
-          {panels[active] || panels['general']}
+          {subPanel === 'about' ? (
+            <AboutPanel />
+          ) : (
+            panels[active] || panels['general']
+          )}
         </div>
       </div>
     </div>

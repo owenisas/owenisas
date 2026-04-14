@@ -10,7 +10,7 @@ const MAX_KEY_PRESSES = 8;
 const MODELS = [
   { name: 'Computer Desk', path: '/assets/computer_desk.glb', realWidth: DESK_REAL_WIDTH, onDesk: false, deskPos: [0,0,0], rotationY: Math.PI, animation: 'none' },
   { name: 'MacBook Pro M3', path: '/assets/macbook_pro_m3_16_inch_2024.glb', realWidth: 35.6, onDesk: true, deskPos: [-0.08,0,0.0], rotationY: Math.PI/2, animation: 'zoomToScreen' },
-  { name: 'Keychron K8', path: '/assets/keychron-k8/source/KeychronK8_01.fbx', type: 'fbx', realWidth: 35.9, onDesk: true, deskPos: [0.1,0,0.0], rotationY: Math.PI/2, animation: 'typingBurst' },
+  { name: 'Knob1 Keyboard', path: '/assets/knob1_mechanical_keyboard.glb', realWidth: 35.9, onDesk: true, deskPos: [0.1,0,0.0], rotationY: Math.PI/2, animation: 'typingBurst' },
   { name: 'Razer Viper Mini', path: '/assets/razer_viper_mini.glb', realWidth: 11.8, onDesk: true, deskPos: [0.07,0,-0.25], rotationY: Math.PI*240/180 - Math.PI/6, animation: 'rgbBurst' },
   { name: 'DJI Mavic 3', path: '/assets/dji-mavic-3/source/DJI-Mavic_3.glb', realWidth: 35, onDesk: true, deskPos: [0.08,0,0.35], rotationY: Math.PI/2+0.3, animation: 'propellerSpin' },
   { name: 'Divergence Meter', path: '/assets/divergence_meter_steinsgate.glb', realWidth: 25, onDesk: true, deskPos: [-0.1,0,0.3], rotationY: Math.PI/2+0.5, animation: 'nixieFlicker' },
@@ -316,121 +316,116 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
           state.active = false; state.t = 0; break;
         }
         case 'typingBurst': {
-          model.traverse(child => { if (child.name === 'SM_KeychronK8_misc') child.visible = false; });
-          let xMin = Infinity, xMax = -Infinity, yMin = Infinity, yMax = -Infinity, zMax = -Infinity;
-          let keyboardMesh = null;
+          // New keycap animation for knob1 keyboard - move parent Object3D positions
+          model.updateMatrixWorld(true);
+          const meshes = [];
+          const meshMap = {};
           model.traverse(child => {
-            if (child.isMesh && child.material) {
-              if (child.name === 'SM_KeychronK8' || !keyboardMesh) keyboardMesh = child;
-              const pos = child.geometry.attributes.position;
-              if (pos) {
-                for (let i = 0; i < pos.count; i++) {
-                  const x = pos.getX(i);
-                  const y = pos.getY(i);
-                  const z = pos.getZ(i);
-                  if (x < xMin) xMin = x;
-                  if (x > xMax) xMax = x;
-                  if (y < yMin) yMin = y;
-                  if (y > yMax) yMax = y;
-                  if (z > zMax) zMax = z;
+            if (child.isMesh && child.geometry) {
+              child.geometry.computeBoundingBox();
+              const bbox = child.geometry.boundingBox;
+              if (bbox) {
+                const center = new THREE.Vector3();
+                bbox.getCenter(center);
+                center.applyMatrix4(child.matrixWorld);
+                meshes.push({
+                  name: child.name,
+                  x: center.x.toFixed(4),
+                  z: center.z.toFixed(4),
+                });
+                meshMap[child.name] = child;
+              }
+            }
+          });
+
+          // Group meshes by position
+          const groups = {};
+          meshes.forEach(m => {
+            const x = Math.round(parseFloat(m.x) / 0.01) * 0.01;
+            const z = Math.round(parseFloat(m.z) / 0.01) * 0.01;
+            const key = `${x.toFixed(3)}_${z.toFixed(3)}`;
+            if (!groups[key]) groups[key] = [];
+            groups[key].push(m.name);
+          });
+
+          // Filter to keycap positions (3+ meshes with keycap materials)
+          const keycapPositions = Object.keys(groups).filter(k => {
+            const meshNames = groups[k];
+            if (meshNames.length < 3) return false;
+            const hasWhiteKeycap = meshNames.some(n => n.includes('Plastic_(1)')) &&
+                                   meshNames.some(n => n.includes('Plastic_(5)'));
+            const hasOrangeKeycap = meshNames.some(n => n.includes('Plastic_(2)')) ||
+                                    meshNames.some(n => n.includes('Plastic_(4)'));
+            return hasWhiteKeycap || hasOrangeKeycap;
+          });
+
+          // Sort by Z then X for row order
+          const sortedKeys = [...new Set(keycapPositions)].sort((a, b) => {
+            const [ax, az] = a.split('_').map(parseFloat);
+            const [bx, bz] = b.split('_').map(parseFloat);
+            if (Math.abs(az - bz) > 0.015) return az - bz;
+            return ax - bx;
+          });
+
+          state.meshMap = meshMap;
+          state.groups = groups;
+          state.allPositions = sortedKeys;
+          state.currentIdx = 0;
+          state.lastPressedMeshes = new Set();
+          state.meshRefs = {};
+          state.meshOffsets = {}; // Track cumulative geometry offset per mesh
+          state.meshTargets = {};
+          state.originalMats = {}; // Store original materials for glow effect
+          // Press depth in geometry local units - scale is ~0.023, so 5 local = 0.12 world
+          state.PRESS_DEPTH = 5;
+          state.LERP_SPEED = 0.35;
+          // Bright glow color for pressed keys - high visibility
+          state.glowColor = new THREE.Color(0xff6600);
+
+          // pressKey function - set target and add glow
+          state.pressKey = (posKey) => {
+            const meshNames = groups[posKey];
+            if (!meshNames) return new Set();
+            const movedMeshes = new Set();
+            meshNames.forEach(meshName => {
+              const mesh = meshMap[meshName];
+              if (mesh && mesh.geometry && !movedMeshes.has(mesh.uuid)) {
+                movedMeshes.add(mesh.uuid);
+                state.meshRefs[mesh.uuid] = mesh;
+                if (state.meshOffsets[mesh.uuid] === undefined) {
+                  state.meshOffsets[mesh.uuid] = 0;
+                }
+                state.meshTargets[mesh.uuid] = -state.PRESS_DEPTH;
+                // Add glow effect
+                if (mesh.material && !state.originalMats[mesh.uuid]) {
+                  state.originalMats[mesh.uuid] = {
+                    emissive: mesh.material.emissive?.clone(),
+                    emissiveIntensity: mesh.material.emissiveIntensity || 0
+                  };
+                  mesh.material = mesh.material.clone();
+                  mesh.material.emissive = state.glowColor;
+                  mesh.material.emissiveIntensity = 2.5;
                 }
               }
-            }
-          });
+            });
+            return movedMeshes;
+          };
 
-          const xRange = xMax - xMin;
-          const yRange = yMax - yMin;
-          const xInset = xRange * 0.075;
-          const yInset = yRange * 0.19;
-          const rowSpecs = [
-            { count: 14, y: yMax - yInset, offset: 0.00 },
-            { count: 14, y: yMax - yInset - yRange * 0.16, offset: 0.03 },
-            { count: 13, y: yMax - yInset - yRange * 0.32, offset: 0.075 },
-            { count: 12, y: yMax - yInset - yRange * 0.48, offset: 0.125 },
-            { count: 9, y: yMin + yInset, offset: 0.22 },
-          ];
-          const keyCenters = [];
-          const keySpecs = [];
-          rowSpecs.forEach(({ count, y, offset }) => {
-            const rowStart = xMin + xInset + xRange * offset;
-            const rowEnd = xMax - xInset;
-            const step = (rowEnd - rowStart) / Math.max(count - 1, 1);
-            for (let i = 0; i < count; i++) {
-              const center = new THREE.Vector2(rowStart + step * i, y);
-              keyCenters.push(center);
-              keySpecs.push({
-                center,
-                width: step * 0.72,
-                depth: yRange * 0.085,
-              });
-            }
-          });
-
-          const typingOrder = [
-            28, 18, 29, 33, 20, 36, 30, 45,
-            15, 25, 34, 21, 37, 46, 31, 19,
-            40, 52, 41, 53, 42, 54, 43, 55,
-            7, 8, 22, 23, 38, 39, 50, 51,
-            13, 27, 35, 49, 57, 58, 59, 60,
-          ].filter(index => index < keyCenters.length);
-
-          state.keyPresses = Array.from({ length: MAX_KEY_PRESSES }, () => new THREE.Vector4(0, 0, 1, 0));
-          state.pressCount = { value: 0 };
-          state.keyCenters = keyCenters;
-          state.typingOrder = typingOrder;
-          state.keyRadius = Math.min(xRange / 28, yRange / 12);
-          state.keyPressDepth = 7.5;
-          state.burstIndex = 0;
-          state.keyMeshes = [];
-          state.keyRestZ = zMax + 3.5;
-
-          model.traverse(child => {
-            if (child.isMesh && child.material) {
-              const keyPresses = state.keyPresses;
-              const pressCount = state.pressCount;
-              const applyKeyPressShader = (material) => {
-                material.onBeforeCompile = (shader) => {
-                  shader.uniforms.uKeyPresses = { value: keyPresses };
-                  shader.uniforms.uPressCount = pressCount;
-                  shader.vertexShader = shader.vertexShader.replace('void main() {', `uniform vec4 uKeyPresses[${MAX_KEY_PRESSES}];\nuniform float uPressCount;\nvoid main() {`);
-                  shader.vertexShader = shader.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>\nfor (int i = 0; i < ${MAX_KEY_PRESSES}; i++) {\n  if (float(i) >= uPressCount) { break; }\n  vec4 keyPress = uKeyPresses[i];\n  float keyDist = distance(position.xy, keyPress.xy);\n  float keyShape = smoothstep(keyPress.z, 0.0, keyDist);\n  transformed.z -= keyShape * keyPress.w;\n}`);
-                };
-              };
-              if (Array.isArray(child.material)) {
-                child.material = child.material.map((material) => {
-                  const cloned = material.clone();
-                  applyKeyPressShader(cloned);
-                  return cloned;
-                });
-              } else {
-                child.material = child.material.clone();
-                applyKeyPressShader(child.material);
+          // releaseKey function - restore material
+          state.releaseKey = (meshUuids) => {
+            meshUuids.forEach(uuid => {
+              state.meshTargets[uuid] = 0;
+              const mesh = state.meshRefs[uuid];
+              const orig = state.originalMats[uuid];
+              if (mesh && mesh.material && orig) {
+                mesh.material.emissive = orig.emissive || new THREE.Color(0x000000);
+                mesh.material.emissiveIntensity = orig.emissiveIntensity;
               }
-            }
-          });
+              delete state.originalMats[uuid];
+            });
+          };
 
-          if (keyboardMesh) {
-            const keyGroup = new THREE.Group();
-            keyGroup.name = 'KeyPressOverlay';
-            const keyCapMaterial = new THREE.MeshStandardMaterial({
-              color: 0xf2f2f2,
-              roughness: 0.6,
-              metalness: 0.02,
-              emissive: new THREE.Color(0x08142a),
-              emissiveIntensity: 0.08,
-            });
-            keySpecs.forEach(({ center, width, depth }, index) => {
-              const geometry = new THREE.BoxGeometry(width, depth, 4.2);
-              const keyCap = new THREE.Mesh(geometry, keyCapMaterial.clone());
-              keyCap.name = `PressableKey_${index}`;
-              keyCap.position.set(center.x, center.y, state.keyRestZ);
-              keyCap.userData.restZ = state.keyRestZ;
-              keyGroup.add(keyCap);
-              state.keyMeshes.push(keyCap);
-            });
-            keyboardMesh.add(keyGroup);
-          }
-          state.active = false; state.t = 0; break;
+          state.active = false; state.t = 0; state.autoPlayTimer = null; break;
         }
         case 'rgbBurst': {
           state.rgbMats = [];
@@ -528,52 +523,47 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
             break;
           }
           case 'typingBurst': {
-            if (state.active) {
-              state.t += Math.min(delta, 1 / 30);
-              const dur = 3.0;
-              const interval = 0.055;
-              const pressDur = 0.22;
-              let pressCount = 0;
-              if (state.t < dur) {
-                state.keyPresses.forEach((keyPress) => keyPress.set(0, 0, 1, 0));
-                const activeKeyMeshes = new Set();
-                for (let i = 0; i < state.typingOrder.length && pressCount < MAX_KEY_PRESSES; i++) {
-                  const start = i * interval;
-                  const localT = state.t - start;
-                  if (localT < 0 || localT > pressDur) continue;
-                  const keyIndex = state.typingOrder[(i + state.burstIndex) % state.typingOrder.length];
-                  const center = state.keyCenters[keyIndex];
-                  const progress = localT / pressDur;
-                  const press = Math.sin(progress * Math.PI);
-                  state.keyPresses[pressCount].set(center.x, center.y, state.keyRadius, state.keyPressDepth * press);
-                  const keyMesh = state.keyMeshes[keyIndex];
-                  if (keyMesh) {
-                    keyMesh.position.z = keyMesh.userData.restZ - state.keyPressDepth * 1.6 * press;
-                    keyMesh.scale.z = 1 - 0.18 * press;
-                    keyMesh.material.emissiveIntensity = 0.08 + 0.28 * press;
-                    activeKeyMeshes.add(keyMesh);
+            // Lerp geometry Y offset toward targets using translate + needsUpdate
+            if (state.meshTargets && state.meshRefs && state.meshOffsets) {
+              Object.entries(state.meshTargets).forEach(([uuid, targetOffset]) => {
+                const mesh = state.meshRefs[uuid];
+                const currentOffset = state.meshOffsets[uuid] || 0;
+                if (mesh && mesh.geometry && targetOffset !== undefined) {
+                  const diff = targetOffset - currentOffset;
+                  if (Math.abs(diff) > 0.001) {
+                    const step = diff * state.LERP_SPEED;
+                    mesh.geometry.translate(0, step, 0);
+                    mesh.geometry.attributes.position.needsUpdate = true;
+                    state.meshOffsets[uuid] = currentOffset + step;
                   }
-                  pressCount++;
                 }
-                state.pressCount.value = pressCount;
-                state.keyMeshes.forEach((keyMesh) => {
-                  if (keyMesh.position.z !== keyMesh.userData.restZ && !activeKeyMeshes.has(keyMesh)) {
-                    keyMesh.position.z += (keyMesh.userData.restZ - keyMesh.position.z) * 0.45;
-                    keyMesh.scale.z += (1 - keyMesh.scale.z) * 0.45;
-                    keyMesh.material.emissiveIntensity += (0.08 - keyMesh.material.emissiveIntensity) * 0.45;
-                  }
-                });
-              } else {
-                state.active = false;
-                state.t = 0;
-                state.pressCount.value = 0;
-                state.keyMeshes.forEach((keyMesh) => {
-                  keyMesh.position.z = keyMesh.userData.restZ;
-                  keyMesh.scale.z = 1;
-                  keyMesh.material.emissiveIntensity = 0.08;
-                });
-                state.burstIndex = (state.burstIndex + 7) % state.typingOrder.length;
-              }
+              });
+            }
+
+            // Auto-play animation when active
+            if (state.active && !state.autoPlayTimer) {
+              const autoPlayStep = () => {
+                // Release previous key
+                if (state.lastPressedMeshes.size > 0) {
+                  state.releaseKey(state.lastPressedMeshes);
+                }
+
+                // Press next key
+                if (state.currentIdx < state.allPositions.length) {
+                  const posKey = state.allPositions[state.currentIdx];
+                  state.lastPressedMeshes = state.pressKey(posKey) || new Set();
+                  state.currentIdx++;
+                  state.autoPlayTimer = setTimeout(autoPlayStep, 200);
+                } else {
+                  // Done - release and reset
+                  state.releaseKey(state.lastPressedMeshes);
+                  state.currentIdx = 0;
+                  state.lastPressedMeshes = new Set();
+                  state.active = false;
+                  state.autoPlayTimer = null;
+                }
+              };
+              state.autoPlayTimer = setTimeout(autoPlayStep, 200);
             }
             break;
           }

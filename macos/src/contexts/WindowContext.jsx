@@ -4,14 +4,15 @@ import { createContext, useContext, useState, useCallback, useRef } from 'react'
 const WindowContext = createContext(null);
 
 const windowDefaults = {
-  calculator: { width: 232, height: 396 },
-  finder:     { width: 920, height: 560 },
-  notes:      { width: 900, height: 560 },
-  terminal:   { width: 640, height: 420 },
-  safari:     { width: 1020, height: 640 },
-  settings:   { width: 780, height: 520 },
-  textedit:   { width: 680, height: 480 },
-  photos:     { width: 960, height: 600 },
+  calculator:    { width: 232, height: 396 },
+  finder:        { width: 920, height: 560 },
+  notes:         { width: 900, height: 560 },
+  terminal:      { width: 640, height: 420 },
+  safari:        { width: 1020, height: 640 },
+  settings:      { width: 780, height: 520 },
+  textedit:      { width: 680, height: 480 },
+  photos:        { width: 960, height: 600 },
+  aboutthismac:  { width: 320, height: 440, resizable: false },
 };
 
 export function WindowProvider({ children }) {
@@ -60,6 +61,7 @@ export function WindowProvider({ children }) {
       maximized: false,
       prevBounds: null,
       payload,
+      resizable: windowDefaults[appId]?.resizable !== false,
     };
 
     setWindows(prev => [...prev, newWindow]);

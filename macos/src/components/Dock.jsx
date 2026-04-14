@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import { appIcons } from './Icons';
 import { useWindows } from '../contexts/WindowContext';
 
@@ -19,6 +19,7 @@ export default function Dock({ onAppLaunch, dockStyle }) {
   const [scales, setScales] = useState(dockApps.map(() => 1));
   const [bouncingApp, setBouncingApp] = useState(null);
   const [tooltip, setTooltip] = useState(null);
+  const tooltipTimeout = useRef(null);
   const { isAppOpen, restoreWindow, windows } = useWindows();
 
   const onMouseMove = useCallback((e) => {
@@ -36,7 +37,22 @@ export default function Dock({ onAppLaunch, dockStyle }) {
 
   const onMouseLeave = useCallback(() => {
     setScales(dockApps.map(() => 1));
+    clearTimeout(tooltipTimeout.current);
     setTooltip(null);
+  }, []);
+
+  const showTooltip = useCallback((id) => {
+    clearTimeout(tooltipTimeout.current);
+    tooltipTimeout.current = setTimeout(() => setTooltip(id), 150);
+  }, []);
+
+  const hideTooltip = useCallback(() => {
+    clearTimeout(tooltipTimeout.current);
+    setTooltip(null);
+  }, []);
+
+  useEffect(() => {
+    return () => clearTimeout(tooltipTimeout.current);
   }, []);
 
   const handleClick = useCallback((appId, title) => {
@@ -79,7 +95,7 @@ export default function Dock({ onAppLaunch, dockStyle }) {
               </div>
             )}
             <div
-              className="dock-icon w-[50px] h-[50px] cursor-pointer transition-transform duration-150 ease-out"
+              className="dock-icon w-[54px] h-[54px] cursor-pointer transition-transform duration-150 ease-out"
               style={{
                 transform: `scale(${scales[i]})${bouncingApp === app.id ? '' : ''}`,
                 transformOrigin: 'bottom center',
@@ -88,13 +104,16 @@ export default function Dock({ onAppLaunch, dockStyle }) {
                 filter: 'drop-shadow(0 8px 10px rgba(0,0,0,0.24))',
               }}
               onClick={() => handleClick(app.id, app.title)}
-              onMouseEnter={() => setTooltip(app.id)}
-              onMouseLeave={() => setTooltip(null)}
+              onMouseEnter={() => showTooltip(app.id)}
+              onMouseLeave={hideTooltip}
             >
               {appIcons[app.id]}
             </div>
             {isAppOpen(app.id) && (
-              <div className="w-[4px] h-[4px] rounded-full bg-white/85 mt-1 absolute -bottom-[3px] shadow-sm" />
+              <div
+                className="w-[5px] h-[5px] rounded-full bg-white/90 absolute shadow-[0_0_3px_rgba(255,255,255,0.5)]"
+                style={{ bottom: -8 }}
+              />
             )}
           </div>
         ))}
@@ -110,10 +129,10 @@ export default function Dock({ onAppLaunch, dockStyle }) {
             </div>
           )}
           <div
-            className="dock-icon w-[50px] h-[50px] cursor-pointer transition-transform duration-150 ease-out"
+            className="dock-icon w-[54px] h-[54px] cursor-pointer transition-transform duration-150 ease-out"
             style={{ transform: `scale(${scales[dockApps.length] || 1})`, transformOrigin: 'bottom center', filter: 'drop-shadow(0 8px 10px rgba(0,0,0,0.24))' }}
-            onMouseEnter={() => setTooltip('trash')}
-            onMouseLeave={() => setTooltip(null)}
+            onMouseEnter={() => showTooltip('trash')}
+            onMouseLeave={hideTooltip}
           >
             {appIcons.trash}
           </div>
