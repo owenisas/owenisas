@@ -1,0 +1,11 @@
+{
+  "name": "owenisas-monorepo",
+  "private": true,
+  "scripts": {
+    "install:macos": "cd macos && npm install",
+    "build": "cd macos && npm run build"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
