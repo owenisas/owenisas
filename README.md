@@ -63,7 +63,6 @@ AI/ML engineer and full-stack developer. CS student who fine-tunes LLMs, builds 
 
 | Project | Description | Stack |
 | :--- | :--- | :--- |
-| **[Parafield](https://parafield.ai/)** | AI audio generation platform — bringing sound intelligence to life. Job-based generation pipeline with history tracking. | `Next.js` `TypeScript` `AI` |
 | **[FPAI](https://fpai.reunifylabs.com/)** | First Principle AI — ed-tech platform that explains concepts from first principles using a block-based learning interface with recursive sub-blocks. Co-founder at [Reunify Labs](https://github.com/Reunify-Labs/FPAI). | `Next.js` `AWS Lambda` `DynamoDB` `OpenAI` |
 | **[Origraph](https://github.com/owenisas/Origraph)** | AI content provenance platform — invisible text watermarking SDK, provenance registry, browser extension. **Champion at [Hack The East](https://hacktheeast.com/) 2026.** | `Python` `JS` `AI` |
 | **[Amadeus 2.0](https://github.com/owenisas/Amadeus2.0)** | Vision-first Android automation framework — AI-directed app workflows via Appium + Gemini/local LLM. GUI dashboard, TUI operator mode, scheduled jobs. | `Python` `Appium` `Gemini` |
