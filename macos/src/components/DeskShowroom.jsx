@@ -196,6 +196,52 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
     let mouseEntry = null;
     const mouseModelOffset = { x: 0, z: 0 };
 
+    // Mobile detection and gyroscope
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      || (navigator.maxTouchPoints && navigator.maxTouchPoints > 2);
+    const gyroInput = { x: 0, y: 0 };
+    let gyroEnabled = false;
+
+    // Request gyroscope permission and setup (iOS requires user gesture)
+    if (isMobile && window.DeviceOrientationEvent) {
+      const enableGyro = () => {
+        if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+          // iOS 13+ requires permission
+          DeviceOrientationEvent.requestPermission()
+            .then(response => {
+              if (response === 'granted') {
+                gyroEnabled = true;
+                window.addEventListener('deviceorientation', handleOrientation);
+              }
+            })
+            .catch(console.error);
+        } else {
+          // Non-iOS devices
+          gyroEnabled = true;
+          window.addEventListener('deviceorientation', handleOrientation);
+        }
+        container.removeEventListener('touchstart', enableGyro, { once: true });
+      };
+
+      // Try to enable immediately for non-iOS, or wait for touch on iOS
+      if (typeof DeviceOrientationEvent.requestPermission !== 'function') {
+        gyroEnabled = true;
+        window.addEventListener('deviceorientation', handleOrientation);
+      } else {
+        container.addEventListener('touchstart', enableGyro, { once: true });
+      }
+    }
+
+    function handleOrientation(event) {
+      if (!gyroEnabled) return;
+      // beta: front-back tilt (-180 to 180), gamma: left-right tilt (-90 to 90)
+      const beta = event.beta || 0;   // front-back
+      const gamma = event.gamma || 0; // left-right
+      // Normalize to -1 to 1 range, with some deadzone
+      gyroInput.x = Math.max(-1, Math.min(1, gamma / 30)); // left-right -> x
+      gyroInput.y = Math.max(-1, Math.min(1, (beta - 45) / 30)); // front-back -> y (45° is neutral holding angle)
+    }
+
     // ── Loading overlay refs ──
     const overlayEl = container.querySelector('.showroom-loading');
     const fillEl = container.querySelector('.showroom-fill');
@@ -805,10 +851,12 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
         animId = requestAnimationFrame(animate);
         const delta = clock.getDelta();
 
-        // Smooth mouse parallax
+        // Smooth parallax - use gyroscope on mobile, mouse on desktop
         const lerp = 1 - Math.pow(0.05, delta);
-        mouseParallax.x += (mouse.x * 0.3 - mouseParallax.x) * lerp;
-        mouseParallax.y += (mouse.y * 0.15 - mouseParallax.y) * lerp;
+        const inputX = (isMobile && gyroEnabled) ? gyroInput.x : mouse.x;
+        const inputY = (isMobile && gyroEnabled) ? gyroInput.y : mouse.y;
+        mouseParallax.x += (inputX * 0.3 - mouseParallax.x) * lerp;
+        mouseParallax.y += (inputY * 0.15 - mouseParallax.y) * lerp;
 
         // Apply parallax offset to camera (only when not zoomed)
         if (zoomState === 'idle') {
@@ -816,11 +864,11 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
           camera.position.y = origCamPos.y + mouseParallax.y;
         }
 
-        // Move 3D mouse model to mirror cursor
+        // Move 3D mouse model to mirror input (gyro on mobile, cursor on desktop)
         if (mouseEntry && zoomState === 'idle') {
           const range = 0.4;
-          const targetX = -mouse.y * range;
-          const targetZ = -mouse.x * range;
+          const targetX = -inputY * range;
+          const targetZ = -inputX * range;
           mouseModelOffset.x += (targetX - mouseModelOffset.x) * lerp;
           mouseModelOffset.z += (targetZ - mouseModelOffset.z) * lerp;
           const baseX = mouseEntry.config.deskPos[0] * deskWorldWidth;
@@ -852,6 +900,7 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
         renderer.domElement.removeEventListener('click', onClick);
         window.removeEventListener('resize', onResize);
         window.removeEventListener('keydown', onKeyDown);
+        if (gyroEnabled) window.removeEventListener('deviceorientation', handleOrientation);
         renderer.dispose();
         container.removeChild(renderer.domElement);
       }
