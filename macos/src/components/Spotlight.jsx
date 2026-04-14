@@ -24,9 +24,9 @@ const fileResults = [
 ];
 
 const webLinks = [
-  { id: 'web-github', title: 'GitHub Profile', subtitle: 'https://github.com/owenisas', icon: 'safari', appId: 'safari', payload: { url: 'https://github.com/owenisas' } },
-  { id: 'web-linkedin', title: 'LinkedIn Profile', subtitle: 'https://www.linkedin.com/in/thomas-suen-84776a262/', icon: 'safari', appId: 'safari', payload: { url: 'https://www.linkedin.com/in/thomas-suen-84776a262/' } },
-  { id: 'web-x', title: 'X (Twitter)', subtitle: 'https://x.com/ThomasSuen6', icon: 'safari', appId: 'safari', payload: { url: 'https://x.com/ThomasSuen6' } }
+  { id: 'web-github', title: 'GitHub Profile', subtitle: 'https://github.com/owenisas', icon: 'safari', externalUrl: 'https://github.com/owenisas' },
+  { id: 'web-linkedin', title: 'LinkedIn Profile', subtitle: 'https://www.linkedin.com/in/thomas-suen-84776a262/', icon: 'safari', externalUrl: 'https://www.linkedin.com/in/thomas-suen-84776a262/' },
+  { id: 'web-x', title: 'X (Twitter)', subtitle: 'https://x.com/ThomasSuen6', icon: 'safari', externalUrl: 'https://x.com/ThomasSuen6' }
 ];
 
 export default function Spotlight({ isOpen, onClose, onAppLaunch }) {
@@ -83,7 +83,8 @@ export default function Spotlight({ isOpen, onClose, onAppLaunch }) {
     if (e.key === 'ArrowUp') { e.preventDefault(); if (filtered.length) setSelectedIndex(i => Math.max(i - 1, 0)); return; }
     if (e.key === 'Enter' && filtered[selectedIndex]) {
       const item = filtered[selectedIndex];
-      onAppLaunch(item.appId || item.id, item.title, { ...item.payload, ts: Date.now() });
+      if (item.externalUrl) { window.open(item.externalUrl, '_blank'); }
+      else { onAppLaunch(item.appId || item.id, item.title, { ...item.payload, ts: Date.now() }); }
       onClose();
     }
   };
@@ -91,7 +92,7 @@ export default function Spotlight({ isOpen, onClose, onAppLaunch }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[300] flex items-start justify-center pt-[20vh]" onClick={onClose}>
+    <div className="fixed inset-0 z-[300] flex items-start justify-center pt-[28vh]" onClick={onClose}>
       <div
         className="w-[700px] rounded-[8px] overflow-hidden animate-[scale-in_0.15s_ease-out]"
         style={{ background: 'rgba(28,30,36,0.78)', backdropFilter: 'blur(64px) saturate(190%)', WebkitBackdropFilter: 'blur(64px) saturate(190%)', boxShadow: 'var(--mac-shadow-popover)', border: '0.5px solid rgba(255,255,255,0.18)' }}
@@ -131,7 +132,11 @@ export default function Spotlight({ isOpen, onClose, onAppLaunch }) {
                         width: 'calc(100% - 16px)',
                         background: selected ? 'rgba(10,132,255,0.84)' : 'transparent',
                       }}
-                      onClick={() => { onAppLaunch(item.appId || item.id, item.title, { ...item.payload, ts: Date.now() }); onClose(); }}
+                      onClick={() => {
+                        if (item.externalUrl) { window.open(item.externalUrl, '_blank'); }
+                        else { onAppLaunch(item.appId || item.id, item.title, { ...item.payload, ts: Date.now() }); }
+                        onClose();
+                      }}
                       onMouseEnter={() => setSelectedIndex(flatIndex)}
                     >
                       <div className="w-9 h-9 shrink-0">{appIcons[item.icon || item.id]}</div>

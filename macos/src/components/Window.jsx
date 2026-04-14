@@ -106,7 +106,7 @@ export default function Window({ windowData, children, toolbar }) {
     >
       {/* Title Bar */}
       <div
-        className="flex items-center h-[36px] shrink-0 px-[14px] gap-[8px] select-none"
+        className="flex items-center h-[36px] shrink-0 pl-[18px] pr-[14px] gap-[8px] select-none"
         style={{
           background: isActive ? 'rgba(245,248,255,0.12)' : 'rgba(245,248,255,0.07)',
           borderBottom: '0.5px solid rgba(255,255,255,0.09)',
@@ -193,7 +193,7 @@ export default function Window({ windowData, children, toolbar }) {
       </div>
 
       {/* Resize Handles */}
-      {!windowData.maximized && resizeHandles.map(dir => (
+      {!windowData.maximized && windowData.resizable !== false && resizeHandles.map(dir => (
         <div
           key={dir}
           className="absolute"

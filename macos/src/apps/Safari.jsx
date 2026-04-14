@@ -25,22 +25,30 @@ const readingList = [
   { title: 'Design notes for the modern browser UI', domain: 'developer.chrome.com', time: '5 min read' },
 ];
 
+// Sites that block iframes and should open externally
+const EXTERNAL_ONLY_SITES = new Set([
+  'linkedin.com', 'www.linkedin.com',
+  'x.com', 'twitter.com', 'www.twitter.com',
+  'instagram.com', 'www.instagram.com',
+  'facebook.com', 'www.facebook.com',
+  'tiktok.com', 'www.tiktok.com',
+]);
+
+function shouldOpenExternally(url) {
+  if (!url) return false;
+  const host = getDomain(url).toLowerCase();
+  return EXTERNAL_ONLY_SITES.has(host);
+}
+
 function getProxiedUrl(url) {
   if (!url) return '';
-  
+
   // Do not proxy local development URLs
   if (url.includes('localhost') || url.includes('127.0.0.1')) {
     return url;
   }
 
-  const host = getDomain(url).toLowerCase();
-  
-  // LinkedIn intentionally blocks corsproxy with 999 status rendering 500 errors. Route it through codetabs instead.
-  if (host === 'linkedin.com' || host === 'www.linkedin.com') {
-    return `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(url)}`;
-  }
-  
-  // Apply corsproxy natively to ALL other websites universally to ensure X-Frame-Options is bypassed
+  // Apply corsproxy to bypass X-Frame-Options
   return `https://corsproxy.io/?${encodeURIComponent(url)}`;
 }
 
@@ -216,6 +224,7 @@ export default function Safari({ windowData }) {
   const canGoBack = tab.historyIndex > 0;
   const canGoForward = tab.historyIndex < tab.history.length - 1;
   const showBlockedPage = Boolean(tab.loadedUrl) && tab.error;
+  const showExternalPage = Boolean(tab.loadedUrl) && shouldOpenExternally(tab.loadedUrl);
 
   return (
     <div className="flex flex-col h-full bg-[#1e1e1e]">
@@ -315,7 +324,38 @@ export default function Safari({ windowData }) {
 
       <div className="flex-1 overflow-hidden relative">
         {tab.loadedUrl ? (
-          showBlockedPage ? (
+          showExternalPage ? (
+            <div className="flex flex-col items-center justify-center h-full text-white/42 gap-4 px-6 relative z-10">
+              <div className="w-[80px] h-[80px] rounded-[20px] bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center shadow-lg">
+                <img
+                  src={`https://www.google.com/s2/favicons?sz=64&domain=${getDomain(tab.loadedUrl)}`}
+                  alt=""
+                  className="w-[48px] h-[48px] rounded-[8px]"
+                  onError={e => { e.currentTarget.style.display = 'none'; }}
+                />
+              </div>
+              <div className="text-center">
+                <div className="text-[18px] font-semibold text-white/90 mb-1">{getDomain(tab.loadedUrl)}</div>
+                <div className="text-[13px] text-white/40 max-w-[300px] truncate">{tab.loadedUrl}</div>
+              </div>
+              <p className="text-[13px] text-white/50 max-w-[360px] text-center leading-relaxed mt-2">
+                This site cannot be displayed in an embedded view. Open it in your browser for the full experience.
+              </p>
+              <button
+                className="mt-4 px-6 py-2.5 rounded-[10px] text-[14px] font-medium text-white shadow-lg transition-all hover:scale-105"
+                style={{ background: 'linear-gradient(180deg, #2E81FF 0%, #1062E0 100%)', border: '0.5px solid rgba(255,255,255,0.2)' }}
+                onClick={() => window.open(tab.loadedUrl, '_blank')}
+              >
+                Open in Browser
+              </button>
+              <button
+                className="text-[12px] text-white/40 hover:text-white/60 transition-colors mt-2"
+                onClick={openStartPage}
+              >
+                Return to Start Page
+              </button>
+            </div>
+          ) : showBlockedPage ? (
             <div className="flex flex-col items-center justify-center h-full text-white/42 gap-3 px-6 relative z-10">
               <div className="w-[64px] h-[64px] rounded-[18px] border border-white/8 bg-white/5 flex items-center justify-center shadow-lg">
                 <SFSymbol name="exclamationmark.triangle.fill" size={30} color="rgba(255,255,255,0.16)" />

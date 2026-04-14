@@ -1,6 +1,11 @@
 import { useMemo, useState, useEffect } from 'react';
 import { appIcons } from './Icons';
 
+const implementedApps = new Set([
+  'finder', 'safari', 'messages', 'photos', 'calendar', 'notes',
+  'weather', 'calculator', 'terminal', 'textedit', 'settings',
+]);
+
 const appCatalog = [
   { id: 'finder', title: 'Finder' },
   { id: 'safari', title: 'Safari' },
@@ -35,10 +40,10 @@ const appCatalog = [
   { id: 'home', title: 'Home' },
   { id: 'findmy', title: 'Find My' },
   { id: 'siri', title: 'Siri' },
-  { id: 'settings', title: 'System Settings' },
+  { id: 'settings', title: 'Settings' },
   { id: 'activitymonitor', title: 'Activity Monitor' },
   { id: 'diskutility', title: 'Disk Utility' },
-];
+].filter(app => implementedApps.has(app.id));
 
 function AppGlyph({ app, size = 70 }) {
   return (
@@ -58,14 +63,14 @@ function AppGlyph({ app, size = 70 }) {
 function AppTile({ app, onLaunch }) {
   return (
     <button
-      className="w-[100px] h-[106px] flex flex-col items-center justify-start gap-1.5 rounded-[12px] p-2 outline-none transition-transform active:scale-95 group focus:bg-white/10"
+      className="w-[110px] h-[110px] flex flex-col items-center justify-start gap-1.5 rounded-[12px] p-2 outline-none transition-transform active:scale-95 group focus:bg-white/10"
       onClick={() => onLaunch(app.id, app.title)}
     >
       <div className="w-[74px] h-[74px] transition-transform duration-200 group-hover:-translate-y-1 drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)]">
         <AppGlyph app={app} size={74} />
       </div>
-      <span 
-        className="text-[13px] text-white text-center font-medium leading-tight max-w-[90px] truncate px-1 rounded-sm tracking-wide"
+      <span
+        className="text-[12px] text-white text-center font-medium leading-tight max-w-[100px] truncate px-1 rounded-sm"
         style={{ textShadow: '0 1px 2px rgba(0,0,0,0.6)' }}
       >
         {app.title}
@@ -126,10 +131,10 @@ export default function Launchpad({ isOpen, onClose, onAppLaunch }) {
       }}
     >
       {/* Search Header */}
-      <div className="w-[360px] max-w-[90%] mb-12 flex justify-center mt-6 shrink-0">
-        <div 
-          className="flex items-center gap-2 rounded-[14px] px-3 py-1.5 w-full transition-colors focus-within:bg-white/10 bg-white/5"
-          style={{ border: '0.5px solid rgba(255,255,255,0.2)' }}
+      <div className="w-[360px] max-w-[90%] flex justify-center mt-16 shrink-0">
+        <div
+          className="flex items-center gap-2 rounded-[14px] px-3 py-1.5 w-full transition-colors focus-within:bg-white/12 bg-white/8"
+          style={{ border: '0.5px solid rgba(255,255,255,0.25)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1)' }}
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="2.5" strokeLinecap="round" className="shrink-0">
             <circle cx="11" cy="11" r="7" /><path d="m21 21-4.35-4.35" />
@@ -144,6 +149,9 @@ export default function Launchpad({ isOpen, onClose, onAppLaunch }) {
           />
         </div>
       </div>
+
+      {/* Spacer */}
+      <div className="h-16 shrink-0" />
 
       {/* Grid Layout */}
       <div className="flex-1 w-[90%] md:w-[95%] max-w-[1400px] overflow-y-auto px-4 hide-scrollbar">
