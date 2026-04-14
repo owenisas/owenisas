@@ -26,6 +26,7 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
+    const isDev = import.meta.env.DEV;
 
     // ── Renderer ──
     const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
@@ -774,29 +775,31 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
         mouseHalfZ = sz.z / 2;
       }
 
-      // Debug: axes helper at origin + clamp boundary box
-      const axesHelper = new THREE.AxesHelper(1);
-      axesHelper.position.y = deskSurfaceY + 0.01;
-      scene.add(axesHelper);
+      if (isDev) {
+        // Debug: axes helper at origin + clamp boundary box
+        const axesHelper = new THREE.AxesHelper(1);
+        axesHelper.position.y = deskSurfaceY + 0.01;
+        scene.add(axesHelper);
 
-      // Clamp boundary wireframe box
-      const dbgMinX = -0.18 * deskWorldWidth;
-      const dbgMaxX = 0.15 * deskWorldWidth;
-      const dbgMinZ = -0.38 * deskWorldWidth;
-      const dbgMaxZ = -0.15 * deskWorldWidth;
-      const boxW = dbgMaxX - dbgMinX;
-      const boxD = dbgMaxZ - dbgMinZ;
-      const boxH = 0.15;
-      const boundBox = new THREE.Mesh(
-        new THREE.BoxGeometry(boxW, boxH, boxD),
-        new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true, transparent: true, opacity: 0.5 })
-      );
-      boundBox.position.set(
-        (dbgMinX + dbgMaxX) / 2,
-        deskSurfaceY + boxH / 2,
-        (dbgMinZ + dbgMaxZ) / 2
-      );
-      scene.add(boundBox);
+        // Clamp boundary wireframe box
+        const dbgMinX = -0.18 * deskWorldWidth;
+        const dbgMaxX = 0.15 * deskWorldWidth;
+        const dbgMinZ = -0.38 * deskWorldWidth;
+        const dbgMaxZ = -0.15 * deskWorldWidth;
+        const boxW = dbgMaxX - dbgMinX;
+        const boxD = dbgMaxZ - dbgMinZ;
+        const boxH = 0.15;
+        const boundBox = new THREE.Mesh(
+          new THREE.BoxGeometry(boxW, boxH, boxD),
+          new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true, transparent: true, opacity: 0.5 })
+        );
+        boundBox.position.set(
+          (dbgMinX + dbgMaxX) / 2,
+          deskSurfaceY + boxH / 2,
+          (dbgMinZ + dbgMaxZ) / 2
+        );
+        scene.add(boundBox);
+      }
 
       function animate() {
         animId = requestAnimationFrame(animate);
