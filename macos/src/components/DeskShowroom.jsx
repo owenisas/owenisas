@@ -1,7 +1,7 @@
 import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 const DESK_REAL_WIDTH = 120;
@@ -150,18 +150,10 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
     rightWall.rotation.y = -Math.PI / 2; rightWall.position.set(5, 3, 0); scene.add(rightWall);
 
     // ── State ──
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
     const gltfLoader = new GLTFLoader();
-    const keychronAssetManager = new THREE.LoadingManager();
-    keychronAssetManager.setURLModifier((url) => {
-      const filename = url.split(/[\\/]/).pop();
-      if (!filename?.startsWith('T_KeychronK8_')) return url;
-      const textureName = filename === 'T_KeychronK8_01_Roughness.png'
-        ? 'T_KeychronK8_02_Roughness.png'
-        : filename;
-      return `/assets/keychron-k8/textures/${textureName}`;
-    });
-    const fbxLoader = new FBXLoader(keychronAssetManager);
-    fbxLoader.setResourcePath('/assets/keychron-k8/textures/');
+    gltfLoader.setDRACOLoader(dracoLoader);
     const entries = [];
     let deskWorldWidth = 1, deskSurfaceY = 0;
     const origCamPos = camera.position.clone();
@@ -189,10 +181,7 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
     const tooltipNameEl = tooltipEl?.querySelector('.name');
 
     function loadModel(asset, config) {
-      const model = config.type === 'fbx' ? asset : asset.scene;
-      if (config.type === 'fbx' && config.animation === 'typingBurst') {
-        model.rotation.x = -Math.PI / 2;
-      }
+      const model = asset.scene;
       model.updateMatrixWorld(true);
       const box = new THREE.Box3().setFromObject(model);
       const center = box.getCenter(new THREE.Vector3());
@@ -743,9 +732,7 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
         const cfg = MODELS[i];
         if (textEl) textEl.textContent = `Loading ${cfg.name}...`;
         try {
-          const asset = cfg.type === 'fbx'
-            ? await fbxLoader.loadAsync(cfg.path)
-            : await gltfLoader.loadAsync(cfg.path);
+          const asset = await gltfLoader.loadAsync(cfg.path);
           const entry = loadModel(asset, cfg);
           if (entry) { initAnimation(entry); entries.push(entry); }
         } catch (err) { console.error(`Failed to load ${cfg.name}:`, err); }
