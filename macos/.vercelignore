@@ -1,0 +1,6 @@
+.codex-artifacts
+.playwright-cli
+output
+node_modules
+dist
+*.log

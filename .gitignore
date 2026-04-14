@@ -1,0 +1,10 @@
+.DS_Store
+.claude/
+node_modules/
+dist/
+dist-ssr/
+*.local
+*.log
+blends/
+renders/
+assets/divergence_meter_steinsgate_high.glb

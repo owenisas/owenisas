@@ -1,0 +1,65 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - paragraph [ref=e7]: Loading Computer Desk...
+    - generic:
+      - generic: Click to interact
+    - button "Cool BlueL" [ref=e8] [cursor=pointer]
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - button:
+            - img
+        - button "Finder"
+        - button "File"
+        - button "Edit"
+        - button "View"
+        - button "Window"
+        - button "Help"
+      - generic:
+        - button:
+          - img
+        - button:
+          - img
+        - button:
+          - img
+        - button:
+          - img
+        - button "Sun Apr 12 3:03 AM"
+    - generic:
+      - button "Macintosh HD Macintosh HD":
+        - generic:
+          - img "Macintosh HD"
+        - generic: Macintosh HD
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - img "Finder"
+        - generic:
+          - generic:
+            - img "Launchpad"
+        - generic:
+          - generic:
+            - img "Safari"
+        - generic:
+          - generic:
+            - img "Notes"
+        - generic:
+          - generic:
+            - img "Terminal"
+        - generic:
+          - generic:
+            - img "Calculator"
+        - generic:
+          - generic:
+            - img "TextEdit"
+        - generic:
+          - generic:
+            - img "Photos"
+        - generic:
+          - generic:
+            - img "System Settings"
+        - generic:
+          - generic:
+            - img "Trash"
