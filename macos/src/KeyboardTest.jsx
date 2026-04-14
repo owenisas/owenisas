@@ -266,8 +266,8 @@ export default function KeyboardTest() {
       let currentIdx = 0;
       let lastPressedParents = new Set();
 
-      // Move parent Object3D positions - try large value for visibility
-      const PRESS_DEPTH = 0.1;
+      // Move parent Object3D positions - visible press depth
+      const PRESS_DEPTH = 0.25;
 
       const pressKey = (posKey) => {
         const meshNames = groups[posKey];
@@ -288,11 +288,10 @@ export default function KeyboardTest() {
             if (!state.keyTargets) state.keyTargets = {};
 
             if (state.originalParentPos[parent.uuid] === undefined) {
-              state.originalParentPos[parent.uuid] = parent.position.y;
-              console.log(`Key ${posKey}: parent.position.y = ${parent.position.y}, target = ${parent.position.y - PRESS_DEPTH}`);
+              state.originalParentPos[parent.uuid] = parent.position.z; // Z axis for downward press
             }
             state.parentRefs[parent.uuid] = parent;
-            state.keyTargets[parent.uuid] = state.originalParentPos[parent.uuid] - PRESS_DEPTH;
+            state.keyTargets[parent.uuid] = state.originalParentPos[parent.uuid] + PRESS_DEPTH; // +Z = down into keyboard
           }
         });
         return movedParents;
@@ -364,7 +363,7 @@ export default function KeyboardTest() {
     animate();
 
     // Keyboard event handlers with smooth animation
-    const KEY_PRESS_DEPTH = 0.006; // Key travel in model units for keyboard events
+    const KEY_PRESS_DEPTH = 0.25; // Match auto-play depth for visible press
 
     const onKeyDown = (e) => {
       if (!state.active || !state.keyMeshMap) return;
@@ -385,13 +384,13 @@ export default function KeyboardTest() {
           const parent = mesh?.parent;
           if (parent && !movedParents.has(parent.uuid)) {
             movedParents.add(parent.uuid);
-            // Store original position and reference
+            // Store original Z position and reference
             if (!state.originalParentPos[parent.uuid]) {
-              state.originalParentPos[parent.uuid] = parent.position.y;
+              state.originalParentPos[parent.uuid] = parent.position.z;
             }
             state.parentRefs[parent.uuid] = parent;
-            // Set target to pressed position
-            state.keyTargets[parent.uuid] = state.originalParentPos[parent.uuid] - KEY_PRESS_DEPTH;
+            // Set target to pressed position (+Z = down into keyboard)
+            state.keyTargets[parent.uuid] = state.originalParentPos[parent.uuid] + KEY_PRESS_DEPTH;
           }
         });
       }
@@ -423,23 +422,19 @@ export default function KeyboardTest() {
       }
     };
 
-    // Smooth animation - lerp parent positions toward targets
+    // Smooth animation - lerp parent positions toward targets (Z axis)
     const LERP_SPEED = 0.25;
-    let animLogCount = 0;
     state.updateKeyAnimation = () => {
       if (!state.keyTargets || !state.parentRefs) return;
 
-      Object.entries(state.keyTargets).forEach(([uuid, targetY]) => {
+      Object.entries(state.keyTargets).forEach(([uuid, targetZ]) => {
         const parent = state.parentRefs[uuid];
-        if (parent && targetY !== undefined) {
-          const diff = targetY - parent.position.y;
+        if (parent && targetZ !== undefined) {
+          const diff = targetZ - parent.position.z;
           if (Math.abs(diff) > 0.0001) {
-            parent.position.y += diff * LERP_SPEED;
-            if (animLogCount++ < 5) {
-              console.log(`Animating: current=${parent.position.y.toFixed(4)}, target=${targetY.toFixed(4)}, diff=${diff.toFixed(4)}`);
-            }
+            parent.position.z += diff * LERP_SPEED;
           } else {
-            parent.position.y = targetY;
+            parent.position.z = targetZ;
           }
         }
       });
