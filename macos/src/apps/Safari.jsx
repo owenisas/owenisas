@@ -25,23 +25,17 @@ const readingList = [
   { title: 'Design notes for the modern browser UI', domain: 'developer.chrome.com', time: '5 min read' },
 ];
 
-// Sites that block iframes and should open externally
+// Sites that block iframes even through proxy — open externally
 const EXTERNAL_ONLY_SITES = new Set([
   'linkedin.com', 'www.linkedin.com',
   'x.com', 'twitter.com', 'www.twitter.com',
   'instagram.com', 'www.instagram.com',
   'facebook.com', 'www.facebook.com',
   'tiktok.com', 'www.tiktok.com',
-  'google.com', 'www.google.com',
-  'youtube.com', 'www.youtube.com',
-  'github.com', 'www.github.com',
-  'reddit.com', 'www.reddit.com',
-  'amazon.com', 'www.amazon.com',
+  // Google works through proxy with frame-bypass
   'netflix.com', 'www.netflix.com',
   'spotify.com', 'www.spotify.com',
   'discord.com', 'www.discord.com',
-  'twitch.tv', 'www.twitch.tv',
-  'stackoverflow.com', 'www.stackoverflow.com',
 ]);
 
 function shouldOpenExternally(url) {
