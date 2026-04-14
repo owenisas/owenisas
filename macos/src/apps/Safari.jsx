@@ -64,7 +64,17 @@ function normalizeUrl(input) {
   const value = input.trim();
   if (!value) return '';
   if (/^https?:\/\//i.test(value)) return value;
-  return `https://${value}`;
+
+  // Check if it looks like a URL (has a dot and no spaces, or is localhost)
+  const looksLikeUrl = (value.includes('.') && !value.includes(' ')) ||
+                       value.startsWith('localhost');
+
+  if (looksLikeUrl) {
+    return `https://${value}`;
+  }
+
+  // Otherwise treat as a Google search query
+  return `https://www.google.com/search?q=${encodeURIComponent(value)}`;
 }
 
 function createTab(id, initialUrl = '') {
