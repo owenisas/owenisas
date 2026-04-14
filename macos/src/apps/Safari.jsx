@@ -32,6 +32,16 @@ const EXTERNAL_ONLY_SITES = new Set([
   'instagram.com', 'www.instagram.com',
   'facebook.com', 'www.facebook.com',
   'tiktok.com', 'www.tiktok.com',
+  'google.com', 'www.google.com',
+  'youtube.com', 'www.youtube.com',
+  'github.com', 'www.github.com',
+  'reddit.com', 'www.reddit.com',
+  'amazon.com', 'www.amazon.com',
+  'netflix.com', 'www.netflix.com',
+  'spotify.com', 'www.spotify.com',
+  'discord.com', 'www.discord.com',
+  'twitch.tv', 'www.twitch.tv',
+  'stackoverflow.com', 'www.stackoverflow.com',
 ]);
 
 function shouldOpenExternally(url) {
@@ -43,13 +53,13 @@ function shouldOpenExternally(url) {
 function getProxiedUrl(url) {
   if (!url) return '';
 
-  // Do not proxy local development URLs
+  // Local URLs don't need proxy
   if (url.includes('localhost') || url.includes('127.0.0.1')) {
     return url;
   }
 
-  // Apply corsproxy to bypass X-Frame-Options
-  return `https://corsproxy.io/?${encodeURIComponent(url)}`;
+  // Use our own Vercel API proxy
+  return `/api/proxy?url=${encodeURIComponent(url)}`;
 }
 
 function getDomain(url) {
