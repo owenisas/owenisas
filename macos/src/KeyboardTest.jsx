@@ -1,9 +1,8 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-
-const MAX_KEY_PRESSES = 8;
 
 export default function KeyboardTest() {
   const containerRef = useRef(null);
@@ -17,197 +16,328 @@ export default function KeyboardTest() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.5;
+    renderer.toneMappingExposure = 1.2;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     container.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x1a1a1a);
 
-    // Camera - centered view
-    const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.01, 100);
-    camera.position.set(0, 0.5, 0.6);
+    // Camera
+    const camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 0.01, 100);
+    camera.position.set(0.3, 0.2, 0.4);
 
     // Controls
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.target.set(0, 0, 0);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.enableZoom = true;
 
-    // Lighting - studio setup
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
 
-    // Key light (main)
-    const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.5);
     keyLight.position.set(2, 3, 2);
-    keyLight.castShadow = true;
     scene.add(keyLight);
 
-    // Fill light (softer, opposite side)
-    const fillLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.8);
     fillLight.position.set(-2, 2, -1);
     scene.add(fillLight);
 
-    // Rim light (backlight for edge definition)
-    const rimLight = new THREE.DirectionalLight(0x88ccff, 0.8);
-    rimLight.position.set(0, 1, -3);
-    scene.add(rimLight);
-
-    // Top light for key visibility
-    const topLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    const topLight = new THREE.DirectionalLight(0xffffff, 0.6);
     topLight.position.set(0, 5, 0);
     scene.add(topLight);
 
-    // Animation state
+    // State
     const state = {
+      mixer: null,
       active: false,
-      t: 0,
-      keyPresses: Array.from({ length: MAX_KEY_PRESSES }, () => new THREE.Vector4(0, 0, 1, 0)),
-      pressCount: { value: 0 },
-      keyCenters: [],
-      typingOrder: [],
-      keyRadius: 0,
-      keyPressDepth: 0,
-      burstIndex: 0,
     };
 
-    // Expose for debugging
-    window.__keyboardState = state;
-    window.__scene = scene;
-    window.__camera = camera;
+    // Load knob1 keyboard
+    const loader = new GLTFLoader();
+    loader.load('/assets/knob1_mechanical_keyboard.glb', (gltf) => {
+      const model = gltf.scene;
+      // Log model structure
+      console.log('=== NZXT Keyboard Loaded ===');
+      console.log('Animations found:', gltf.animations.length);
 
-    // Load keyboard
-    const loader = new FBXLoader();
-    loader.setResourcePath('/assets/keychron-k8/textures/');
-
-    const manager = new THREE.LoadingManager();
-    manager.setURLModifier((url) => {
-      const filename = url.split('/').pop();
-      if (!filename?.startsWith('T_KeychronK8_')) return url;
-      const textureName = filename === 'T_KeychronK8_01_Roughness.png'
-        ? 'T_KeychronK8_02_Roughness.png'
-        : filename;
-      return `/assets/keychron-k8/textures/${textureName}`;
-    });
-
-    const fbxLoader = new FBXLoader(manager);
-    fbxLoader.setResourcePath('/assets/keychron-k8/textures/');
-
-    fbxLoader.load('/assets/keychron-k8/source/KeychronK8_01.fbx', (model) => {
-      // Hide misc parts
-      model.traverse(child => {
-        if (child.name === 'SM_KeychronK8_misc') child.visible = false;
-      });
-
-      // Rotate to Y-up
-      model.rotation.x = -Math.PI / 2;
+      // Log all meshes with geometry center positions to identify keycaps
       model.updateMatrixWorld(true);
+      const meshes = [];
+      const meshMap = {};
+      model.traverse(child => {
+        if (child.isMesh && child.geometry) {
+          // Compute geometry bounding box center in world space
+          child.geometry.computeBoundingBox();
+          const bbox = child.geometry.boundingBox;
+          if (bbox) {
+            const center = new THREE.Vector3();
+            bbox.getCenter(center);
+            center.applyMatrix4(child.matrixWorld);
+            meshes.push({
+              name: child.name,
+              x: center.x.toFixed(4),
+              y: center.y.toFixed(4),
+              z: center.z.toFixed(4),
+              mesh: child,
+            });
+            meshMap[child.name] = child;
+          }
+        }
+      });
+      state.meshMap = meshMap;
+      state.allMeshes = meshes;
+      // Expose globally for debugging - include scene reference
+      window.__kbMeshes = meshes;
+      window.__kbMeshMap = meshMap;
+      window.__kbScene = scene;
+      window.__kbModel = model;
+      console.log(`Found ${meshes.length} meshes`);
 
-      // Center and scale - make keyboard fill view
+      // Sort by Z (rows) then X (columns) to match keyboard layout
+      const sorted = [...meshes].sort((a, b) => parseFloat(a.z) - parseFloat(b.z) || parseFloat(a.x) - parseFloat(b.x));
+      console.log('Sample sorted meshes:', sorted.slice(0, 30).map(m => ({ name: m.name, x: m.x, z: m.z })));
+
+      // Log animations if any
+      console.log('Animations:', gltf.animations.length);
+
+      // Center and scale
       const box = new THREE.Box3().setFromObject(model);
       const center = box.getCenter(new THREE.Vector3());
       const size = box.getSize(new THREE.Vector3());
       model.position.sub(center);
-      // Scale to fill view - large
-      const scale = 4.0 / Math.max(size.x, size.y, size.z);
+      const scale = 0.4 / Math.max(size.x, size.y, size.z);
       model.scale.setScalar(scale);
-
-      // Get LOCAL geometry bounds (XZ plane in original FBX)
-      let xMin = Infinity, xMax = -Infinity, zMin = Infinity, zMax = -Infinity;
-      model.traverse(child => {
-        if (child.isMesh && child.geometry) {
-          child.geometry.computeBoundingBox();
-          const b = child.geometry.boundingBox;
-          if (b.min.x < xMin) xMin = b.min.x;
-          if (b.max.x > xMax) xMax = b.max.x;
-          if (b.min.z < zMin) zMin = b.min.z;
-          if (b.max.z > zMax) zMax = b.max.z;
-        }
-      });
-
-      const xRange = xMax - xMin;
-      const zRange = zMax - zMin;
-      const xInset = xRange * 0.075;
-      const zInset = zRange * 0.19;
-
-      // Key layout (Keychron K8 TKL)
-      const rowKeyWidths = [
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
-        [1.5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1.5],
-        [1.75, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2.25],
-        [1.25, 1.25, 1.25, 6.25, 1.25, 1.25, 1.25, 1, 1],
-      ];
-      const rowZPositions = [
-        zMax - zInset,
-        zMax - zInset - zRange * 0.16,
-        zMax - zInset - zRange * 0.32,
-        zMax - zInset - zRange * 0.48,
-        zMin + zInset,
-      ];
-
-      const keyCenters = [];
-      const keyableWidth = xRange - 2 * xInset;
-      rowKeyWidths.forEach((widths, rowIdx) => {
-        const z = rowZPositions[rowIdx];
-        const totalUnits = widths.reduce((a, b) => a + b, 0);
-        const unitWidth = keyableWidth / totalUnits;
-        let xPos = xMin + xInset;
-        widths.forEach((units) => {
-          const keyWidth = units * unitWidth;
-          keyCenters.push(new THREE.Vector2(xPos + keyWidth / 2, z));
-          xPos += keyWidth;
-        });
-      });
-
-      // Typing order (letter keys only)
-      state.typingOrder = [
-        29, 42, 30, 43, 31, 44, 32, 45,
-        33, 46, 34, 47, 35, 48, 36, 49,
-        37, 50, 38, 51, 39, 15, 16, 17,
-        18, 19, 20, 21, 22, 23, 24, 25,
-      ].filter(i => i < keyCenters.length);
-
-      state.keyCenters = keyCenters;
-      state.keyRadius = Math.min(xRange / 12, zRange / 4);
-      state.keyPressDepth = 80;
-
-      // Apply shader to all meshes
-      model.traverse(child => {
-        if (child.isMesh && child.material) {
-          const applyShader = (mat) => {
-            mat.onBeforeCompile = (shader) => {
-              shader.uniforms.uKeyPresses = { value: state.keyPresses };
-              shader.uniforms.uPressCount = state.pressCount;
-              shader.vertexShader = shader.vertexShader.replace('void main() {',
-                `uniform vec4 uKeyPresses[${MAX_KEY_PRESSES}];\nuniform float uPressCount;\nvarying float vKeyPress;\nvoid main() {\n  vKeyPress = 0.0;`);
-              shader.vertexShader = shader.vertexShader.replace('#include <begin_vertex>',
-                `#include <begin_vertex>\nfor (int i = 0; i < ${MAX_KEY_PRESSES}; i++) {\n  if (float(i) >= uPressCount) break;\n  vec4 kp = uKeyPresses[i];\n  float d = distance(position.xz, kp.xy);\n  float shape = smoothstep(kp.z, 0.0, d);\n  transformed.y -= shape * kp.w;\n  vKeyPress = max(vKeyPress, shape * kp.w / 80.0);\n}`);
-              shader.fragmentShader = shader.fragmentShader.replace('void main() {',
-                `varying float vKeyPress;\nvoid main() {`);
-              shader.fragmentShader = shader.fragmentShader.replace('#include <emissivemap_fragment>',
-                `#include <emissivemap_fragment>\ntotalEmissiveRadiance += vec3(0.2, 0.8, 1.0) * vKeyPress * 25.0;`);
-            };
-          };
-          if (Array.isArray(child.material)) {
-            child.material = child.material.map(m => { const c = m.clone(); applyShader(c); return c; });
-          } else {
-            child.material = child.material.clone();
-            applyShader(child.material);
-          }
-        }
-      });
 
       scene.add(model);
 
-      // Start animation
-      state.active = true;
+      // Build key-to-mesh mapping based on position analysis
+      state.pressedKeys = new Set();
+      state.originalPositions = {};
 
-      // Status display
+      // Group ALL meshes by position (not just Plastic_1)
+      // Each keycap has multiple layers: text (Plastic_1), body (Plastic_5), etc.
+      const groups = {};
+      meshes.forEach(m => {
+        const x = Math.round(parseFloat(m.x) / 0.01) * 0.01;
+        const z = Math.round(parseFloat(m.z) / 0.01) * 0.01;
+        const key = `${x.toFixed(3)}_${z.toFixed(3)}`;
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(m.name);
+      });
+
+      // Sort by Z then X to get row order
+      // Include positions with multiple mesh layers (keycaps have 3+ parts)
+      // White keys: Plastic_(1) text + Plastic_(5) body
+      // Orange keys: Plastic_(2), _(3), _(4) combinations
+      const keycapPositions = Object.keys(groups).filter(k => {
+        const meshNames = groups[k];
+        // Must have at least 3 meshes to be a real keycap
+        if (meshNames.length < 3) return false;
+        // Check for keycap materials
+        const hasWhiteKeycap = meshNames.some(n => n.includes('Plastic_(1)')) &&
+                               meshNames.some(n => n.includes('Plastic_(5)'));
+        const hasOrangeKeycap = meshNames.some(n => n.includes('Plastic_(2)')) ||
+                                meshNames.some(n => n.includes('Plastic_(4)'));
+        return hasWhiteKeycap || hasOrangeKeycap;
+      });
+
+      // Remove duplicate positions and sort
+      const uniquePositions = [...new Set(keycapPositions)];
+      const sortedKeys = uniquePositions.sort((a, b) => {
+        const [ax, az] = a.split('_').map(parseFloat);
+        const [bx, bz] = b.split('_').map(parseFloat);
+        if (Math.abs(az - bz) > 0.015) return az - bz;
+        return ax - bx;
+      });
+
+      // Smart row grouping: find major Z positions (10+ keys) and merge nearby
+      const zCounts = {};
+      sortedKeys.forEach(k => {
+        const z = parseFloat(k.split('_')[1]).toFixed(2);
+        zCounts[z] = (zCounts[z] || 0) + 1;
+      });
+
+      // Major Z values have 10+ keys
+      const majorZs = Object.entries(zCounts)
+        .filter(([z, count]) => count >= 10)
+        .map(([z]) => parseFloat(z))
+        .sort((a, b) => a - b);
+
+      // Assign each key to nearest major Z
+      const rows = majorZs.map(() => []);
+      sortedKeys.forEach(k => {
+        const z = parseFloat(k.split('_')[1]);
+        let bestIdx = 0;
+        let bestDist = Math.abs(z - majorZs[0]);
+        majorZs.forEach((mz, i) => {
+          const dist = Math.abs(z - mz);
+          if (dist < bestDist) {
+            bestDist = dist;
+            bestIdx = i;
+          }
+        });
+        rows[bestIdx].push(k);
+      });
+
+      // Sort keys within each row by X position and deduplicate by X
+      // Use 0.015 tolerance to merge wide keys (Tab, Shift, Space, etc.)
+      rows.forEach((row, rowIdx) => {
+        row.sort((a, b) => parseFloat(a.split('_')[0]) - parseFloat(b.split('_')[0]));
+        // Merge positions with same X (within 0.015 tolerance)
+        const merged = [];
+        let lastX = null;
+        row.forEach(pos => {
+          const x = parseFloat(pos.split('_')[0]);
+          if (lastX === null || Math.abs(x - lastX) > 0.015) {
+            merged.push(pos);
+            lastX = x;
+          } else {
+            // Merge mesh names into previous position
+            const prevPos = merged[merged.length - 1];
+            groups[prevPos] = [...groups[prevPos], ...groups[pos]];
+          }
+        });
+        rows[rowIdx] = merged;
+      });
+
+      // Debug: Log row structure
+      console.log('=== ROW STRUCTURE ===');
+      rows.forEach((row, i) => {
+        console.log(`Row ${i}: ${row.length} keys, Z≈${majorZs[i].toFixed(2)}`);
+      });
+
+      // Physical keyboard layout - 6 major rows at Z=0.07, 0.09, 0.11, 0.13, 0.15, 0.17
+      // Row counts after 0.015 X-dedup: 14, 14, 14, 12, 13, 9
+      const keyboardRows = [
+        // Row 0 (Z≈0.07): Number row + Escape (14 keys)
+        ['Escape', 'Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal'],
+        // Row 1 (Z≈0.09): QWERTY row (14 keys) - starts with Tab at idx 0
+        ['Tab', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash'],
+        // Row 2 (Z≈0.11): Home row (14 keys)
+        ['CapsLock', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'Enter', 'Backspace'],
+        // Row 3 (Z≈0.13): Shift row (12 keys)
+        ['ShiftLeft', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ShiftRight'],
+        // Row 4 (Z≈0.15): Bottom row (13 keys)
+        ['ControlLeft', 'MetaLeft', 'AltLeft', 'Space', 'Space', 'Space', 'AltRight', 'Fn', 'ControlRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ArrowUp'],
+        // Row 5 (Z≈0.17): Bottom edge (9 keys)
+        ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9'],
+      ];
+
+      // Build the mapping
+      const keyMeshMapping = {};
+      rows.forEach((row, rowIdx) => {
+        if (rowIdx < keyboardRows.length) {
+          const physKeys = keyboardRows[rowIdx];
+          row.forEach((posKey, colIdx) => {
+            if (colIdx < physKeys.length) {
+              keyMeshMapping[physKeys[colIdx]] = groups[posKey];
+            }
+          });
+        }
+      });
+
+      state.keyMeshMap = keyMeshMapping;
+
+      // Store original positions for all keycap meshes
+      Object.values(keyMeshMapping).flat().forEach(meshName => {
+        const mesh = meshMap[meshName];
+        if (mesh) {
+          state.originalPositions[meshName] = mesh.position.clone();
+        }
+      });
+
+      console.log('Key mapping ready:', Object.keys(keyMeshMapping).length, 'keys');
+      console.log('Sample: Q=', keyMeshMapping['KeyQ'], 'W=', keyMeshMapping['KeyW']);
+
+      state.model = model;
+      state.active = true;
+      state.allPositions = rows.flat(); // All keycap positions in order
+      state.groups = groups;
+
       const statusEl = document.getElementById('status');
-      if (statusEl) statusEl.textContent = 'Keyboard loaded. Animation running.';
+      if (statusEl) {
+        statusEl.textContent = `Keyboard ready! ${Object.keys(keyMeshMapping).length} keys mapped. Auto-playing...`;
+      }
+
+      // Auto-play animation: press keys from top-left to bottom-right
+      let currentIdx = 0;
+      let lastPressedParents = new Set();
+
+      // Move parent Object3D positions - try large value for visibility
+      const PRESS_DEPTH = 0.1;
+
+      const pressKey = (posKey) => {
+        const meshNames = groups[posKey];
+        if (!meshNames) return new Set();
+
+        const movedParents = new Set();
+        meshNames.forEach(meshName => {
+          let mesh = null;
+          model.traverse(child => {
+            if (child.isMesh && child.name === meshName) mesh = child;
+          });
+
+          const parent = mesh?.parent;
+          if (parent && !movedParents.has(parent.uuid)) {
+            movedParents.add(parent.uuid);
+            if (!state.originalParentPos) state.originalParentPos = {};
+            if (!state.parentRefs) state.parentRefs = {};
+            if (!state.keyTargets) state.keyTargets = {};
+
+            if (state.originalParentPos[parent.uuid] === undefined) {
+              state.originalParentPos[parent.uuid] = parent.position.y;
+              console.log(`Key ${posKey}: parent.position.y = ${parent.position.y}, target = ${parent.position.y - PRESS_DEPTH}`);
+            }
+            state.parentRefs[parent.uuid] = parent;
+            state.keyTargets[parent.uuid] = state.originalParentPos[parent.uuid] - PRESS_DEPTH;
+          }
+        });
+        return movedParents;
+      };
+
+      const releaseKey = (parentUuids) => {
+        parentUuids.forEach(uuid => {
+          if (state.originalParentPos?.[uuid] !== undefined) {
+            state.keyTargets[uuid] = state.originalParentPos[uuid];
+          }
+        });
+      };
+
+      const autoPlay = () => {
+        // Release previous key
+        if (lastPressedParents.size > 0) {
+          releaseKey(lastPressedParents);
+        }
+
+        // Press next key
+        if (currentIdx < state.allPositions.length) {
+          const posKey = state.allPositions[currentIdx];
+          lastPressedParents = pressKey(posKey) || new Set();
+          currentIdx++;
+
+          if (statusEl) {
+            const row = Math.floor(currentIdx / 14); // Approximate row
+            statusEl.textContent = `Row ${row + 1} - Key ${currentIdx}/${state.allPositions.length}`;
+          }
+
+          setTimeout(autoPlay, 100); // 100ms between keys
+        } else {
+          // Loop back
+          releaseKey(lastPressedParents);
+          currentIdx = 0;
+          lastPressedParents = new Set();
+          if (statusEl) {
+            statusEl.textContent = `Done! Restarting...`;
+          }
+          setTimeout(autoPlay, 500);
+        }
+      };
+
+      // Start auto-play after a short delay
+      setTimeout(autoPlay, 1000);
     });
 
     // Animation loop
@@ -219,39 +349,104 @@ export default function KeyboardTest() {
       const delta = clock.getDelta();
       controls.update();
 
-      if (state.active && state.keyCenters.length > 0) {
-        state.t += Math.min(delta, 1 / 30);
-        const dur = 3.0;
-        const interval = 0.055;
-        const pressDur = 0.22;
-        let pressCount = 0;
+      // Update animation mixer
+      if (state.mixer) {
+        state.mixer.update(delta);
+      }
 
-        if (state.t < dur) {
-          state.keyPresses.forEach(kp => kp.set(0, 0, 1, 0));
-          for (let i = 0; i < state.typingOrder.length && pressCount < MAX_KEY_PRESSES; i++) {
-            const start = i * interval;
-            const localT = state.t - start;
-            if (localT < 0 || localT > pressDur) continue;
-            const keyIndex = state.typingOrder[(i + state.burstIndex) % state.typingOrder.length];
-            const center = state.keyCenters[keyIndex];
-            if (!center) continue;
-            const progress = localT / pressDur;
-            const press = Math.sin(progress * Math.PI);
-            state.keyPresses[pressCount].set(center.x, center.y, state.keyRadius, state.keyPressDepth * press);
-            pressCount++;
-          }
-          state.pressCount.value = pressCount;
-        } else {
-          state.active = true; // Loop
-          state.t = 0;
-          state.pressCount.value = 0;
-          state.burstIndex = (state.burstIndex + 7) % state.typingOrder.length;
-        }
+      // Update smooth key press animation
+      if (state.updateKeyAnimation) {
+        state.updateKeyAnimation();
       }
 
       renderer.render(scene, camera);
     }
     animate();
+
+    // Keyboard event handlers with smooth animation
+    const KEY_PRESS_DEPTH = 0.006; // Key travel in model units for keyboard events
+
+    const onKeyDown = (e) => {
+      if (!state.active || !state.keyMeshMap) return;
+      const meshNames = state.keyMeshMap[e.code];
+      if (meshNames && !state.pressedKeys.has(e.code)) {
+        state.pressedKeys.add(e.code);
+
+        const model = window.__kbModel;
+        if (!model) return;
+
+        const movedParents = new Set();
+        meshNames.forEach(meshName => {
+          let mesh = null;
+          model.traverse(child => {
+            if (child.isMesh && child.name === meshName) mesh = child;
+          });
+
+          const parent = mesh?.parent;
+          if (parent && !movedParents.has(parent.uuid)) {
+            movedParents.add(parent.uuid);
+            // Store original position and reference
+            if (!state.originalParentPos[parent.uuid]) {
+              state.originalParentPos[parent.uuid] = parent.position.y;
+            }
+            state.parentRefs[parent.uuid] = parent;
+            // Set target to pressed position
+            state.keyTargets[parent.uuid] = state.originalParentPos[parent.uuid] - KEY_PRESS_DEPTH;
+          }
+        });
+      }
+    };
+
+    const onKeyUp = (e) => {
+      if (!state.active || !state.keyMeshMap) return;
+      const meshNames = state.keyMeshMap[e.code];
+      if (meshNames && state.pressedKeys.has(e.code)) {
+        state.pressedKeys.delete(e.code);
+
+        const model = window.__kbModel;
+        if (!model) return;
+
+        const restoredParents = new Set();
+        meshNames.forEach(meshName => {
+          let mesh = null;
+          model.traverse(child => {
+            if (child.isMesh && child.name === meshName) mesh = child;
+          });
+
+          const parent = mesh?.parent;
+          if (parent && !restoredParents.has(parent.uuid)) {
+            restoredParents.add(parent.uuid);
+            // Set target back to original position
+            state.keyTargets[parent.uuid] = state.originalParentPos[parent.uuid];
+          }
+        });
+      }
+    };
+
+    // Smooth animation - lerp parent positions toward targets
+    const LERP_SPEED = 0.25;
+    let animLogCount = 0;
+    state.updateKeyAnimation = () => {
+      if (!state.keyTargets || !state.parentRefs) return;
+
+      Object.entries(state.keyTargets).forEach(([uuid, targetY]) => {
+        const parent = state.parentRefs[uuid];
+        if (parent && targetY !== undefined) {
+          const diff = targetY - parent.position.y;
+          if (Math.abs(diff) > 0.0001) {
+            parent.position.y += diff * LERP_SPEED;
+            if (animLogCount++ < 5) {
+              console.log(`Animating: current=${parent.position.y.toFixed(4)}, target=${targetY.toFixed(4)}, diff=${diff.toFixed(4)}`);
+            }
+          } else {
+            parent.position.y = targetY;
+          }
+        }
+      });
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
 
     // Resize
     const onResize = () => {
@@ -263,6 +458,8 @@ export default function KeyboardTest() {
 
     return () => {
       window.removeEventListener('resize', onResize);
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('keyup', onKeyUp);
       cancelAnimationFrame(animationId);
       renderer.dispose();
       container.removeChild(renderer.domElement);

@@ -18,7 +18,6 @@ function Router() {
 }
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <Router />
-  </StrictMode>,
+  // StrictMode disabled temporarily for 3D animation testing
+  <Router />
 )
