@@ -1,8 +1,6 @@
 {
-  "buildCommand": "cd macos && npm ci && npm run build",
-  "outputDirectory": "macos/dist",
-  "framework": null,
-  "rewrites": [
-    { "source": "/api/:path*", "destination": "/api/:path*" }
-  ]
+  "version": 2,
+  "installCommand": "cd macos && npm install",
+  "buildCommand": "cd macos && npm run build",
+  "outputDirectory": "macos/dist"
 }

@@ -1,0 +1,21 @@
+# Exclude source/extracted folders
+assets/computer-desk/
+assets/razer_extracted/
+assets/macbook_extracted/
+assets/keychron-k8/
+assets/SteinGate/
+assets/dji-mavic-3/
+
+# Exclude dev files
+blends/
+renders/
+scripts/
+*.blend
+*.blend1
+
+# Node modules
+node_modules/
+macos/node_modules/
+
+# Build outputs (will be generated)
+macos/dist/
