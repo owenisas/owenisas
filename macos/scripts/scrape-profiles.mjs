@@ -69,6 +69,10 @@ async function scrapeLinkedIn(browser) {
   if (bcookie) cookies.push({ name: 'bcookie', value: bcookie, domain: '.linkedin.com', path: '/', secure: true, sameSite: 'None' });
   const bscookie = optEnv('LINKEDIN_BSCOOKIE');
   if (bscookie) cookies.push({ name: 'bscookie', value: bscookie, domain: '.www.linkedin.com', path: '/', secure: true, sameSite: 'None' });
+  const lidc = optEnv('LINKEDIN_LIDC');
+  if (lidc) cookies.push({ name: 'lidc', value: lidc, domain: '.linkedin.com', path: '/', secure: true, sameSite: 'None' });
+  const dfpfpt = optEnv('LINKEDIN_DFPFPT');
+  if (dfpfpt) cookies.push({ name: 'dfpfpt', value: dfpfpt, domain: '.linkedin.com', path: '/', secure: true, sameSite: 'None' });
   await ctx.addCookies(cookies);
 
   const page = await ctx.newPage();
@@ -197,12 +201,21 @@ async function scrapeLinkedIn(browser) {
     return { name, headline, location, connectionCount, avatarUrl, about, experience, education, skills };
   });
 
-  if (!data.name) {
+  const finalUrl = page.url();
+  const looksBlocked =
+    !data.name ||
+    data.name === 'Join LinkedIn' ||
+    data.name === 'Sign in' ||
+    /\/authwall|\/login|\/signup|\/uas\/login|\/checkpoint/.test(finalUrl);
+
+  if (looksBlocked) {
+    console.error(`LinkedIn blocked — finalUrl=${finalUrl} name="${data.name}"`);
     await dumpDebug(page, 'linkedin');
+    data.name = ''; // signal failure upstream
   }
 
   await ctx.close();
-  return { ...data, url: LINKEDIN_URL };
+  return { ...data, url: LINKEDIN_URL, finalUrl };
 }
 
 async function scrapeX(browser) {
