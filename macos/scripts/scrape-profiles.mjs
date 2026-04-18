@@ -58,8 +58,10 @@ async function scrapeLinkedIn(browser) {
     locale: 'en-US',
   });
 
+  // li_at is on .www.linkedin.com in the source cookie file — not .linkedin.com.
+  // Putting it on the wrong domain causes ERR_TOO_MANY_REDIRECTS.
   const cookies = [
-    { name: 'li_at', value: requireEnv('LINKEDIN_LI_AT'), domain: '.linkedin.com', path: '/', httpOnly: true, secure: true, sameSite: 'None' },
+    { name: 'li_at', value: requireEnv('LINKEDIN_LI_AT'), domain: '.www.linkedin.com', path: '/', httpOnly: true, secure: true, sameSite: 'None' },
     { name: 'JSESSIONID', value: requireEnv('LINKEDIN_JSESSIONID'), domain: '.www.linkedin.com', path: '/', httpOnly: false, secure: true, sameSite: 'None' },
     { name: 'liap', value: 'true', domain: '.linkedin.com', path: '/', secure: true, sameSite: 'None' },
   ];
@@ -70,7 +72,17 @@ async function scrapeLinkedIn(browser) {
   await ctx.addCookies(cookies);
 
   const page = await ctx.newPage();
-  await page.goto(LINKEDIN_URL, { waitUntil: 'domcontentloaded', timeout: 45000 });
+
+  try {
+    // Warm-up: hit /feed first so LinkedIn validates the session and issues
+    // any fresh cookies it wants before we request a profile page.
+    await page.goto('https://www.linkedin.com/feed/', { waitUntil: 'domcontentloaded', timeout: 45000 });
+    await page.waitForTimeout(1200);
+    await page.goto(LINKEDIN_URL, { waitUntil: 'domcontentloaded', timeout: 45000 });
+  } catch (err) {
+    await dumpDebug(page, 'linkedin-goto-error').catch(() => {});
+    throw err;
+  }
   await page.waitForSelector('h1', { timeout: 20000 }).catch(() => {});
 
   // Scroll to trigger lazy-loaded sections (about, experience, education, skills).
