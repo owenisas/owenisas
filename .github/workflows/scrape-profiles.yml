@@ -52,6 +52,15 @@ jobs:
           X_KDT: ${{ secrets.X_KDT }}
         run: node scripts/scrape-profiles.mjs
 
+      - name: Upload debug artifacts (HTML + screenshots)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scrape-debug-${{ github.run_id }}
+          path: macos/scripts/debug/
+          if-no-files-found: ignore
+          retention-days: 7
+
       - name: Commit refreshed data
         working-directory: .
         run: |

@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.vercel
+
+# Scraper debug artifacts (HTML + screenshots saved on failure)
+scripts/debug/
