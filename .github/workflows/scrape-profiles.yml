@@ -1,0 +1,66 @@
+name: Scrape Profiles
+
+on:
+  schedule:
+    # Daily at 08:00 UTC (once per day keeps us well under scraping rate limits)
+    - cron: '0 8 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: scrape-profiles
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: macos
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: macos/package-lock.json
+
+      - name: Install app deps
+        run: npm ci
+
+      - name: Install Playwright + Chromium
+        run: |
+          npm install --no-save playwright@^1.48.0
+          npx playwright install --with-deps chromium
+
+      - name: Scrape profiles
+        env:
+          LINKEDIN_URL: https://www.linkedin.com/in/thomas-suen-84776a262/
+          X_URL: https://x.com/ThomasSuen6
+          LINKEDIN_LI_AT: ${{ secrets.LINKEDIN_LI_AT }}
+          LINKEDIN_JSESSIONID: ${{ secrets.LINKEDIN_JSESSIONID }}
+          LINKEDIN_BCOOKIE: ${{ secrets.LINKEDIN_BCOOKIE }}
+          LINKEDIN_BSCOOKIE: ${{ secrets.LINKEDIN_BSCOOKIE }}
+          X_AUTH_TOKEN: ${{ secrets.X_AUTH_TOKEN }}
+          X_CT0: ${{ secrets.X_CT0 }}
+          X_TWID: ${{ secrets.X_TWID }}
+          X_KDT: ${{ secrets.X_KDT }}
+        run: node scripts/scrape-profiles.mjs
+
+      - name: Commit refreshed data
+        working-directory: .
+        run: |
+          if git diff --quiet macos/public/data; then
+            echo "No profile data changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add macos/public/data/
+          git commit -m "chore: refresh profile data ($(date -u +%Y-%m-%d))"
+          git push
