@@ -19,6 +19,19 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = path.resolve(__dirname, '..', 'public', 'data');
+const DEBUG_DIR = path.resolve(__dirname, 'debug');
+
+async function dumpDebug(page, tag) {
+  try {
+    await fs.mkdir(DEBUG_DIR, { recursive: true });
+    const html = await page.content();
+    await fs.writeFile(path.join(DEBUG_DIR, `${tag}.html`), html);
+    await page.screenshot({ path: path.join(DEBUG_DIR, `${tag}.png`), fullPage: true });
+    console.error(`Debug artifacts saved: ${tag}.html, ${tag}.png`);
+  } catch (e) {
+    console.error(`Failed to save debug artifacts for ${tag}:`, e.message);
+  }
+}
 
 const LINKEDIN_URL = process.env.LINKEDIN_URL || 'https://www.linkedin.com/in/thomas-suen-84776a262/';
 const X_URL = process.env.X_URL || 'https://x.com/ThomasSuen6';
@@ -172,6 +185,10 @@ async function scrapeLinkedIn(browser) {
     return { name, headline, location, connectionCount, avatarUrl, about, experience, education, skills };
   });
 
+  if (!data.name) {
+    await dumpDebug(page, 'linkedin');
+  }
+
   await ctx.close();
   return { ...data, url: LINKEDIN_URL };
 }
@@ -266,6 +283,10 @@ async function scrapeX(browser) {
     return { name, handle, bio, location, website, joined, following, followers, avatarUrl, bannerUrl, tweets };
   });
 
+  if (!data.name || !data.tweets?.length) {
+    await dumpDebug(page, 'x');
+  }
+
   await ctx.close();
   return { ...data, url: X_URL };
 }
@@ -282,32 +303,38 @@ async function main() {
     ]);
 
     const [liRes, xRes] = results;
+    let liOk = false, xOk = false;
 
     if (liRes.status === 'fulfilled') {
       const v = liRes.value;
       if (!v.name) {
         console.error('LinkedIn scrape returned no name — likely blocked or cookie expired');
-        process.exitCode = 1;
       } else {
         await fs.writeFile(path.join(OUT_DIR, 'linkedin.json'), JSON.stringify(v, null, 2));
         console.log(`LinkedIn: OK — ${v.name} · ${v.experience.length} roles · ${v.skills.length} skills`);
+        liOk = true;
       }
     } else {
       console.error('LinkedIn failed:', liRes.reason?.message || liRes.reason);
-      process.exitCode = 1;
     }
 
     if (xRes.status === 'fulfilled') {
       const v = xRes.value;
       if (!v.name || !v.tweets?.length) {
         console.error('X scrape returned no data — likely blocked or cookie expired');
-        process.exitCode = 1;
       } else {
         await fs.writeFile(path.join(OUT_DIR, 'x.json'), JSON.stringify(v, null, 2));
         console.log(`X: OK — ${v.name} (${v.handle}) · ${v.tweets.length} tweets`);
+        xOk = true;
       }
     } else {
       console.error('X failed:', xRes.reason?.message || xRes.reason);
+    }
+
+    // Exit 0 if at least one site succeeded — partial data beats no data.
+    // Exit 1 only if both failed, so the workflow surfaces a clear problem.
+    if (!liOk && !xOk) {
+      console.error('Both scrapes failed — exiting 1');
       process.exitCode = 1;
     }
   } finally {
