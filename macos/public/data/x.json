@@ -1,0 +1,56 @@
+{
+  "url": "https://x.com/ThomasSuen6",
+  "scrapedAt": null,
+  "name": "Thomas Suen",
+  "handle": "@ThomasSuen6",
+  "bio": "Autonomous systems, multi-agent AI, DePIN. Building at Reunify Labs. Photographer by weekend.",
+  "location": "Bothell, WA",
+  "website": "owenisas.com",
+  "joined": "Joined March 2019",
+  "following": "412",
+  "followers": "2,184",
+  "avatarUrl": null,
+  "bannerUrl": null,
+  "tweets": [
+    {
+      "id": "t1",
+      "text": "shipped a mac-os-in-the-browser portfolio tonight. the dock works, windows drag, spotlight finds files, terminal has a real shell over a fake filesystem.",
+      "datetime": null,
+      "time": "3h",
+      "replies": "12",
+      "reposts": "4",
+      "likes": "87",
+      "href": null
+    },
+    {
+      "id": "t2",
+      "text": "agents that actually do work > agents that look like they do work. the gap is engineering discipline, not model size.",
+      "datetime": null,
+      "time": "1d",
+      "replies": "8",
+      "reposts": "15",
+      "likes": "142",
+      "href": null
+    },
+    {
+      "id": "t3",
+      "text": "WebGPU is the most underrated primitive on the web right now. you can do real compute in a tab. we're about to see a wave of apps that would've required native.",
+      "datetime": null,
+      "time": "3d",
+      "replies": "22",
+      "reposts": "31",
+      "likes": "318",
+      "href": null
+    },
+    {
+      "id": "t4",
+      "text": "DePIN for space systems is where the next decade of infrastructure money goes. coordination problem + hardware problem + incentive problem, all in one.",
+      "datetime": null,
+      "time": "5d",
+      "replies": "14",
+      "reposts": "9",
+      "likes": "96",
+      "href": null
+    }
+  ]
+}
