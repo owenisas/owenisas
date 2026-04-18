@@ -1,55 +1,15 @@
 {
-  "url": "https://www.linkedin.com/in/thomas-suen-84776a262/",
-  "scrapedAt": null,
   "name": "Thomas Suen",
-  "headline": "CS Student · Autonomous Systems · AI/ML · Full-Stack",
-  "location": "Bothell, Washington, United States",
-  "connectionCount": "500+ connections",
-  "avatarUrl": null,
-  "about": "I build autonomous systems that bridge digital and physical worlds — multi-agent AI, DePIN for Earth and space, AgriTech, AI governance, and embedded engineering. Also a photographer (street, landscape, aerial).",
-  "experience": [
-    {
-      "title": "Founder",
-      "company": "Reunify Labs",
-      "span": "Present",
-      "summary": "Building agent infrastructure and end-to-end product. AI/ML, full-stack, agentic systems.",
-      "logo": null
-    },
-    {
-      "title": "Independent Researcher",
-      "company": "Multi-Agent AI & DePIN",
-      "span": "2024 – Present",
-      "summary": "Research at the intersection of multi-agent coordination and decentralized physical infrastructure for Earth and space applications.",
-      "logo": null
-    },
-    {
-      "title": "Open-Source Contributor",
-      "company": "github.com/owenisas",
-      "span": "Ongoing",
-      "summary": "Tooling around LLM agents, 3D pipelines, and WebGPU. Projects span agent scaffolding and procedural animation.",
-      "logo": null
-    }
-  ],
-  "education": [
-    {
-      "school": "University (CS)",
-      "degree": "B.S. Computer Science",
-      "span": "In progress",
-      "logo": null
-    }
-  ],
-  "skills": [
-    "TypeScript",
-    "React",
-    "Three.js",
-    "WebGPU",
-    "LLM Agents",
-    "Multi-Agent Systems",
-    "Python",
-    "Embedded",
-    "Computer Vision",
-    "Photography",
-    "DePIN",
-    "AgriTech"
-  ]
+  "headline": "Automate your life",
+  "location": "Bellevue, Washington, United States",
+  "pronouns": "He/Him",
+  "connectionCount": "124",
+  "avatarUrl": "https://media.licdn.com/dms/image/v2/D5603AQHPvZHcU0Q96Q/profile-displayphoto-scale_200_200/B56ZylODYdHYAY-/0/1772298513014?e=1778112000&v=beta&t=ufoQmURxh0mDTK7UmpkOYavUnOQGMpgWntPVYebkdUA",
+  "about": "",
+  "experience": [],
+  "education": [],
+  "skills": [],
+  "url": "https://www.linkedin.com/in/thomas-suen-84776a262/",
+  "finalUrl": "https://www.linkedin.com/in/thomas-suen-84776a262/",
+  "scrapedAt": "2026-04-18T23:44:28.264Z"
 }
