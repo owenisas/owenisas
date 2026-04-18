@@ -1,56 +1,46 @@
 {
-  "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": null,
   "name": "Thomas Suen",
   "handle": "@ThomasSuen6",
-  "bio": "Autonomous systems, multi-agent AI, DePIN. Building at Reunify Labs. Photographer by weekend.",
-  "location": "Bothell, WA",
-  "website": "owenisas.com",
-  "joined": "Joined March 2019",
-  "following": "412",
-  "followers": "2,184",
-  "avatarUrl": null,
+  "bio": "",
+  "location": "Washington",
+  "website": "",
+  "joined": "Joined March 2026",
+  "following": "23",
+  "followers": "9",
+  "avatarUrl": "https://pbs.twimg.com/profile_images/2036569139293331456/5XE8c5bD_200x200.jpg",
   "bannerUrl": null,
   "tweets": [
     {
-      "id": "t1",
-      "text": "shipped a mac-os-in-the-browser portfolio tonight. the dock works, windows drag, spotlight finds files, terminal has a real shell over a fake filesystem.",
-      "datetime": null,
-      "time": "3h",
-      "replies": "12",
+      "id": "2044285406800425009",
+      "text": "Managing multiple CLI auth profiles is painful. I built ContextCLI — run any dev CLI under a named profile. Integrates perfectly with your current agentic development workflow too! Open source (MIT): http://github.com/owenisas/contextcli… Follow and comment for app support request.",
+      "datetime": "2026-04-15T05:23:16.000Z",
+      "time": "Apr 15",
+      "replies": "3",
+      "reposts": "",
+      "likes": "2",
+      "href": "/ThomasSuen6/status/2044285406800425009"
+    },
+    {
+      "id": "2044287379377402124",
+      "text": "Surely will maintain regularly if at least 100 people star the project, LOL",
+      "datetime": "2026-04-15T05:31:06.000Z",
+      "time": "Apr 15",
+      "replies": "",
+      "reposts": "",
+      "likes": "",
+      "href": "/ThomasSuen6/status/2044287379377402124"
+    },
+    {
+      "id": "2043913920432484626",
+      "text": "It's time to build @fdotinc Thank you @hthieblot @adriannalakatos and the entire Founders Inc team! Got rejected 3 months ago btw. How hard can it be?",
+      "datetime": "2026-04-14T04:47:07.000Z",
+      "time": "Apr 14",
+      "replies": "11",
       "reposts": "4",
-      "likes": "87",
-      "href": null
-    },
-    {
-      "id": "t2",
-      "text": "agents that actually do work > agents that look like they do work. the gap is engineering discipline, not model size.",
-      "datetime": null,
-      "time": "1d",
-      "replies": "8",
-      "reposts": "15",
-      "likes": "142",
-      "href": null
-    },
-    {
-      "id": "t3",
-      "text": "WebGPU is the most underrated primitive on the web right now. you can do real compute in a tab. we're about to see a wave of apps that would've required native.",
-      "datetime": null,
-      "time": "3d",
-      "replies": "22",
-      "reposts": "31",
-      "likes": "318",
-      "href": null
-    },
-    {
-      "id": "t4",
-      "text": "DePIN for space systems is where the next decade of infrastructure money goes. coordination problem + hardware problem + incentive problem, all in one.",
-      "datetime": null,
-      "time": "5d",
-      "replies": "14",
-      "reposts": "9",
-      "likes": "96",
-      "href": null
+      "likes": "42",
+      "href": "/imjustinliao/status/2043913920432484626"
     }
-  ]
+  ],
+  "url": "https://x.com/ThomasSuen6",
+  "scrapedAt": "2026-04-18T21:30:08.426Z"
 }
