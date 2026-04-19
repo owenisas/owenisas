@@ -174,13 +174,15 @@ function Desktop() {
 
   return (
     <>
-      {/* 3D Desk Showroom — lazy loaded, behind desktop */}
+      {/* 3D Desk Showroom — lazy loaded, behind desktop.
+          Opacity-only fade (no visibility toggle) avoids the fade-in snap
+          on return, where visibility-hidden would hold the element invisible
+          for 0.45s while opacity silently ramped to 1, then pop in. */}
       <div
         style={{
           opacity: desktopVisible ? 0 : 1,
-          visibility: desktopVisible ? 'hidden' : 'visible',
           pointerEvents: view === 'desktop' ? 'none' : 'auto',
-          transition: 'opacity 0.45s ease, visibility 0s linear 0.45s',
+          transition: 'opacity 0.45s ease',
         }}
       >
         <Suspense fallback={<div className="fixed inset-0 bg-[#0a0a0c]" />}>
@@ -206,13 +208,15 @@ function Desktop() {
         pointerEvents: desktopVisible ? 'auto' : 'none',
       }}
     >
-      {/* Wallpaper — fades in first */}
+      {/* Wallpaper — fades in first. Duration matches the showroom fade-out
+          (0.45s) so there's no dark-body gap between layers during the swap. */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: 'url(/wallpaper.jpg)',
+          backgroundColor: '#1a1f2b',
           opacity: desktopVisible ? 1 : 0,
-          transition: 'opacity 0.8s ease',
+          transition: 'opacity 0.45s ease',
         }}
         onContextMenu={handleContextMenu}
         onClick={() => { setContextMenu(null); setSelectedIcon(null); }}
