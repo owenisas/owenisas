@@ -48,6 +48,13 @@ const FALLBACK_X = {
   ],
 };
 
+function isMeaningful(v) {
+  if (v == null) return false;
+  if (typeof v === 'string') return v.trim() !== '';
+  if (Array.isArray(v)) return v.length > 0;
+  return true;
+}
+
 function useProfileJson(url, fallback) {
   const [data, setData] = useState(fallback);
   useEffect(() => {
@@ -56,7 +63,11 @@ function useProfileJson(url, fallback) {
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
         if (cancelled || !d) return;
-        setData({ ...fallback, ...d });
+        const merged = { ...fallback };
+        for (const [k, v] of Object.entries(d)) {
+          if (isMeaningful(v)) merged[k] = v;
+        }
+        setData(merged);
       })
       .catch(() => {});
     return () => {
