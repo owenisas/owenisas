@@ -123,6 +123,7 @@ function StartTile({ item, onClick }) {
 export default function Safari({ windowData }) {
   const [tabs, setTabs] = useState([createTab(1, windowData?.payload?.url || '')]);
   const [activeTab, setActiveTab] = useState(1);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const nextId = useRef(2);
   const urlInputRef = useRef(null);
   const [urlEditing, setUrlEditing] = useState(false);
@@ -236,6 +237,10 @@ export default function Safari({ windowData }) {
 
   const canGoBack = tab.historyIndex > 0;
   const canGoForward = tab.historyIndex < tab.history.length - 1;
+  const handleShare = useCallback(() => {
+    const target = tab.loadedUrl || 'https://www.owenisas.com/';
+    window.open(target, '_blank', 'noopener,noreferrer');
+  }, [tab.loadedUrl]);
   const showBlockedPage = Boolean(tab.loadedUrl) && tab.error;
   const showExternalPage = Boolean(tab.loadedUrl) && shouldOpenExternally(tab.loadedUrl);
   const CustomRenderer = tab.loadedUrl ? getCustomRenderer(tab.loadedUrl) : null;
@@ -293,10 +298,16 @@ export default function Safari({ windowData }) {
         className="flex items-center gap-3 h-[44px] px-3 shrink-0 relative z-10"
         style={{ background: 'rgba(44,44,46,0.96)', borderBottom: '0.5px solid rgba(255,255,255,0.05)' }}
       >
-        <MacToolbarButton icon="sidebar.left" size={26} />
+        <MacToolbarButton
+          icon="sidebar.left"
+          size={26}
+          label="Toggle Sidebar"
+          active={sidebarOpen}
+          onClick={() => setSidebarOpen(v => !v)}
+        />
         <div className="flex items-center gap-0.5">
-          <MacToolbarButton icon="chevron.left" onClick={canGoBack ? goBack : undefined} size={26} label="Back" active={canGoBack} />
-          <MacToolbarButton icon="chevron.right" onClick={canGoForward ? goForward : undefined} size={26} label="Forward" active={canGoForward} />
+          <MacToolbarButton icon="chevron.left" onClick={goBack} size={26} label="Back" active={canGoBack} />
+          <MacToolbarButton icon="chevron.right" onClick={goForward} size={26} label="Forward" active={canGoForward} />
         </div>
 
         {urlEditing ? (
@@ -334,10 +345,45 @@ export default function Safari({ windowData }) {
           </div>
         )}
 
-        <MacToolbarButton icon="square.and.arrow.up" size={26} label="Share" />
+        <MacToolbarButton icon="square.and.arrow.up" size={26} label="Share" onClick={handleShare} />
       </div>
 
-      <div className="flex-1 overflow-hidden relative">
+      <div className="flex-1 overflow-hidden relative flex">
+        {sidebarOpen && (
+          <aside
+            className="w-[220px] shrink-0 overflow-y-auto border-r border-white/5 px-2 py-4"
+            style={{ background: 'rgba(30,30,32,0.96)' }}
+          >
+            <div className="text-[11px] font-semibold uppercase tracking-wider text-white/40 px-2 mb-2">Favorites</div>
+            <div className="flex flex-col gap-0.5 mb-4">
+              {defaultFavorites.map(fav => (
+                <button
+                  key={fav.name}
+                  onClick={() => navigate(fav.url)}
+                  className="flex items-center gap-2 px-2 py-1.5 rounded-[6px] text-[12px] text-white/85 hover:bg-white/10 transition-colors text-left cursor-default"
+                >
+                  <span
+                    className="w-[18px] h-[18px] rounded-[4px] flex items-center justify-center text-[10px] font-medium text-white shrink-0"
+                    style={{ background: fav.color }}
+                  >
+                    {fav.letter || fav.name[0]}
+                  </span>
+                  <span className="truncate">{fav.name}</span>
+                </button>
+              ))}
+            </div>
+            <div className="text-[11px] font-semibold uppercase tracking-wider text-white/40 px-2 mb-2">Reading List</div>
+            <div className="flex flex-col gap-0.5">
+              {readingList.map(item => (
+                <div key={item.title} className="px-2 py-1.5 rounded-[6px] hover:bg-white/10 transition-colors cursor-default">
+                  <div className="text-[12px] text-white/85 truncate">{item.title}</div>
+                  <div className="text-[10px] text-white/40 truncate">{item.domain}</div>
+                </div>
+              ))}
+            </div>
+          </aside>
+        )}
+        <div className="flex-1 relative overflow-hidden">
         {tab.loadedUrl ? (
           CustomRenderer ? (
             <CustomRenderer />
@@ -462,6 +508,7 @@ export default function Safari({ windowData }) {
             </div>
           </div>
         )}
+        </div>
       </div>
     </div>
   );
