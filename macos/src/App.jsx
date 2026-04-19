@@ -183,6 +183,7 @@ function Desktop() {
           opacity: desktopVisible ? 0 : 1,
           pointerEvents: view === 'desktop' ? 'none' : 'auto',
           transition: 'opacity 0.45s ease',
+          willChange: 'opacity',
         }}
       >
         <Suspense fallback={<div className="fixed inset-0 bg-[#0a0a0c]" />}>
@@ -217,6 +218,7 @@ function Desktop() {
           backgroundColor: '#1a1f2b',
           opacity: desktopVisible ? 1 : 0,
           transition: 'opacity 0.45s ease',
+          willChange: 'opacity',
         }}
         onContextMenu={handleContextMenu}
         onClick={() => { setContextMenu(null); setSelectedIcon(null); }}
