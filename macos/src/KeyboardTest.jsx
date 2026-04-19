@@ -340,12 +340,13 @@ export default function KeyboardTest() {
     });
 
     // Animation loop
-    const clock = new THREE.Clock();
+    const timer = new THREE.Timer();
     let animationId;
 
     function animate() {
       animationId = requestAnimationFrame(animate);
-      const delta = clock.getDelta();
+      timer.update();
+      const delta = timer.getDelta();
       controls.update();
 
       // Update animation mixer

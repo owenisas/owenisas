@@ -1,0 +1,8 @@
+{
+  "projects": [
+    { "slug": "owenisas-site", "title": "owenisas.com", "tagline": "macOS in the browser", "icon": "safari" },
+    { "slug": "blender-showreel", "title": "Blender MCP showreel", "tagline": "Procedural product animation", "icon": "photobooth" },
+    { "slug": "autonomous-systems", "title": "Autonomous systems", "tagline": "Long-horizon agents", "icon": "scripteditor" },
+    { "slug": "photography-notes", "title": "Photography", "tagline": "Street, landscape, aerial", "icon": "photos" }
+  ]
+}

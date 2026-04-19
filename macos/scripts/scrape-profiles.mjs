@@ -78,127 +78,140 @@ async function scrapeLinkedIn(browser) {
   const page = await ctx.newPage();
 
   try {
-    // Warm-up: hit /feed first so LinkedIn validates the session and issues
-    // any fresh cookies it wants before we request a profile page.
-    await page.goto('https://www.linkedin.com/feed/', { waitUntil: 'domcontentloaded', timeout: 45000 });
-    await page.waitForTimeout(1200);
+    // Go directly to the profile URL. A /feed warm-up occasionally triggers
+    // LinkedIn's bot-detection pipeline and returns clear-site-data headers
+    // that blank the session, causing the next request to hit /authwall.
     await page.goto(LINKEDIN_URL, { waitUntil: 'domcontentloaded', timeout: 45000 });
   } catch (err) {
     await dumpDebug(page, 'linkedin-goto-error').catch(() => {});
     throw err;
   }
-  await page.waitForSelector('h1', { timeout: 20000 }).catch(() => {});
 
-  // Scroll to trigger lazy-loaded sections (about, experience, education, skills).
-  for (let i = 0; i < 8; i++) {
+  // LinkedIn's new profile UI is SDUI (server-driven UI) — class names are
+  // hashed per build, but `componentkey` attrs are stable. Wait for the
+  // Topcard to populate (it holds name, headline, location, avatar).
+  await page
+    .waitForFunction(
+      () => {
+        const topcard = document.querySelector('[componentkey*="Topcard"]');
+        return topcard && topcard.textContent && topcard.textContent.length > 50;
+      },
+      { timeout: 20000 }
+    )
+    .catch(() => {});
+
+  // Scroll to trigger SDUI hydration of About/Experience/Education/Skills.
+  for (let i = 0; i < 12; i++) {
     await page.evaluate((y) => window.scrollBy(0, y), 700);
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(700);
   }
   await page.evaluate(() => window.scrollTo(0, 0));
-  await page.waitForTimeout(400);
+  await page.waitForTimeout(600);
 
   const data = await page.evaluate(() => {
     const text = (el) => (el?.textContent || '').replace(/\s+/g, ' ').trim();
     const pick = (sel, root = document) => root.querySelector(sel);
     const pickAll = (sel, root = document) => Array.from(root.querySelectorAll(sel));
-    const firstText = (sels, root = document) => {
-      for (const s of sels) { const t = text(pick(s, root)); if (t) return t; }
-      return '';
-    };
 
-    const name = firstText(['h1.text-heading-xlarge', 'h1']);
+    // --- Topcard (name, headline, location, avatar) ---
+    const topcard = pick('[componentkey*="Topcard"]');
+    let name = '', headline = '', location = '', connectionCount = '', avatarUrl = null, pronouns = '';
 
-    const headline = firstText([
-      '.text-body-medium.break-words',
-      '.pv-text-details__left-panel .text-body-medium',
-      'section[data-view-name="profile-card"] .text-body-medium',
-    ]);
-
-    const location = firstText([
-      '.pv-text-details__left-panel + div .text-body-small',
-      '.text-body-small.inline.t-black--light.break-words',
-    ]);
-
-    const connectionCount = firstText([
-      '.pv-top-card--list-bullet li a span',
-      'ul.pv-top-card--list-bullet span',
-    ]);
-
-    const avatarImg = pick(
-      'img.pv-top-card-profile-picture__image, img.profile-photo-edit__preview, button[aria-label*="photo"] img'
-    );
-    const avatarUrl = avatarImg?.src || null;
-
-    // Prefer the full about text from the inline-show-more-text span.
-    let about = '';
-    const aboutSection = document.getElementById('about')?.closest('section');
-    if (aboutSection) {
-      about = firstText(
-        [
-          '[class*="inline-show-more-text"] span[aria-hidden="true"]',
-          '.display-flex.ph5.pv3 span[aria-hidden="true"]',
-          '.pv-shared-text-with-see-more span[aria-hidden="true"]',
-        ],
-        aboutSection
-      );
+    // Name: document.title is "<Name> | LinkedIn" — most reliable source.
+    {
+      const t = document.title.split('|')[0].trim();
+      if (t && t !== 'LinkedIn') name = t;
     }
 
-    const extractList = (sectionId) => {
-      const section = document.getElementById(sectionId)?.closest('section');
-      if (!section) return [];
-      const items = pickAll('li.artdeco-list__item, .pvs-list__paged-list-item, li.pv-entity__position-group-pager', section);
-      const out = [];
-      items.forEach((li) => {
-        const title = firstText(
-          ['.t-bold span[aria-hidden="true"]', '.mr1 span[aria-hidden="true"]', '.t-bold'],
-          li
-        );
-        const subtitle = firstText(
-          ['.t-14.t-normal:not(.t-black--light) span[aria-hidden="true"]', '.t-14.t-normal span[aria-hidden="true"]'],
-          li
-        );
-        const span = firstText(
-          ['.t-14.t-normal.t-black--light span[aria-hidden="true"]', '.pvs-entity__caption-wrapper'],
-          li
-        );
-        const detail = firstText(
-          ['.pvs-entity__sub-components .pvs-list__paged-list-item span[aria-hidden="true"]', '.pv-shared-text-with-see-more span[aria-hidden="true"]'],
-          li
-        );
+    if (topcard) {
+      const avatarImg = pick('img[src*="profile-displayphoto"], img[src*="profile-framedphoto"]', topcard)
+        || pick('figure img', topcard);
+      avatarUrl = avatarImg?.src || null;
+
+      // Walk every <p>/<span> in topcard; classify by content pattern.
+      const lines = Array.from(topcard.querySelectorAll('p, span'))
+        .map((el) => text(el))
+        .filter((t) => t && t.length < 200);
+      // Dedupe while preserving order
+      const seen = new Set();
+      const unique = [];
+      for (const l of lines) {
+        if (!seen.has(l)) { seen.add(l); unique.push(l); }
+      }
+      for (const l of unique) {
+        if (!pronouns && /^(He\/Him|She\/Her|They\/Them)$/i.test(l)) pronouns = l;
+        else if (!location && /,\s*[A-Z]/.test(l) && /United States|Canada|Kingdom|Australia|India|Germany|France|Singapore|Hong Kong|Japan|China|Brazil|Mexico|Netherlands|Spain|Italy|Sweden|Switzerland|Ireland|Poland|Belgium|Denmark|Norway|Finland/.test(l)) location = l;
+        else if (!connectionCount && /^\d[\d,+]*$/.test(l)) connectionCount = l;
+      }
+
+      // Headline heuristic: first non-name, non-pronoun, non-location <p> text under topcard.
+      const paragraphs = Array.from(topcard.querySelectorAll('p')).map((p) => text(p));
+      for (const p of paragraphs) {
+        if (!p || p === name || p === pronouns || p === location || /connection/i.test(p)) continue;
+        if (p.length > 180) continue;
+        if (!headline) { headline = p; continue; }
+      }
+    }
+
+    // --- About section ---
+    let about = '';
+    const aboutCard = pick('[componentkey*="refAbout"]') || pick('[componentkey*="About"]');
+    if (aboutCard) {
+      about = text(aboutCard).replace(/^About\s*/i, '').trim();
+    }
+
+    // --- Experience ---
+    const experience = [];
+    const expCard = pick('[componentkey*="Experience"]');
+    if (expCard) {
+      pickAll('li', expCard).forEach((li) => {
+        const ps = Array.from(li.querySelectorAll('p, span'))
+          .map((el) => text(el))
+          .filter((t) => t && t.length < 300);
+        const uniq = [];
+        const seen = new Set();
+        for (const p of ps) { if (!seen.has(p)) { seen.add(p); uniq.push(p); } }
+        const title = uniq[0] || '';
+        const company = uniq[1] || '';
+        const span = uniq[2] || '';
         const logo = li.querySelector('img')?.src || null;
-        if (title) out.push({ title, subtitle, span, detail, logo });
+        if (title) experience.push({ title, company, span, summary: '', logo });
       });
-      return out;
-    };
+    }
 
-    const experienceRaw = extractList('experience');
-    const educationRaw = extractList('education');
+    // --- Education ---
+    const education = [];
+    const eduCard = pick('[componentkey*="Education"]');
+    if (eduCard) {
+      pickAll('li', eduCard).forEach((li) => {
+        const ps = Array.from(li.querySelectorAll('p, span'))
+          .map((el) => text(el))
+          .filter((t) => t && t.length < 300);
+        const uniq = [];
+        const seen = new Set();
+        for (const p of ps) { if (!seen.has(p)) { seen.add(p); uniq.push(p); } }
+        const school = uniq[0] || '';
+        const degree = uniq[1] || '';
+        const span = uniq[2] || '';
+        const logo = li.querySelector('img')?.src || null;
+        if (school) education.push({ school, degree, span, logo });
+      });
+    }
 
-    const experience = experienceRaw.map((r) => ({
-      title: r.title,
-      company: r.subtitle,
-      span: r.span,
-      summary: r.detail,
-      logo: r.logo,
-    }));
-
-    const education = educationRaw.map((r) => ({
-      school: r.title,
-      degree: r.subtitle,
-      span: r.span,
-      logo: r.logo,
-    }));
-
+    // --- Skills ---
     const skills = [];
-    const skillsSection = document.getElementById('skills')?.closest('section');
-    if (skillsSection) {
-      pickAll('.t-bold span[aria-hidden="true"]', skillsSection).forEach((s) => {
-        const t = (s.textContent || '').trim();
+    const skillsCard = pick('[componentkey*="Skills"]');
+    if (skillsCard) {
+      pickAll('li', skillsCard).forEach((li) => {
+        const ps = Array.from(li.querySelectorAll('p, span'))
+          .map((el) => text(el))
+          .filter((t) => t && t.length > 0 && t.length < 80);
+        const t = ps[0];
         if (t && !skills.includes(t)) skills.push(t);
       });
     }
 
-    return { name, headline, location, connectionCount, avatarUrl, about, experience, education, skills };
+    return { name, headline, location, pronouns, connectionCount, avatarUrl, about, experience, education, skills };
   });
 
   const finalUrl = page.url();
@@ -212,10 +225,164 @@ async function scrapeLinkedIn(browser) {
     console.error(`LinkedIn blocked — finalUrl=${finalUrl} name="${data.name}"`);
     await dumpDebug(page, 'linkedin');
     data.name = ''; // signal failure upstream
+    await ctx.close();
+    return { ...data, url: LINKEDIN_URL, finalUrl };
+  }
+
+  // Snapshot the full rendered page as a scrubbed, self-contained HTML file
+  // so the Safari app can render it verbatim instead of reconstructing UI.
+  // Same page visit — we're already past auth, don't want to re-navigate.
+  try {
+    await snapshotLinkedInPage(page);
+    console.log('LinkedIn: HTML snapshot saved');
+  } catch (err) {
+    console.error('LinkedIn snapshot failed:', err?.message || err);
   }
 
   await ctx.close();
   return { ...data, url: LINKEDIN_URL, finalUrl };
+}
+
+// Capture the live LinkedIn profile DOM and save a self-contained HTML file:
+// - strips logged-in chrome (nav, right rail, edit buttons, my account markers)
+// - inlines stylesheets so styling survives without network calls
+// - removes scripts and preload hints (no auth leakage, no active fetching)
+// - final regex sweep over residual JSON containing session/user identifiers
+async function snapshotLinkedInPage(page) {
+  // Give SDUI cards extra time to hydrate before snapshotting so the HTML
+  // contains about/experience/education/skills content, not empty shells.
+  for (let i = 0; i < 20; i++) {
+    await page.evaluate((y) => window.scrollBy(0, y), 500);
+    await page.waitForTimeout(600);
+  }
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(800);
+
+  // Fetch stylesheets from inside the page context (browser handles CORS +
+  // auth the same way it already did when loading them for rendering).
+  const stylesheets = await page.evaluate(async () => {
+    const links = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
+    const out = [];
+    await Promise.all(
+      links.map(async (link) => {
+        try {
+          const resp = await fetch(link.href, { credentials: 'include' });
+          if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+          const css = await resp.text();
+          out.push({ href: link.href, css });
+        } catch (e) {
+          out.push({ href: link.href, css: null, error: String(e.message || e) });
+        }
+      })
+    );
+    return out;
+  });
+
+  await page.evaluate((stylesheets) => {
+    const kill = (sel) => document.querySelectorAll(sel).forEach((el) => el.remove());
+
+    // Global nav (me-menu, notifications, messaging, search box with my user)
+    kill('#global-nav, [id*="global-nav"], .global-nav, nav, header');
+    // Right rail (people-you-may-know, analytics, edit-profile nudges)
+    kill('aside, .scaffold-layout__aside, [class*="scaffold-layout-aside"], [class*="pv-right-rail"], [data-view-name*="right-rail"]');
+    // Owner-only controls — pencil edits, "Add section", "Your dashboard"
+    kill('button[aria-label*="Edit" i], a[aria-label*="Edit" i]');
+    kill('button[aria-label*="Add profile section" i], a[aria-label*="Add profile section" i]');
+    kill('[aria-label*="Your dashboard" i], [aria-label*="analytics" i]');
+    kill('button[aria-label*="More actions" i], button[aria-label*="Share profile" i], button[aria-label*="Save to PDF" i]');
+    // Chat / messaging overlays
+    kill('.msg-overlay-list-bubble, .msg-overlay-bubble-header, [class*="msg-overlay"]');
+    // All scripts + prefetch/preload hints (no runtime fetching once offline)
+    kill('script, noscript, link[rel="preload"], link[rel="prefetch"], link[rel="dns-prefetch"], link[rel="preconnect"], link[rel="modulepreload"]');
+    // Meta tags carrying session / csrf / user identifiers
+    document.querySelectorAll('meta').forEach((m) => {
+      const n = (m.getAttribute('name') || m.getAttribute('property') || '').toLowerCase();
+      if (/tracking|csrf|session|member|user|x-li-|i18n-instance/.test(n)) m.remove();
+    });
+    // Strip data attrs on <body>/<html> that may embed my member id
+    ['html', 'body'].forEach((tag) => {
+      const el = document.querySelector(tag);
+      if (!el) return;
+      Array.from(el.attributes).forEach((a) => {
+        if (/^data-/.test(a.name) && /member|user|track|csrf|session/i.test(a.name + a.value)) el.removeAttribute(a.name);
+      });
+    });
+    // <code> blobs — LinkedIn embeds bootstrap JSON in <code> tags
+    kill('code[id^="bpr-guid"], code[style*="display:none"], code[style*="display: none"]');
+
+    // Replace external stylesheets with inline <style> blocks.
+    const cssByHref = new Map(stylesheets.map((s) => [s.href, s.css]));
+    document.querySelectorAll('link[rel="stylesheet"]').forEach((link) => {
+      const css = cssByHref.get(link.href);
+      if (css) {
+        const style = document.createElement('style');
+        style.textContent = css;
+        link.replaceWith(style);
+      } else {
+        link.setAttribute('href', link.href);
+      }
+    });
+
+    // Force image srcs to absolute URLs so they resolve when served from any origin.
+    document.querySelectorAll('img[src], img[srcset]').forEach((img) => {
+      const src = img.getAttribute('src');
+      if (src && !/^(https?:|data:)/.test(src)) {
+        try { img.setAttribute('src', new URL(src, location.href).href); } catch {}
+      }
+      const srcset = img.getAttribute('srcset');
+      if (srcset) {
+        const rewritten = srcset
+          .split(',')
+          .map((part) => {
+            const m = part.trim().match(/^(\S+)(\s+\S+)?$/);
+            if (!m) return part;
+            let [, u, sz] = m;
+            if (!/^(https?:|data:)/.test(u)) {
+              try { u = new URL(u, location.href).href; } catch {}
+            }
+            return sz ? `${u}${sz}` : u;
+          })
+          .join(', ');
+        img.setAttribute('srcset', rewritten);
+      }
+    });
+
+    // Anchor hrefs: force absolute, but neutralize so clicks don't navigate
+    // a logged-in user session on LinkedIn's real site from our preview.
+    document.querySelectorAll('a[href]').forEach((a) => {
+      const href = a.getAttribute('href');
+      if (href && !/^(https?:|#|mailto:|tel:)/.test(href)) {
+        try { a.setAttribute('href', new URL(href, location.href).href); } catch {}
+      }
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener noreferrer');
+    });
+
+    // <base> so anything we missed still resolves.
+    const existing = document.querySelector('base');
+    if (existing) existing.remove();
+    const base = document.createElement('base');
+    base.href = 'https://www.linkedin.com/';
+    document.head.insertBefore(base, document.head.firstChild);
+  }, stylesheets);
+
+  let html = await page.content();
+
+  // Regex sweep for any residual identifiers leaked in text/attributes.
+  // Conservative — we don't try to re-parse; just zero out common keys.
+  const scrubs = [
+    [/"memberId"\s*:\s*"[^"]*"/g, '"memberId":""'],
+    [/"trackingId"\s*:\s*"[^"]*"/g, '"trackingId":""'],
+    [/"sessionId"\s*:\s*"[^"]*"/g, '"sessionId":""'],
+    [/"csrfToken"\s*:\s*"[^"]*"/g, '"csrfToken":""'],
+    [/"miniProfile"\s*:\s*\{[^}]*\}/g, '"miniProfile":null'],
+    [/"currentUser"\s*:\s*\{[^}]*\}/g, '"currentUser":null'],
+    [/data-member-id="[^"]*"/g, 'data-member-id=""'],
+    [/data-tracking-id="[^"]*"/g, ''],
+  ];
+  for (const [re, rep] of scrubs) html = html.replace(re, rep);
+
+  await fs.writeFile(path.join(OUT_DIR, 'linkedin.html'), html);
 }
 
 async function scrapeX(browser) {

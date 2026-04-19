@@ -1,5 +1,7 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import SFSymbol from '../components/icons/SFSymbol';
+import { getByPath } from '../fs/vfs';
+import { useFileContent } from '../hooks/useFileContent';
 
 const FONTS = ['Helvetica Neue', 'Georgia', 'Times New Roman', 'Courier New', 'Arial', 'Verdana', 'Menlo'];
 const SIZES = [9, 10, 11, 12, 14, 18, 24, 36, 48, 64];
@@ -28,11 +30,80 @@ const ToolbarButton = ({ icon, active, onClick, label }) => (
   </button>
 );
 
-export default function TextEdit() {
+// Simple md → html for seeding the editor. Uses MarkdownView-equivalent subset inline.
+function mdToHtml(md) {
+  if (!md) return '';
+  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const inline = t => esc(t)
+    .replace(/`([^`]+)`/g, '<code style="background:rgba(0,0,0,0.05);padding:1px 4px;border-radius:3px;font-family:Menlo,monospace;font-size:0.92em">$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/(^|\W)\*([^*\n]+)\*(?=\W|$)/g, '$1<em>$2</em>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color:#0a84ff;text-decoration:underline">$1</a>');
+
+  const lines = md.replace(/\r\n/g, '\n').split('\n');
+  const out = [];
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i];
+    const h = line.match(/^(#{1,6})\s+(.+)$/);
+    if (h) {
+      const lvl = h[1].length;
+      const sizes = [26, 22, 18, 16, 15, 14];
+      out.push(`<p style="font-size:${sizes[lvl - 1]}px;font-weight:${lvl < 3 ? 700 : 600};margin:${lvl < 3 ? '20px 0 10px' : '16px 0 8px'}">${inline(h[2].trim())}</p>`);
+      i++; continue;
+    }
+    if (/^\s*---+\s*$/.test(line)) { out.push('<hr style="border:none;border-top:1px solid rgba(0,0,0,0.12);margin:16px 0"/>'); i++; continue; }
+    if (/^\s*[-*]\s+/.test(line)) {
+      const items = [];
+      while (i < lines.length && /^\s*[-*]\s+/.test(lines[i])) { items.push(lines[i].replace(/^\s*[-*]\s+/, '')); i++; }
+      out.push(`<ul style="margin:8px 0 12px 24px">${items.map(t => `<li style="margin:2px 0">${inline(t)}</li>`).join('')}</ul>`);
+      continue;
+    }
+    if (/^\s*\d+\.\s+/.test(line)) {
+      const items = [];
+      while (i < lines.length && /^\s*\d+\.\s+/.test(lines[i])) { items.push(lines[i].replace(/^\s*\d+\.\s+/, '')); i++; }
+      out.push(`<ol style="margin:8px 0 12px 24px">${items.map(t => `<li style="margin:2px 0">${inline(t)}</li>`).join('')}</ol>`);
+      continue;
+    }
+    if (/^>\s?/.test(line)) {
+      const buf = [];
+      while (i < lines.length && /^>\s?/.test(lines[i])) { buf.push(lines[i].replace(/^>\s?/, '')); i++; }
+      out.push(`<blockquote style="border-left:3px solid rgba(0,0,0,0.15);padding:4px 12px;margin:12px 0;color:#555">${inline(buf.join(' '))}</blockquote>`);
+      continue;
+    }
+    if (line.trim() === '') { i++; continue; }
+    const buf = [];
+    while (i < lines.length && lines[i].trim() !== '' && !/^(#{1,6}\s|>\s?|\s*[-*]\s|\s*\d+\.\s|\s*---+\s*$)/.test(lines[i])) {
+      buf.push(lines[i]); i++;
+    }
+    out.push(`<p style="margin:0 0 10px;line-height:1.55">${inline(buf.join(' '))}</p>`);
+  }
+  return out.join('\n');
+}
+
+export default function TextEdit({ windowData }) {
   const editorRef = useRef(null);
   const [font, setFont] = useState('Helvetica Neue');
   const [fontSize, setFontSize] = useState(14);
   const [activeFormats, setActiveFormats] = useState({});
+
+  const vfsPath = windowData?.payload?.vfsPath;
+  const node = useMemo(() => vfsPath ? getByPath(vfsPath) : null, [vfsPath]);
+  const { text } = useFileContent(node?.contentUrl);
+
+  const seededHtml = useMemo(() => {
+    if (node && text) {
+      if (node.kind === 'md') return mdToHtml(text);
+      return `<pre style="font-family:Menlo,monospace;font-size:12px;white-space:pre-wrap;margin:0">${text.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</pre>`;
+    }
+    return '<p style="margin-bottom:12px">Welcome to TextEdit.</p><p style="margin-bottom:12px">Start typing here to create a new document. Use the toolbar above to format your text.</p>';
+  }, [node, text]);
+
+  useEffect(() => {
+    if (editorRef.current && seededHtml) {
+      editorRef.current.innerHTML = seededHtml;
+    }
+  }, [seededHtml]);
 
   const updateActiveFormats = useCallback(() => {
     setActiveFormats({
@@ -54,25 +125,15 @@ export default function TextEdit() {
 
   const sizeUp = () => {
     const idx = SIZES.indexOf(fontSize);
-    if (idx < SIZES.length - 1) {
-      const s = SIZES[idx + 1];
-      setFontSize(s);
-      exec('fontSize', 4);
-    }
+    if (idx < SIZES.length - 1) setFontSize(SIZES[idx + 1]);
   };
-
   const sizeDown = () => {
     const idx = SIZES.indexOf(fontSize);
-    if (idx > 0) {
-      const s = SIZES[idx - 1];
-      setFontSize(s);
-      exec('fontSize', 3);
-    }
+    if (idx > 0) setFontSize(SIZES[idx - 1]);
   };
 
   return (
     <div className="flex flex-col h-full" style={{ background: '#fff' }}>
-      {/* Toolbar */}
       <div
         className="flex items-center justify-between gap-2 px-3 h-[40px] shrink-0"
         style={{ background: 'linear-gradient(to bottom, #efefef, #e9e9e9)', borderBottom: '0.5px solid rgba(0,0,0,0.12)' }}
@@ -87,7 +148,6 @@ export default function TextEdit() {
             >
               {FONTS.map(f => <option key={f} value={f} style={{ fontFamily: f }}>{f}</option>)}
             </select>
-
             <div className="flex items-center bg-white rounded-[4px] border border-[#c9c9c9] h-[22px] overflow-hidden">
               <button onClick={sizeDown} className="px-1.5 text-[#555] hover:bg-[#ececec] h-full">
                 <SFSymbol name="minus" size={9} color="#555" />
@@ -98,35 +158,30 @@ export default function TextEdit() {
               </button>
             </div>
           </div>
-
           <div className="w-px h-5 bg-black/10" />
-
           <ToolbarGroup title="Style">
             <ToolbarButton icon={<span className="text-[13px] font-bold" style={{ fontFamily: 'Georgia' }}>B</span>} active={activeFormats.bold} onClick={() => exec('bold')} label="Bold" />
             <ToolbarButton icon={<span className="text-[13px] italic" style={{ fontFamily: 'Georgia' }}>I</span>} active={activeFormats.italic} onClick={() => exec('italic')} label="Italic" />
             <ToolbarButton icon={<span className="text-[13px] underline" style={{ fontFamily: 'Georgia' }}>U</span>} active={activeFormats.underline} onClick={() => exec('underline')} label="Underline" />
           </ToolbarGroup>
-
           <div className="w-px h-5 bg-black/10" />
-
           <ToolbarGroup title="Align">
             <ToolbarButton icon="text.alignleft" active={activeFormats.justifyLeft} onClick={() => exec('justifyLeft')} label="Align Left" />
             <ToolbarButton icon="text.aligncenter" active={activeFormats.justifyCenter} onClick={() => exec('justifyCenter')} label="Center" />
             <ToolbarButton icon="text.alignright" active={activeFormats.justifyRight} onClick={() => exec('justifyRight')} label="Align Right" />
             <ToolbarButton icon="text.justify" active={activeFormats.justifyFull} onClick={() => exec('justifyFull')} label="Justify" />
           </ToolbarGroup>
-
           <div className="w-px h-5 bg-black/10" />
-
           <ToolbarGroup title="Lists">
             <ToolbarButton icon="list.bullet" onClick={() => exec('insertUnorderedList')} label="Bullet List" />
             <ToolbarButton icon="list.number" onClick={() => exec('insertOrderedList')} label="Numbered List" />
           </ToolbarGroup>
         </div>
-        <div className="text-[10px] uppercase tracking-[0.08em] text-[#7e7e7e] whitespace-nowrap">Document</div>
+        <div className="text-[10px] uppercase tracking-[0.08em] text-[#7e7e7e] whitespace-nowrap truncate max-w-[200px]">
+          {node?.name || 'Untitled'}
+        </div>
       </div>
 
-      {/* Ruler */}
       <div className="h-[18px] relative overflow-hidden select-none shrink-0" style={{ background: 'linear-gradient(to bottom, #f5f5f5, #efefef)', borderBottom: '0.5px solid rgba(0,0,0,0.08)' }}>
         <div className="flex items-end h-full px-[72px]">
           {Array.from({ length: 16 }, (_, i) => (
@@ -137,18 +192,16 @@ export default function TextEdit() {
             </div>
           ))}
         </div>
-        {/* Margin indicators */}
         <div className="absolute left-[69px] bottom-0" style={{ borderLeft: '4px solid transparent', borderRight: '4px solid transparent', borderBottom: '5px solid rgba(0,0,0,0.35)' }} />
         <div className="absolute right-[69px] bottom-0" style={{ borderLeft: '4px solid transparent', borderRight: '4px solid transparent', borderBottom: '5px solid rgba(0,0,0,0.35)' }} />
       </div>
 
-      {/* Editor */}
       <div className="flex-1 overflow-y-auto bg-white">
         <div
           ref={editorRef}
           contentEditable
           suppressContentEditableWarning
-          className="min-h-full w-full max-w-[760px] mx-auto outline-none px-6 py-8 text-[#1d1d1f] leading-relaxed"
+          className="min-h-full w-full max-w-[760px] mx-auto outline-none px-8 py-10 text-[#1d1d1f] leading-relaxed"
           style={{ fontFamily: font, fontSize, caretColor: '#000' }}
           onSelect={updateActiveFormats}
           onKeyUp={updateActiveFormats}
@@ -159,9 +212,6 @@ export default function TextEdit() {
               else if (e.key === 'i') { e.preventDefault(); exec('italic'); }
               else if (e.key === 'u') { e.preventDefault(); exec('underline'); }
             }
-          }}
-          dangerouslySetInnerHTML={{
-            __html: '<p style="margin-bottom:12px">Welcome to TextEdit.</p><p style="margin-bottom:12px">Start typing here to create a new document. Use the toolbar above to format your text with bold, italic, underline, alignment, and list options.</p>'
           }}
         />
       </div>

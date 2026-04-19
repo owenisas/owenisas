@@ -19,6 +19,8 @@ import Settings from './apps/Settings';
 import TextEdit from './apps/TextEdit';
 import Photos from './apps/Photos';
 import Messages from './apps/Messages';
+import Mail from './apps/Mail';
+import Preview from './apps/Preview';
 import Weather from './apps/Weather';
 import Calendar from './apps/Calendar';
 import AboutThisMac from './apps/AboutThisMac';
@@ -33,6 +35,8 @@ const appComponents = {
   textedit: TextEdit,
   photos: Photos,
   messages: Messages,
+  mail: Mail,
+  preview: Preview,
   weather: Weather,
   calendar: Calendar,
   aboutthismac: AboutThisMac,
@@ -149,19 +153,24 @@ function Desktop() {
       if ((e.metaKey || e.ctrlKey) && e.code === 'Space') {
         e.preventDefault();
         setSpotlightOpen(prev => !prev);
+        return;
       }
-      // ESC while in desktop → fade out desktop, then zoom back out
-      if (e.key === 'Escape' && view === 'desktop') {
-        setDesktopVisible(false);
-        setTimeout(() => {
-          setView('showroom');
-          showroomRef.current?.__zoomOut?.();
-        }, 600);
+      if (e.key === 'Escape') {
+        if (spotlightOpen) { setSpotlightOpen(false); return; }
+        if (launchpadOpen) { setLaunchpadOpen(false); return; }
+        if (contextMenu) { setContextMenu(null); return; }
+        if (view === 'desktop') {
+          setDesktopVisible(false);
+          setTimeout(() => {
+            setView('showroom');
+            showroomRef.current?.__zoomOut?.();
+          }, 600);
+        }
       }
     };
     document.addEventListener('keydown', handler);
     return () => document.removeEventListener('keydown', handler);
-  }, [view]);
+  }, [view, spotlightOpen, launchpadOpen, contextMenu]);
 
   return (
     <>
@@ -235,7 +244,7 @@ function Desktop() {
           label="GitHub"
           isSelected={selectedIcon === 'github'}
           onSelect={() => setSelectedIcon('github')}
-          onDoubleClick={() => window.open('https://github.com/owenisas', '_blank')}
+          onDoubleClick={() => handleAppLaunch('safari', 'Safari', { url: 'https://github.com/owenisas' })}
         />
 
         <DraggableDesktopIcon
@@ -243,7 +252,7 @@ function Desktop() {
           label="LinkedIn"
           isSelected={selectedIcon === 'linkedin'}
           onSelect={() => setSelectedIcon('linkedin')}
-          onDoubleClick={() => window.open('https://www.linkedin.com/in/thomas-suen-84776a262/', '_blank')}
+          onDoubleClick={() => handleAppLaunch('safari', 'Safari', { url: 'https://www.linkedin.com/in/thomas-suen-84776a262/' })}
         />
 
         <DraggableDesktopIcon
@@ -251,7 +260,7 @@ function Desktop() {
           label="X"
           isSelected={selectedIcon === 'x'}
           onSelect={() => setSelectedIcon('x')}
-          onDoubleClick={() => window.open('https://x.com/ThomasSuen6', '_blank')}
+          onDoubleClick={() => handleAppLaunch('safari', 'Safari', { url: 'https://x.com/ThomasSuen6' })}
         />
       </div>
 

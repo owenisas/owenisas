@@ -14,6 +14,14 @@ const toneStyles = {
     background: 'rgba(255,255,255,0.12)',
     border: '0.5px solid rgba(255,255,255,0.14)',
   },
+  light: {
+    background: 'rgba(0,0,0,0.06)',
+    border: '0.5px solid rgba(0,0,0,0.08)',
+  },
+  'light-quiet': {
+    background: 'transparent',
+    border: '0.5px solid transparent',
+  },
 };
 
 // --- Toggle Switch (green when on, like real macOS) ---
@@ -85,21 +93,25 @@ export function MacSlider({ value, onChange, min = 0, max = 100, accentColor = '
 // --- Segmented Control ---
 export function MacSegmentedControl({ options, value, onChange, size = 'default', tone = 'glass' }) {
   const h = size === 'small' ? 22 : size === 'large' ? 30 : 26;
+  const isLight = tone === 'light' || tone === 'light-quiet';
   return (
     <div
       className="inline-flex items-center rounded-[8px] p-[2px]"
-      style={{ ...toneStyles[tone], height: h, boxShadow: 'inset 0 0.5px 0 rgba(255,255,255,0.08)' }}
+      style={{ ...toneStyles[tone], height: h, boxShadow: isLight ? 'inset 0 0 0 0.5px rgba(0,0,0,0.06)' : 'inset 0 0.5px 0 rgba(255,255,255,0.08)' }}
     >
       {options.map(opt => {
         const isActive = opt.value === value;
+        const activeBg = isLight ? '#ffffff' : 'rgba(255,255,255,0.22)';
+        const activeColor = isLight ? 'rgba(0,0,0,0.85)' : '#fff';
+        const idleColor = isLight ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.55)';
         return (
           <button
             key={opt.value}
             className="relative flex items-center justify-center px-2.5 h-full rounded-[5px] text-[11px] font-medium transition-all duration-150 cursor-default"
             style={{
-              background: isActive ? 'rgba(255,255,255,0.22)' : 'transparent',
-              color: isActive ? '#fff' : 'rgba(255,255,255,0.55)',
-              boxShadow: isActive ? '0 0.5px 2px rgba(0,0,0,0.2)' : 'none',
+              background: isActive ? activeBg : 'transparent',
+              color: isActive ? activeColor : idleColor,
+              boxShadow: isActive ? (isLight ? '0 0.5px 2px rgba(0,0,0,0.12)' : '0 0.5px 2px rgba(0,0,0,0.2)') : 'none',
               minWidth: 28,
             }}
             onClick={() => onChange?.(opt.value)}
@@ -116,22 +128,23 @@ export function MacSegmentedControl({ options, value, onChange, size = 'default'
 // --- Search Field ---
 export function MacSearchField({ value, onChange, placeholder = 'Search', className = '', density = 'default', tone = 'glass' }) {
   const height = density === 'compact' ? 22 : density === 'spacious' ? 30 : 26;
+  const isLight = tone === 'light' || tone === 'light-quiet';
   return (
     <div
       className={`flex items-center gap-1.5 rounded-[8px] px-2 ${className}`}
-      style={{ ...toneStyles[tone], height, boxShadow: 'inset 0 0.5px 0 rgba(255,255,255,0.08)' }}
+      style={{ ...toneStyles[tone], height, boxShadow: isLight ? 'inset 0 0 0 0.5px rgba(0,0,0,0.05)' : 'inset 0 0.5px 0 rgba(255,255,255,0.08)' }}
     >
-      <SFSymbol name="magnifyingglass" size={11} color="rgba(255,255,255,0.4)" />
+      <SFSymbol name="magnifyingglass" size={11} color={isLight ? 'rgba(0,0,0,0.45)' : 'rgba(255,255,255,0.4)'} />
       <input
         type="text"
         value={value}
         onChange={e => onChange?.(e.target.value)}
         placeholder={placeholder}
-        className="bg-transparent text-[12px] text-white/90 placeholder:text-white/30 outline-none w-full"
+        className={`bg-transparent text-[12px] outline-none w-full ${isLight ? 'text-black/90 placeholder:text-black/35' : 'text-white/90 placeholder:text-white/30'}`}
       />
       {value && (
         <button onClick={() => onChange?.('')} className="opacity-45 hover:opacity-80 transition-opacity">
-          <SFSymbol name="xmark.circle" size={11} />
+          <SFSymbol name="xmark.circle" size={11} color={isLight ? 'rgba(0,0,0,0.5)' : undefined} />
         </button>
       )}
     </div>
@@ -161,9 +174,14 @@ export function MacDropdown({ value, options, onChange, width }) {
 
 // --- Toolbar Button ---
 export function MacToolbarButton({ icon, onClick, active, label, size = 28, variant = 'quiet', tone = 'glass' }) {
+  const isLight = tone === 'light' || tone === 'light-quiet';
+  const activeBg = isLight ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.16)';
+  const hoverBg = isLight ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.1)';
+  const activeColor = isLight ? 'rgba(0,0,0,0.9)' : '#fff';
+  const idleColor = isLight ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.7)';
   const base = variant === 'pill'
     ? { ...toneStyles[tone], borderRadius: 8 }
-    : { background: active ? 'rgba(255,255,255,0.16)' : 'transparent', border: '0.5px solid transparent', borderRadius: 6 };
+    : { background: active ? activeBg : 'transparent', border: '0.5px solid transparent', borderRadius: 6 };
   return (
     <button
       onClick={onClick}
@@ -171,10 +189,10 @@ export function MacToolbarButton({ icon, onClick, active, label, size = 28, vari
       style={{
         width: size, height: size,
         ...base,
-        color: active ? '#fff' : 'rgba(255,255,255,0.7)',
-        boxShadow: active ? 'inset 0 0.5px 0 rgba(255,255,255,0.12)' : 'none',
+        color: active ? activeColor : idleColor,
+        boxShadow: active ? (isLight ? 'inset 0 0 0 0.5px rgba(0,0,0,0.08)' : 'inset 0 0.5px 0 rgba(255,255,255,0.12)') : 'none',
       }}
-      onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
+      onMouseEnter={e => { if (!active) e.currentTarget.style.background = hoverBg; }}
       onMouseLeave={e => { if (!active) e.currentTarget.style.background = variant === 'pill' ? toneStyles[tone].background : 'transparent'; }}
       title={label}
     >
@@ -186,25 +204,33 @@ export function MacToolbarButton({ icon, onClick, active, label, size = 28, vari
 // --- Sidebar Item ---
 export function MacSidebarItem({ icon, iconColor, label, selected, onClick, badge, density = 'default', tone = 'sidebar' }) {
   const padY = density === 'compact' ? 2 : density === 'spacious' ? 5 : 3;
+  const isLight = tone === 'light' || tone === 'light-source';
+  let selectedBg;
+  if (tone === 'source' || tone === 'light-source') selectedBg = 'rgba(10,132,255,0.9)';
+  else if (isLight) selectedBg = 'rgba(0,0,0,0.08)';
+  else selectedBg = 'rgba(255,255,255,0.2)';
+  const hoverBg = isLight ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.08)';
+  const idleColor = isLight ? 'rgba(0,0,0,0.82)' : 'rgba(255,255,255,0.85)';
+  const idleIcon = isLight ? 'rgba(0,0,0,0.45)' : 'rgba(255,255,255,0.55)';
   return (
     <button
       className="flex items-center w-full gap-2 px-2.5 rounded-[6px] text-[13px] cursor-default transition-colors duration-75"
       style={{
         paddingTop: padY + 1.5,
         paddingBottom: padY + 1.5,
-        background: selected ? (tone === 'source' ? 'rgba(10,132,255,0.82)' : 'rgba(255,255,255,0.2)') : 'transparent',
-        color: selected ? '#fff' : 'rgba(255,255,255,0.85)',
-        boxShadow: selected ? 'inset 0 0.5px 0 rgba(255,255,255,0.12)' : 'none',
+        background: selected ? selectedBg : 'transparent',
+        color: selected ? '#fff' : idleColor,
+        boxShadow: selected && !isLight ? 'inset 0 0.5px 0 rgba(255,255,255,0.12)' : 'none',
       }}
-      onMouseEnter={e => { if (!selected) e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; }}
+      onMouseEnter={e => { if (!selected) e.currentTarget.style.background = hoverBg; }}
       onMouseLeave={e => { if (!selected) e.currentTarget.style.background = 'transparent'; }}
       onClick={onClick}
     >
       {typeof icon === 'string' ? (
-        <SFSymbol name={icon} size={15} color={iconColor || (selected ? '#0a84ff' : 'rgba(255,255,255,0.55)')} />
+        <SFSymbol name={icon} size={15} color={iconColor || (selected ? (isLight ? '#0a84ff' : '#0a84ff') : idleIcon)} />
       ) : icon}
       <span className="truncate flex-1 text-left">{label}</span>
-      {badge && <span className="text-[10px] text-white/40 tabular-nums">{badge}</span>}
+      {badge && <span className={`text-[10px] tabular-nums ${isLight ? 'text-black/40' : 'text-white/40'}`}>{badge}</span>}
     </button>
   );
 }
@@ -262,11 +288,12 @@ export function MacSettingsIcon({ icon, color }) {
 }
 
 // --- Section Header (for sidebar sections) ---
-export function MacSidebarSection({ title, children }) {
+export function MacSidebarSection({ title, children, tone = 'dark' }) {
+  const isLight = tone === 'light';
   return (
     <div className="mb-4 mt-1">
-      {title && <div className="text-[11px] font-semibold text-white/40 uppercase tracking-wider px-3 pb-1.5">{title}</div>}
-      <div className="flex flex-col gap-[2px]">{children}</div>
+      {title && <div className={`text-[11px] font-semibold uppercase tracking-wider px-3 pb-1.5 ${isLight ? 'text-black/45' : 'text-white/40'}`}>{title}</div>}
+      <div className="flex flex-col gap-[2px] px-1">{children}</div>
     </div>
   );
 }

@@ -1,15 +1,21 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { appIcons } from './Icons';
+import { searchFs, parentPath } from '../fs/vfs';
 
 const allApps = [
   { id: 'finder', title: 'Finder' },
   { id: 'safari', title: 'Safari' },
+  { id: 'mail', title: 'Mail' },
+  { id: 'messages', title: 'Messages' },
+  { id: 'photos', title: 'Photos' },
   { id: 'terminal', title: 'Terminal' },
   { id: 'notes', title: 'Notes' },
   { id: 'calculator', title: 'Calculator' },
-  { id: 'settings', title: 'System Settings' },
   { id: 'textedit', title: 'TextEdit' },
-  { id: 'photos', title: 'Photos' },
+  { id: 'preview', title: 'Preview' },
+  { id: 'calendar', title: 'Calendar' },
+  { id: 'weather', title: 'Weather' },
+  { id: 'settings', title: 'System Settings' },
 ];
 
 const quickActions = [
@@ -18,10 +24,18 @@ const quickActions = [
   { id: 'action-note', title: 'Create Note', subtitle: 'Notes', icon: 'notes', appId: 'notes' },
 ];
 
-const fileResults = [
-  { id: 'file-project', title: 'project-notes.md', subtitle: 'Documents', icon: 'textedit', appId: 'finder' },
-  { id: 'file-photos', title: 'April Photos', subtitle: 'Photos Library', icon: 'photos', appId: 'photos' },
-];
+function iconForKind(kind) {
+  if (kind === 'image') return 'photos';
+  if (kind === 'md' || kind === 'text') return 'textedit';
+  if (kind === 'pdf') return 'preview';
+  return 'finder';
+}
+
+function appForNode(node) {
+  if (node.type === 'dir') return 'finder';
+  if (node.kind === 'image' || node.kind === 'pdf') return 'preview';
+  return 'textedit';
+}
 
 const webLinks = [
   { id: 'web-github', title: 'GitHub Profile', subtitle: 'https://github.com/owenisas', icon: 'safari', externalUrl: 'https://github.com/owenisas' },
@@ -54,15 +68,25 @@ export default function Spotlight({ isOpen, onClose, onAppLaunch }) {
     ? allApps.filter(a => a.title.toLowerCase().includes(normalized))
     : allApps.slice(0, 6);
   const actionMatches = quickActions.filter(a => !query || a.title.toLowerCase().includes(normalized) || a.subtitle.toLowerCase().includes(normalized));
-  const fileMatches = fileResults.filter(a => !query || a.title.toLowerCase().includes(normalized) || a.subtitle.toLowerCase().includes(normalized));
+  const fsMatches = useMemo(() => {
+    if (!query.trim()) return [];
+    return searchFs(query, { limit: 6 }).map(({ node, path }) => ({
+      id: `fs-${path}`,
+      title: node.name,
+      subtitle: parentPath(path).replace('~', 'Home'),
+      icon: node.type === 'dir' ? 'finder' : iconForKind(node.kind),
+      appId: appForNode(node),
+      payload: { vfsPath: path },
+    }));
+  }, [query]);
   const linkMatches = webLinks.filter(a => !query || a.title.toLowerCase().includes(normalized) || a.subtitle.toLowerCase().includes(normalized));
 
   const groups = [
     { title: 'Calculator', items: mathResult !== null ? [{ id: 'calc-res', title: String(mathResult), subtitle: query, icon: 'calculator', appId: 'calculator' }] : [] },
     { title: 'Applications', items: appMatches.map(item => ({ ...item, type: 'app', appId: item.id })) },
+    { title: 'Files', items: fsMatches.map(item => ({ ...item, type: 'file' })) },
     { title: 'Social Profiles', items: linkMatches.map(item => ({ ...item, type: 'link' })) },
     { title: 'Actions', items: actionMatches.map(item => ({ ...item, type: 'action' })) },
-    { title: 'Files', items: fileMatches.map(item => ({ ...item, type: 'file' })) },
   ].filter(group => group.items.length > 0);
   const filtered = groups.flatMap(group => group.items.map(item => ({ ...item, group: group.title })));
 

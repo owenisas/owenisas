@@ -2,8 +2,8 @@ import { useMemo, useState, useEffect } from 'react';
 import { appIcons } from './Icons';
 
 const implementedApps = new Set([
-  'finder', 'safari', 'messages', 'photos', 'calendar', 'notes',
-  'weather', 'calculator', 'terminal', 'textedit', 'settings',
+  'finder', 'safari', 'messages', 'mail', 'photos', 'calendar', 'notes',
+  'weather', 'calculator', 'terminal', 'textedit', 'preview', 'settings',
 ]);
 
 const appCatalog = [

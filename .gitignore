@@ -9,3 +9,4 @@ blends/
 renders/
 assets/divergence_meter_steinsgate_high.glb
 .vercel
+.env*.local

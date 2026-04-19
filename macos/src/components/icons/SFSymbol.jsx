@@ -20,6 +20,8 @@ const icons = {
   'doc': { vb: '0 0 24 24', d: 'M6 3h8l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm8 0v5h5', fill: false },
   'doc.fill': { vb: '0 0 24 24', d: 'M6 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V8l-5-5H6zm8 0v5h5' },
   'doc.text': { vb: '0 0 24 24', d: 'M6 3h8l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm8 0v5h5M8 13h8M8 17h5', fill: false },
+  'doc.text.fill': { vb: '0 0 24 24', d: 'M6 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V8l-5-5H6zm8 0v5h5M8 13h8M8 17h5' },
+  'doc.richtext.fill': { vb: '0 0 24 24', d: 'M6 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V8l-5-5H6zm8 0v5h5M8 13h8M8 17h5M8 9h3' },
   'trash': { vb: '0 0 24 24', d: 'M4 6h16M9 6V4h6v2M6 6l1 14h10l1-14M10 10v7M14 10v7', fill: false },
   'internaldrive': { vb: '0 0 24 24', d: 'M3 14h18v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4zM3 14l2-8h14l2 8M16 17h1', fill: false },
 
@@ -77,6 +79,8 @@ const icons = {
   'network': { vb: '0 0 24 24', d: 'M12 2v6m0 8v6M2 12h6m8 0h6M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z', fill: false },
   'person.crop.circle': { vb: '0 0 24 24', d: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm-6 12a6 6 0 0 1 12 0', fill: false },
   'person.crop.circle.fill': { vb: '0 0 24 24', d: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm-6 12a6 6 0 0 1 12 0' },
+  'person.crop.square': { vb: '0 0 24 24', d: 'M4 4h16v16H4V4zm8 3a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm-4 11a4 4 0 0 1 8 0', fill: false },
+  'airplane': { vb: '0 0 24 24', d: 'M12 2l3 8 7 4-7 2-1 6-2-4-2 4-1-6-7-2 7-4 3-8z', fill: false },
 
   // --- Apps / Categories ---
   'clock': { vb: '0 0 24 24', d: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 4v6l4 4', fill: false },
@@ -110,6 +114,26 @@ const icons = {
   'menubar.rectangle': { vb: '0 0 24 24', d: 'M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5zM3 8h18', fill: false },
   'sparkles': { vb: '0 0 24 24', d: 'M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2zM5 16l.8 2.2L8 19l-2.2.8L5 22l-.8-2.2L2 19l2.2-.8L5 16z', fill: false },
   'circle.fill': { vb: '0 0 24 24', d: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z' },
+
+  // --- Weather ---
+  'sun.max.fill': { vb: '0 0 24 24', d: 'M12 6a6 6 0 1 0 0 12 6 6 0 0 0 0-12zM12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1' },
+  'sun.max': { vb: '0 0 24 24', d: 'M12 6a6 6 0 1 0 0 12 6 6 0 0 0 0-12zM12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1', fill: false },
+  'moon.fill': { vb: '0 0 24 24', d: 'M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z' },
+  'moon.stars.fill': { vb: '0 0 24 24', d: 'M18 15A7 7 0 0 1 9 6a7 7 0 1 0 9 9zM19 3l.6 1.7L21 5l-1.4.3L19 7l-.6-1.7L17 5l1.4-.3zM17 10l.4 1.2 1.1.2-1.1.2L17 12.8l-.4-1.2-1.1-.2 1.1-.2z' },
+  'cloud.fill': { vb: '0 0 24 24', d: 'M7 18a5 5 0 1 1 1.2-9.8A6 6 0 0 1 20 10.5a4 4 0 0 1-1 7.5H7z' },
+  'cloud.sun.fill': { vb: '0 0 24 24', d: 'M15 3v2M19.2 5.8l-1.4 1.4M22 10h-2M17.8 14.2l1.4 1.4M15 7a3 3 0 0 1 2.8 4.1M7 20a5 5 0 1 1 1.2-9.8A6 6 0 0 1 20 12.5a4 4 0 0 1-1 7.5H7z' },
+  'cloud.rain.fill': { vb: '0 0 24 24', d: 'M7 14a5 5 0 1 1 1.2-9.8A6 6 0 0 1 20 6.5a4 4 0 0 1-1 7.5H7zM8 17l-1 3M12 17l-1 3M16 17l-1 3' },
+  'cloud.drizzle.fill': { vb: '0 0 24 24', d: 'M7 14a5 5 0 1 1 1.2-9.8A6 6 0 0 1 20 6.5a4 4 0 0 1-1 7.5H7zM8 18l-.5 2M12 18l-.5 2M16 18l-.5 2' },
+  'cloud.snow.fill': { vb: '0 0 24 24', d: 'M7 13a5 5 0 1 1 1.2-9.8A6 6 0 0 1 20 5.5a4 4 0 0 1-1 7.5H7zM8 17h.01M12 17h.01M16 17h.01M8 21h.01M12 21h.01M16 21h.01' },
+  'wind': { vb: '0 0 24 24', d: 'M3 8h12a3 3 0 1 0-3-3M3 12h17a3 3 0 1 1-3 3M3 16h9a3 3 0 1 1-3 3', fill: false },
+  'sunrise.fill': { vb: '0 0 24 24', d: 'M12 3v6M7 8l5-5 5 5M3 20h18M5 17a7 7 0 1 1 14 0' },
+  'sunset.fill': { vb: '0 0 24 24', d: 'M12 9V3M7 8l5 1 5-1M3 20h18M5 17a7 7 0 1 1 14 0' },
+  'drop.fill': { vb: '0 0 24 24', d: 'M12 2c-4 6-7 9-7 13a7 7 0 0 0 14 0c0-4-3-7-7-13z' },
+  'thermometer': { vb: '0 0 24 24', d: 'M10 4a2 2 0 1 1 4 0v10a4 4 0 1 1-4 0V4zm2 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4z', fill: false },
+  'aqi.medium': { vb: '0 0 24 24', d: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-5 8h10M7 14h10', fill: false },
+  'aqi.low': { vb: '0 0 24 24', d: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-5 8h10', fill: false },
+  'eye.fill': { vb: '0 0 24 24', d: 'M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8zm11 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6z' },
+  'humidity.fill': { vb: '0 0 24 24', d: 'M12 2c-4 6-7 9-7 13a7 7 0 0 0 14 0c0-4-3-7-7-13zM9 14a3 3 0 0 0 3 3' },
 };
 
 export default function SFSymbol({ name, size = 16, color = 'currentColor', className = '', weight = 1.5 }) {

@@ -1,0 +1,71 @@
+{
+  "threads": [
+    {
+      "id": "about",
+      "title": "About Thomas",
+      "subtitle": "Who are you, really?",
+      "avatar": "T",
+      "color": "#0A84FF",
+      "messages": [
+        { "from": "them", "text": "Hi — who's running this portfolio?" },
+        { "from": "me", "text": "Thomas Suen. CS student, developer, photographer." },
+        { "from": "me", "text": "I build autonomous systems and over-engineered web toys." },
+        { "from": "them", "text": "Based where?" },
+        { "from": "me", "text": "Vancouver, BC. Open to remote / relocation for the right team." },
+        { "from": "them", "text": "What's the elevator pitch?" },
+        { "from": "me", "text": "I make one-person-team software: design, graphics, backend, deploy. Bias for shipping." }
+      ],
+      "suggestions": ["What are you working on?", "Show me a project", "How do I hire you?"]
+    },
+    {
+      "id": "projects",
+      "title": "Projects",
+      "subtitle": "Show me what you've shipped",
+      "avatar": "P",
+      "color": "#30D158",
+      "messages": [
+        { "from": "them", "text": "What are you most proud of?" },
+        { "from": "me", "text": "Three things right now." },
+        { "from": "me", "text": "1. This portfolio — a full macOS sim with real windowing + vfs + scripted apps." },
+        { "from": "me", "text": "2. A Blender-MCP animation pipeline — agents keyframe products procedurally." },
+        { "from": "me", "text": "3. A batch of vertical agents (sales, ops, legal) over real enterprise data." },
+        { "from": "them", "text": "Which one do you want to talk about?" },
+        { "from": "me", "text": "Pick one in Finder → Documents → Projects and open it. Or ask me here." }
+      ],
+      "suggestions": ["Tell me about the Blender pipeline", "Who's the portfolio for?", "Open Finder"]
+    },
+    {
+      "id": "hire",
+      "title": "Work with me",
+      "subtitle": "Roles, rates, contact",
+      "avatar": "$",
+      "color": "#FF9F0A",
+      "messages": [
+        { "from": "them", "text": "Are you looking for work?" },
+        { "from": "me", "text": "Always listening. Favourite shape of engagement:" },
+        { "from": "me", "text": "— Small team, high trust, real ownership" },
+        { "from": "me", "text": "— Product-adjacent eng (graphics, agents, DX tooling)" },
+        { "from": "me", "text": "— Contract or intern, remote-friendly" },
+        { "from": "them", "text": "How do I reach you?" },
+        { "from": "me", "text": "Open Mail and send something. Or email reunifylabs@gmail.com directly." }
+      ],
+      "suggestions": ["Open Mail", "Show résumé", "What do you charge?"]
+    },
+    {
+      "id": "fun",
+      "title": "Fun facts",
+      "subtitle": "Off-the-record",
+      "avatar": "★",
+      "color": "#BF5AF2",
+      "messages": [
+        { "from": "them", "text": "Something weird about you?" },
+        { "from": "me", "text": "I edit photos on the same laptop I render 3D on. It protests." },
+        { "from": "me", "text": "I own too many mechanical keyboards." },
+        { "from": "me", "text": "My most-used key is Cmd+Tab." },
+        { "from": "them", "text": "Music while coding?" },
+        { "from": "me", "text": "Lo-fi, drum & bass, or the Interstellar soundtrack on repeat." }
+      ],
+      "suggestions": ["What's your favourite camera?", "What IDE?", "Back to projects"]
+    }
+  ]
+}

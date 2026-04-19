@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState, useEffect } from 'react';
 import SFSymbol from '../components/icons/SFSymbol';
 import { MacToolbarButton } from '../components/ui/MacControls';
+import { getCustomRenderer } from './safari/ProfileCards';
 
 const defaultFavorites = [
   { name: 'Apple', url: 'https://apple.com', color: '#555', letter: '' },
@@ -25,14 +26,12 @@ const readingList = [
   { title: 'Design notes for the modern browser UI', domain: 'developer.chrome.com', time: '5 min read' },
 ];
 
-// Sites that block iframes even through proxy — open externally
+// Sites that block iframes even through proxy — open externally.
+// LinkedIn and X now render via custom in-app profile cards (see ProfileCards.jsx).
 const EXTERNAL_ONLY_SITES = new Set([
-  'linkedin.com', 'www.linkedin.com',
-  'x.com', 'twitter.com', 'www.twitter.com',
   'instagram.com', 'www.instagram.com',
   'facebook.com', 'www.facebook.com',
   'tiktok.com', 'www.tiktok.com',
-  // Google works through proxy with frame-bypass
   'netflix.com', 'www.netflix.com',
   'spotify.com', 'www.spotify.com',
   'discord.com', 'www.discord.com',
@@ -239,22 +238,23 @@ export default function Safari({ windowData }) {
   const canGoForward = tab.historyIndex < tab.history.length - 1;
   const showBlockedPage = Boolean(tab.loadedUrl) && tab.error;
   const showExternalPage = Boolean(tab.loadedUrl) && shouldOpenExternally(tab.loadedUrl);
+  const CustomRenderer = tab.loadedUrl ? getCustomRenderer(tab.loadedUrl) : null;
 
   return (
     <div className="flex flex-col h-full bg-[#1e1e1e]">
       {/* Tab Bar */}
       <div
-        className="flex items-center h-[36px] gap-[2px] px-2 shrink-0 relative z-20"
-        style={{ background: 'rgba(40,40,40,0.9)', borderBottom: '0.5px solid rgba(0,0,0,0.8)' }}
+        className="flex items-center h-[40px] gap-[2px] px-2 shrink-0 relative z-20 DragHandle"
+        style={{ background: 'rgba(44,44,46,0.92)', borderBottom: '0.5px solid rgba(0,0,0,0.4)' }}
       >
-        <div className="flex items-center gap-[2px] flex-1 overflow-hidden h-[28px]">
+        <div className="flex items-center gap-[2px] flex-1 overflow-hidden h-[30px]">
           {tabs.map(t => (
             <button
               key={t.id}
-              className="group flex flex-col justify-center px-3 rounded-[6px] min-w-[140px] max-w-[200px] h-full cursor-default transition-all relative"
+              className="group flex flex-col justify-center px-3 rounded-[7px] min-w-[140px] max-w-[200px] h-full cursor-default transition-all relative"
               style={{
-                background: activeTab === t.id ? 'rgba(255,255,255,0.1)' : 'transparent',
-                boxShadow: activeTab === t.id ? '0 1px 2px rgba(0,0,0,0.2)' : 'none',
+                background: activeTab === t.id ? 'rgba(255,255,255,0.14)' : 'transparent',
+                boxShadow: activeTab === t.id ? '0 1px 2px rgba(0,0,0,0.25), inset 0 0.5px 0 rgba(255,255,255,0.08)' : 'none',
               }}
               onMouseEnter={e => { if (activeTab !== t.id) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
               onMouseLeave={e => { if (activeTab !== t.id) e.currentTarget.style.background = 'transparent'; }}
@@ -291,7 +291,7 @@ export default function Safari({ windowData }) {
       {/* Toolbar */}
       <div
         className="flex items-center gap-3 h-[44px] px-3 shrink-0 relative z-10"
-        style={{ background: 'rgba(40,40,40,0.98)', borderBottom: '0.5px solid rgba(255,255,255,0.05)' }}
+        style={{ background: 'rgba(44,44,46,0.96)', borderBottom: '0.5px solid rgba(255,255,255,0.05)' }}
       >
         <MacToolbarButton icon="sidebar.left" size={26} />
         <div className="flex items-center gap-0.5">
@@ -308,7 +308,8 @@ export default function Safari({ windowData }) {
               value={urlDraft}
               onChange={e => setUrlDraft(e.target.value)}
               onBlur={() => setUrlEditing(false)}
-              className="w-full max-w-[600px] h-[28px] rounded-[8px] bg-white/10 border border-[#0A84FF] shadow-[0_0_0_2px_rgba(10,132,255,0.3)] px-3 text-[13px] text-white outline-none"
+              className="w-full max-w-[560px] h-[28px] rounded-[7px] bg-black/25 px-3 text-[13px] text-white outline-none"
+              style={{ border: '0.5px solid rgba(10,132,255,0.75)', boxShadow: '0 0 0 2.5px rgba(10,132,255,0.18)' }}
               placeholder="Search or enter website name"
               autoFocus
               spellCheck={false}
@@ -317,8 +318,8 @@ export default function Safari({ windowData }) {
         ) : (
           <div className="flex-1 flex justify-center">
             <button
-              className="w-full max-w-[600px] h-[28px] rounded-[8px] flex items-center justify-center px-3 text-[13px] cursor-text transition-colors shadow-inner"
-              style={{ background: 'rgba(0,0,0,0.3)', border: '0.5px solid rgba(255,255,255,0.08)' }}
+              className="w-full max-w-[560px] h-[28px] rounded-[7px] flex items-center justify-center px-3 text-[13px] cursor-text transition-colors"
+              style={{ background: 'rgba(0,0,0,0.22)', border: '0.5px solid rgba(255,255,255,0.06)', boxShadow: 'inset 0 0.5px 0 rgba(0,0,0,0.2)' }}
               onClick={startEditUrl}
             >
               {tab.loadedUrl ? (
@@ -338,7 +339,9 @@ export default function Safari({ windowData }) {
 
       <div className="flex-1 overflow-hidden relative">
         {tab.loadedUrl ? (
-          showExternalPage ? (
+          CustomRenderer ? (
+            <CustomRenderer />
+          ) : showExternalPage ? (
             <div className="flex flex-col items-center justify-center h-full text-white/42 gap-4 px-6 relative z-10">
               <div className="w-[80px] h-[80px] rounded-[20px] bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center shadow-lg">
                 <img

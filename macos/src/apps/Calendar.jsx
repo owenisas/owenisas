@@ -60,10 +60,6 @@ export default function Calendar() {
       <div className="flex flex-1 overflow-hidden">
         {/* Left Sidebar */}
         <div className="w-[200px] border-r border-white/10 p-3 flex flex-col gap-4 overflow-y-auto" style={{ background: 'rgba(30, 30, 30, 0.5)' }}>
-            <div>
-                <img src="/icons/calendar.png" alt="Calendar" className="w-[128px] h-[128px] mx-auto drop-shadow-lg mb-4" />
-            </div>
-            
             <div className="text-white/40 text-[11px] font-bold uppercase tracking-wider px-2">iCloud</div>
             <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2 px-2 py-1 relative">

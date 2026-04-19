@@ -288,20 +288,20 @@ export default function Settings() {
         <PanelTitle>Appearance</PanelTitle>
         <MacSettingsGroup>
           <div className="px-5 py-4">
-            <div className="text-[13px] text-white/90 mb-3">Appearance</div>
+            <div className="text-[13px] text-black/85 mb-3">Appearance</div>
             <div className="flex flex-wrap gap-4">
               {['light', 'dark', 'auto'].map(mode => (
                 <button key={mode} className="flex flex-col items-center gap-2" onClick={() => set('appearance', mode)}>
                   <div
                     className="w-[80px] h-[52px] rounded-[8px] border-2 overflow-hidden"
-                    style={{ borderColor: s.appearance === mode ? '#0a84ff' : 'rgba(255,255,255,0.1)' }}
+                    style={{ borderColor: s.appearance === mode ? '#0a84ff' : 'rgba(0,0,0,0.1)' }}
                   >
                     <div className={`w-full h-full ${mode === 'light' ? 'bg-[#e8e8e8]' : mode === 'dark' ? 'bg-[#1e1e1e]' : 'bg-gradient-to-r from-[#e8e8e8] to-[#1e1e1e]'}`}>
                       <div className="mt-2 mx-2 h-2 rounded" style={{ background: mode === 'light' ? '#ccc' : 'rgba(255,255,255,0.15)' }} />
                       <div className="mt-1 mx-2 h-1.5 rounded w-3/4" style={{ background: mode === 'light' ? '#ddd' : 'rgba(255,255,255,0.1)' }} />
                     </div>
                   </div>
-                  <span className="text-[12px] text-white/60 capitalize">{mode}</span>
+                  <span className="text-[12px] text-[#6e6e73] capitalize">{mode}</span>
                 </button>
               ))}
             </div>
@@ -309,7 +309,7 @@ export default function Settings() {
         </MacSettingsGroup>
         <MacSettingsGroup>
           <div className="px-5 py-4">
-            <div className="text-[13px] text-white/90 mb-3">Accent color</div>
+            <div className="text-[13px] text-black/85 mb-3">Accent color</div>
             <div className="flex flex-wrap gap-2.5">
               {[
                 { c: 'linear-gradient(135deg,#ff5f57,#febc2e,#28c840,#007AFF,#5856d6)', label: 'Multi' },
@@ -340,7 +340,7 @@ export default function Settings() {
             <select
               value={s.sidebarIconSize}
               onChange={e => set('sidebarIconSize', e.target.value)}
-              className="appearance-none bg-white/8 text-white/80 text-[12px] rounded-[6px] px-2.5 h-[24px] border-[0.5px] border-white/10 outline-none"
+              className="appearance-none bg-black/[0.06] text-black/80 text-[12px] rounded-[6px] px-2.5 h-[24px] border-[0.5px] border-black/10 outline-none"
             >
               <option value="small" className="bg-[#2a2a2a]">Small</option>
               <option value="medium" className="bg-[#2a2a2a]">Medium</option>
@@ -362,13 +362,13 @@ export default function Settings() {
         <MacSettingsGroup>
           <div className="px-5 py-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[13px] text-white/90">Size</span>
-              <span className="text-[11px] text-white/40 tabular-nums">{s.dockSize}px</span>
+              <span className="text-[13px] text-black/85">Size</span>
+              <span className="text-[11px] text-[#86868b] tabular-nums">{s.dockSize}px</span>
             </div>
             <div className="flex items-center gap-2.5">
-              <span className="text-[11px] text-white/40">Small</span>
+              <span className="text-[11px] text-[#86868b]">Small</span>
               <MacSlider value={s.dockSize} onChange={v => set('dockSize', v)} min={32} max={80} />
-              <span className="text-[11px] text-white/40">Large</span>
+              <span className="text-[11px] text-[#86868b]">Large</span>
             </div>
           </div>
           <MacSettingsRow label="Magnification">
@@ -381,8 +381,8 @@ export default function Settings() {
                   key={pos}
                   className="text-[11px] px-2 h-[20px] rounded-[4px] capitalize"
                   style={{
-                    background: s.dockPosition === pos ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.06)',
-                    color: s.dockPosition === pos ? '#fff' : 'rgba(255,255,255,0.5)',
+                    background: s.dockPosition === pos ? '#0A84FF' : 'rgba(0,0,0,0.06)',
+                    color: s.dockPosition === pos ? '#fff' : 'rgba(0,0,0,0.6)',
                   }}
                   onClick={() => set('dockPosition', pos)}
                 >
@@ -395,7 +395,7 @@ export default function Settings() {
             <select
               value={s.minimizeEffect}
               onChange={e => set('minimizeEffect', e.target.value)}
-              className="appearance-none bg-white/8 text-white/80 text-[12px] rounded-[6px] px-2.5 h-[24px] border-[0.5px] border-white/10 outline-none"
+              className="appearance-none bg-black/[0.06] text-black/80 text-[12px] rounded-[6px] px-2.5 h-[24px] border-[0.5px] border-black/10 outline-none"
             >
               <option value="genie" className="bg-[#2a2a2a]">Genie Effect</option>
               <option value="scale" className="bg-[#2a2a2a]">Scale Effect</option>
@@ -417,12 +417,12 @@ export default function Settings() {
         <MacSettingsGroup>
           <div className="px-5 py-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[13px] text-white/90">Brightness</span>
+              <span className="text-[13px] text-black/85">Brightness</span>
             </div>
             <div className="flex items-center gap-2.5">
-              <SFSymbol name="display" size={14} color="rgba(255,255,255,0.4)" />
+              <SFSymbol name="display" size={14} color="rgba(0,0,0,0.4)" />
               <MacSlider value={s.brightness} onChange={v => set('brightness', v)} />
-              <SFSymbol name="display" size={18} color="rgba(255,255,255,0.6)" />
+              <SFSymbol name="display" size={18} color="rgba(0,0,0,0.6)" />
             </div>
           </div>
           <MacSettingsRow label="True Tone" description="Automatically adapt display to make colors appear consistent in different ambient lighting">
@@ -434,7 +434,7 @@ export default function Settings() {
         </MacSettingsGroup>
         <MacSettingsGroup title="Resolution">
           <MacSettingsRow label="Default for display" noBorder>
-            <span className="text-[12px] text-white/50">3456 x 2234</span>
+            <span className="text-[12px] text-[#86868b]">3456 x 2234</span>
           </MacSettingsRow>
         </MacSettingsGroup>
       </>
@@ -467,7 +467,7 @@ export default function Settings() {
                   <div className="h-full w-full flex items-end justify-between p-2.5" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.24))' }}>
                     <div className="max-w-[70%]">
                       <div className="text-[12px] text-white font-medium leading-tight">{wallpaper.name}</div>
-                      <div className="text-[10px] text-white/70 leading-tight mt-0.5">{wallpaper.caption}</div>
+                      <div className="text-[10px] text-black/70 leading-tight mt-0.5">{wallpaper.caption}</div>
                     </div>
                     <div className={`w-2.5 h-2.5 rounded-full border border-white/40 ${s.wallpaperId === wallpaper.id ? 'bg-white' : 'bg-white/20'}`} />
                   </div>
@@ -485,22 +485,22 @@ export default function Settings() {
         <MacSettingsGroup title="Output">
           <div className="px-5 py-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[13px] text-white/90">Output volume</span>
-              <span className="text-[11px] text-white/40 tabular-nums">{s.volume}%</span>
+              <span className="text-[13px] text-black/85">Output volume</span>
+              <span className="text-[11px] text-[#86868b] tabular-nums">{s.volume}%</span>
             </div>
             <div className="flex items-center gap-2.5">
-              <SFSymbol name="speaker.wave.3" size={14} color="rgba(255,255,255,0.4)" weight={1.2} />
+              <SFSymbol name="speaker.wave.3" size={14} color="rgba(0,0,0,0.4)" weight={1.2} />
               <MacSlider value={s.volume} onChange={v => set('volume', v)} />
             </div>
           </div>
           <MacSettingsRow label="Output device" noBorder>
-            <span className="text-[12px] text-white/50">{s.outputDevice}</span>
+            <span className="text-[12px] text-[#86868b]">{s.outputDevice}</span>
           </MacSettingsRow>
         </MacSettingsGroup>
         <MacSettingsGroup title="Sound effects">
           <div className="px-5 py-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[13px] text-white/90">Alert volume</span>
+              <span className="text-[13px] text-black/85">Alert volume</span>
             </div>
             <MacSlider value={s.alertVolume} onChange={v => set('alertVolume', v)} />
           </div>
@@ -508,7 +508,7 @@ export default function Settings() {
             <MacToggle checked={s.startupSound} onChange={v => set('startupSound', v)} />
           </MacSettingsRow>
           <MacSettingsRow label="Alert sound" noBorder>
-            <span className="text-[12px] text-white/50">Breeze</span>
+            <span className="text-[12px] text-[#86868b]">Breeze</span>
           </MacSettingsRow>
         </MacSettingsGroup>
       </>
@@ -522,7 +522,7 @@ export default function Settings() {
             <MacToggle checked={s.allowNotifications} onChange={v => set('allowNotifications', v)} />
           </MacSettingsRow>
           <MacSettingsRow label="Show previews">
-            <span className="text-[12px] text-white/50">When Unlocked</span>
+            <span className="text-[12px] text-[#86868b]">When Unlocked</span>
           </MacSettingsRow>
           <MacSettingsRow label="Allow notifications on lock screen" noBorder>
             <MacToggle checked={true} onChange={() => {}} />
@@ -532,8 +532,8 @@ export default function Settings() {
           {['Calendar', 'FaceTime', 'Finder', 'Mail', 'Messages', 'Safari', 'Tips'].map((app, i, arr) => (
             <MacSettingsRow key={app} label={app} noBorder={i === arr.length - 1}>
               <div className="flex items-center gap-1.5">
-                <span className="text-[11px] text-white/40">Banners</span>
-                <SFSymbol name="chevron.right" size={10} color="rgba(255,255,255,0.3)" />
+                <span className="text-[11px] text-[#86868b]">Banners</span>
+                <SFSymbol name="chevron.right" size={10} color="#C7C7CC" />
               </div>
             </MacSettingsRow>
           ))}
@@ -555,7 +555,7 @@ export default function Settings() {
         <MacSettingsGroup title="Privacy">
           {['Location Services', 'Contacts', 'Calendars', 'Photos', 'Camera', 'Microphone', 'Accessibility', 'Full Disk Access'].map((item, i, arr) => (
             <MacSettingsRow key={item} label={item} noBorder={i === arr.length - 1}>
-              <SFSymbol name="chevron.right" size={10} color="rgba(255,255,255,0.3)" />
+              <SFSymbol name="chevron.right" size={10} color="#C7C7CC" />
             </MacSettingsRow>
           ))}
         </MacSettingsGroup>
@@ -571,8 +571,8 @@ export default function Settings() {
           </MacSettingsRow>
           <MacSettingsRow label="Network" noBorder>
             <div className="flex items-center gap-1.5">
-              <SFSymbol name="wifi" size={12} color="rgba(255,255,255,0.6)" />
-              <span className="text-[12px] text-white/60">{s.wifiNetwork}</span>
+              <SFSymbol name="wifi" size={12} color="rgba(0,0,0,0.55)" />
+              <span className="text-[12px] text-[#6e6e73]">{s.wifiNetwork}</span>
             </div>
           </MacSettingsRow>
         </MacSettingsGroup>
@@ -581,7 +581,7 @@ export default function Settings() {
             <span className="text-[12px] text-[#34C759]">Active</span>
           </MacSettingsRow>
           <MacSettingsRow label="VPN" noBorder>
-            <span className="text-[12px] text-white/40">Not Connected</span>
+            <span className="text-[12px] text-[#86868b]">Not Connected</span>
           </MacSettingsRow>
         </MacSettingsGroup>
       </>
@@ -602,12 +602,12 @@ export default function Settings() {
             { name: 'Magic Trackpad', status: 'Connected', icon: '🖱️' },
           ].map((d, i, arr) => (
             <MacSettingsRow key={d.name} label={<span className="flex items-center gap-2"><span>{d.icon}</span>{d.name}</span>} noBorder={i === arr.length - 1}>
-              <span className="text-[12px] text-white/40">{d.status}</span>
+              <span className="text-[12px] text-[#86868b]">{d.status}</span>
             </MacSettingsRow>
           ))}
         </MacSettingsGroup>
         <MacSettingsGroup title="Nearby devices">
-          <div className="px-4 py-6 text-center text-[12px] text-white/30">Searching for devices...</div>
+          <div className="px-4 py-6 text-center text-[12px] text-black/30">Searching for devices...</div>
         </MacSettingsGroup>
       </>
     ),
@@ -619,19 +619,19 @@ export default function Settings() {
           <div className="px-5 py-4">
             <div className="flex items-center gap-3.5 mb-4">
               <div className="relative w-[42px] h-[22px]">
-                <div className="absolute inset-0 rounded-[4px] border-[1.5px] border-white/50" />
-                <div className="absolute right-[-4px] top-[5px] w-[3px] h-[10px] rounded-r-[2px] bg-white/50" />
+                <div className="absolute inset-0 rounded-[4px] border-[1.5px] border-black/40" />
+                <div className="absolute right-[-4px] top-[5px] w-[3px] h-[10px] rounded-r-[2px] bg-black/40" />
                 <div
                   className="absolute left-[2px] top-[2px] bottom-[2px] rounded-[2px]"
                   style={{ width: `${s.batteryLevel * 0.36}px`, background: s.batteryLevel > 20 ? '#34C759' : '#FF3B30' }}
                 />
               </div>
               <div>
-                <div className="text-[16px] text-white font-medium">{s.batteryLevel}%</div>
-                <div className="text-[11px] text-white/40">Power Source: Power Adapter</div>
+                <div className="text-[16px] text-black font-medium">{s.batteryLevel}%</div>
+                <div className="text-[11px] text-[#86868b]">Power Source: Power Adapter</div>
               </div>
             </div>
-            <div className="h-[72px] rounded-[8px] flex items-end gap-[2px] px-2 py-2" style={{ background: 'rgba(255,255,255,0.045)' }}>
+            <div className="h-[72px] rounded-[8px] flex items-end gap-[2px] px-2 py-2" style={{ background: 'rgba(0,0,0,0.04)' }}>
               {batteryHistory.map((height, i) => (
                 <div
                   key={i}
@@ -643,7 +643,7 @@ export default function Settings() {
                 />
               ))}
             </div>
-            <div className="flex justify-between mt-1 text-[10px] text-white/30">
+            <div className="flex justify-between mt-1 text-[10px] text-[#86868b]">
               <span>12 AM</span><span>6 AM</span><span>12 PM</span><span>6 PM</span><span>Now</span>
             </div>
           </div>
@@ -662,18 +662,18 @@ export default function Settings() {
     about: (
       <>
         <div className="flex flex-col items-center py-7">
-          <svg width="56" height="68" viewBox="0 0 14 17" fill="white" opacity="0.8" className="mb-3">
+          <svg width="56" height="68" viewBox="0 0 14 17" fill="#1d1d1f" opacity="0.9" className="mb-3">
             <path d="M11.3 8.9c0-2.1 1.7-3.1 1.8-3.2-1-1.4-2.5-1.6-3-1.6-1.3-.1-2.5.7-3.1.7-.7 0-1.7-.7-2.8-.7C2.8 4.1 1.4 5 .6 6.4c-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7c1.2 0 2-1.1 2.8-2.3.9-1.3 1.2-2.5 1.3-2.6 0 0-2.5-1-2.5-3.2zM9 3.2C9.6 2.4 10 1.4 9.9.3 9 .3 7.9.9 7.3 1.7c-.6.7-1.1 1.7-1 2.7 1 .1 2-.5 2.7-1.2z" />
           </svg>
-          <h2 className="text-white text-[20px] font-medium">macOS Tahoe</h2>
-          <span className="text-white/40 text-[13px]">Version 26.0</span>
+          <h2 className="text-black text-[20px] font-medium">macOS Tahoe</h2>
+          <span className="text-[#86868b] text-[13px]">Version 26.0</span>
         </div>
         <MacSettingsGroup>
-          <MacSettingsRow label="Chip"><span className="text-[13px] text-white/70">Apple M3 Max</span></MacSettingsRow>
-          <MacSettingsRow label="Memory"><span className="text-[13px] text-white/70">36 GB</span></MacSettingsRow>
-          <MacSettingsRow label="Startup Disk"><span className="text-[13px] text-white/70">Macintosh HD</span></MacSettingsRow>
-          <MacSettingsRow label="Serial Number"><span className="text-[13px] text-white/70">FVFXXXXXXXXX</span></MacSettingsRow>
-          <MacSettingsRow label="macOS" noBorder><span className="text-[13px] text-white/70">Tahoe 26.0 (26A000)</span></MacSettingsRow>
+          <MacSettingsRow label="Chip"><span className="text-[13px] text-black/70">Apple M3 Max</span></MacSettingsRow>
+          <MacSettingsRow label="Memory"><span className="text-[13px] text-black/70">36 GB</span></MacSettingsRow>
+          <MacSettingsRow label="Startup Disk"><span className="text-[13px] text-black/70">Macintosh HD</span></MacSettingsRow>
+          <MacSettingsRow label="Serial Number"><span className="text-[13px] text-black/70">FVFXXXXXXXXX</span></MacSettingsRow>
+          <MacSettingsRow label="macOS" noBorder><span className="text-[13px] text-black/70">Tahoe 26.0 (26A000)</span></MacSettingsRow>
         </MacSettingsGroup>
       </>
     ),
@@ -749,7 +749,7 @@ export default function Settings() {
 }
 
 function PanelTitle({ children }) {
-  return <h2 className="text-white text-[22px] font-medium mb-5 tracking-normal">{children}</h2>;
+  return <h2 className="text-black text-[22px] font-semibold mb-5 tracking-tight pt-6">{children}</h2>;
 }
 
 function WallpaperPreview({ wallpaper }) {
@@ -765,7 +765,7 @@ function WallpaperPreview({ wallpaper }) {
       <div className="h-full w-full flex items-end justify-between p-4" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.26))' }}>
         <div>
           <div className="text-[15px] font-medium text-white leading-tight">{wallpaper.name}</div>
-          <div className="text-[11px] text-white/70 mt-1">{wallpaper.caption}</div>
+          <div className="text-[11px] text-black/70 mt-1">{wallpaper.caption}</div>
         </div>
         <div className="rounded-[8px] border border-white/20 bg-white/10 px-2.5 py-1 text-[11px] text-white/85 backdrop-blur-sm">
           Tahoe

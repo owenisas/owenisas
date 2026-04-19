@@ -2,58 +2,84 @@
 
 Pulls real content from LinkedIn + X with an authed headless browser and writes it to `macos/public/data/{linkedin,x}.json`. The Safari app renders those JSONs as LinkedIn / X profile cards.
 
-## How it runs
+## Split responsibility
 
-- **In CI**: `.github/workflows/scrape-profiles.yml` runs daily at 08:00 UTC (and on `workflow_dispatch`). It reads cookies from GitHub Secrets, runs Playwright headless Chromium, and commits the refreshed JSON back to the branch.
-- **Locally**: useful for testing selectors after LinkedIn/X change their DOM.
+| Site | Where it runs | Why |
+|---|---|---|
+| **X** | Daily in GitHub Actions | X is scrapable from datacenter IPs with valid cookies |
+| **LinkedIn** | Locally on your laptop | LinkedIn's edge serves `/authwall?trk=bf` to GitHub Actions IP ranges — cookies aren't even evaluated. Residential IP works fine |
 
-## Required secrets
+The scraper writes only what succeeded. CI runs commit just `x.json`; manual local runs refresh `linkedin.json` (and `x.json`, which is fine — whichever is newer wins).
 
-Create these in GitHub → Settings → Secrets and variables → Actions:
-
-| Name | Where to get it |
-|---|---|
-| `LINKEDIN_LI_AT` | Chrome DevTools → Application → Cookies → `linkedin.com` → `li_at` |
-| `LINKEDIN_JSESSIONID` | Same, `JSESSIONID` on `.www.linkedin.com` (keep the quotes: `"ajax:..."`) |
-| `LINKEDIN_BCOOKIE` *(optional)* | `bcookie` on `.linkedin.com` |
-| `LINKEDIN_BSCOOKIE` *(optional)* | `bscookie` on `.www.linkedin.com` |
-| `X_AUTH_TOKEN` | `x.com` → `auth_token` |
-| `X_CT0` | `x.com` → `ct0` (CSRF token) |
-| `X_TWID` *(optional)* | `twid` |
-| `X_KDT` *(optional)* | `kdt` |
-
-> **Security**: `li_at` and `auth_token` are equivalent to being logged in. Treat them like passwords. Never paste them into chat, commits, or public gists. Rotate by signing out all sessions on the respective site — this invalidates the cookies immediately.
-
-## Local run
+## Local run (for LinkedIn — or to refresh both ad-hoc)
 
 ```bash
 cd macos
+
+# One-time setup
+cp .env.local.example .env.local
+# Open .env.local and paste cookie values (see below)
+
 npm install --no-save playwright
 npx playwright install chromium
 
-export LINKEDIN_LI_AT=...
-export LINKEDIN_JSESSIONID='"ajax:..."'
-export X_AUTH_TOKEN=...
-export X_CT0=...
+# Every run
+./scripts/scrape-local.sh
 
-node scripts/scrape-profiles.mjs
+# Commit + push
+git add public/data
+git commit -m "chore: refresh profile data"
+git push
 ```
 
-Output lands in `macos/public/data/`.
+Vercel redeploys on push, refreshed data goes live.
+
+## Where to get each cookie
+
+Open Chrome → Settings → Privacy → Cookies and site data → See all cookies → search the domain → copy the "Value" column.
+
+Or: DevTools on a logged-in tab → Application → Cookies → select the domain.
+
+| Env var | Domain | Cookie | Notes |
+|---|---|---|---|
+| `LINKEDIN_LI_AT` | `.www.linkedin.com` | `li_at` | required |
+| `LINKEDIN_JSESSIONID` | `.www.linkedin.com` | `JSESSIONID` | required; keep surrounding quotes — they're part of the value |
+| `LINKEDIN_BCOOKIE` | `.linkedin.com` | `bcookie` | keep quotes |
+| `LINKEDIN_BSCOOKIE` | `.www.linkedin.com` | `bscookie` | keep quotes |
+| `LINKEDIN_LIDC` | `.linkedin.com` | `lidc` | keep quotes; routing cookie, short-lived |
+| `LINKEDIN_DFPFPT` | `.linkedin.com` | `dfpfpt` | fingerprint cookie |
+| `X_AUTH_TOKEN` | `x.com` | `auth_token` | required |
+| `X_CT0` | `x.com` | `ct0` | required (CSRF) |
+| `X_TWID` | `x.com` | `twid` | optional |
+| `X_KDT` | `x.com` | `kdt` | optional |
+
+**Security**: `li_at` and `auth_token` are equivalent to being logged in. Treat like passwords. Never paste into commits, chat transcripts, or public gists. Rotate by signing out all sessions on the respective site.
+
+## CI (X only)
+
+`.github/workflows/scrape-profiles.yml` runs daily at 08:00 UTC. Cookies are in GitHub Secrets. LinkedIn secrets are set but will always hit the authwall — the workflow silently skips LinkedIn and commits whatever X produced. To trigger manually:
+
+```bash
+gh workflow run scrape-profiles.yml -R owenisas/owenisas
+```
 
 ## When it breaks
 
-LinkedIn and X ship DOM changes often. If a selector breaks:
+### Scrape returns empty / blocked
+- Check `macos/scripts/debug/linkedin.html` and `linkedin.png` (locally) or the `scrape-debug-<runid>` artifact on the GitHub Actions run.
+- Most common cause: cookies expired. Re-export.
 
-1. Run `node scripts/scrape-profiles.mjs` locally with `headless: false` (edit the script) to watch what happens.
-2. Update the `page.evaluate(...)` block in `scrape-profiles.mjs`.
-3. If the scrape returns empty, the script exits 1 and the workflow won't commit, so stale data stays live.
+### Selector changes
+LinkedIn / X update their DOM regularly. When a selector breaks:
+1. Edit `scrape-profiles.mjs`: flip `chromium.launch({ headless: true })` to `headless: false` to watch what happens.
+2. Update the `page.evaluate(...)` block.
+3. Run locally with `./scripts/scrape-local.sh` until the JSON looks right.
 
 ## Cookie rotation
 
 Cookies expire. Rough lifetimes:
+- LinkedIn `li_at`: ~1 year, but invalidated when you sign out or LinkedIn detects anomaly.
+- LinkedIn `lidc`: ~24 hours, refreshes on every authed page view.
+- X `auth_token`: ~1 year, invalidated on password change.
 
-- LinkedIn `li_at`: ~1 year, but invalidated when you sign out or they detect anomaly.
-- X `auth_token`: ~1 year, invalidated on password change or forced logout.
-
-When the Action starts failing with "missing env var" gone, but scrape returns `null` name — cookies are expired. Re-export and update the secrets.
+If the scraper worked yesterday and silently stops refreshing today, re-export cookies.
