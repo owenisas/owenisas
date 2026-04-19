@@ -161,6 +161,7 @@ function Desktop() {
         if (contextMenu) { setContextMenu(null); return; }
         if (view === 'desktop') {
           setDesktopVisible(false);
+          showroomRef.current?.__resume?.();
           setTimeout(() => {
             setView('showroom');
             showroomRef.current?.__zoomOut?.();
@@ -194,6 +195,10 @@ function Desktop() {
               requestAnimationFrame(() => {
                 requestAnimationFrame(() => setDesktopVisible(true));
               });
+              // Pause the 3D render loop after desktop fade-in completes
+              // (0.45s wallpaper fade + 0.15s buffer) so its animations
+              // don't bleed through the compositor once hidden.
+              setTimeout(() => showroomRef.current?.__pause?.(), 700);
             }}
           />
         </Suspense>
