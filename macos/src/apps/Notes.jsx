@@ -12,9 +12,9 @@ function loadNotes() {
     void error;
   }
   return [
-    { id: '1', title: 'Welcome to Notes', content: 'Welcome to Notes\n\nThis is your first note. Start typing to edit it.\n\nYou can create new notes, search through them, and organize your thoughts.', folder: 'notes', updated: Date.now() },
-    { id: '2', title: 'Shopping List', content: 'Shopping List\n\n- Milk\n- Eggs\n- Bread\n- Coffee\n- Avocados', folder: 'notes', updated: Date.now() - 3600000 },
-    { id: '3', title: 'Project Ideas', content: 'Project Ideas\n\n1. macOS web simulator\n2. Portfolio website\n3. 3D desk showroom\n4. CLI tool for automation', folder: 'notes', updated: Date.now() - 86400000 },
+    { id: '1', title: 'Welcome to Notes', content: 'This is your first note. Start typing to edit it.\n\nYou can create new notes, search through them, and organize your thoughts.', folder: 'notes', updated: Date.now() },
+    { id: '2', title: 'Shopping List', content: '- Milk\n- Eggs\n- Bread\n- Coffee\n- Avocados', folder: 'notes', updated: Date.now() - 3600000 },
+    { id: '3', title: 'Project Ideas', content: '1. macOS web simulator\n2. Portfolio website\n3. 3D desk showroom\n4. CLI tool for automation', folder: 'notes', updated: Date.now() - 86400000 },
   ];
 }
 

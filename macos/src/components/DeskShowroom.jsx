@@ -185,7 +185,7 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
     let zoomT = 0;
     const zoomTargetPos = new THREE.Vector3();
     const zoomTargetLook = new THREE.Vector3();
-    const clock = new THREE.Clock();
+    const timer = new THREE.Timer();
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
     let hoveredEntry = null;
@@ -313,6 +313,8 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
                   map: tex,
                   toneMapped: false,
                   color: new THREE.Color(0.85, 0.85, 0.85), // dim to match dark desktop
+                  transparent: false,
+                  depthWrite: true,
                 });
               }
             });
@@ -513,7 +515,7 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
     }
 
     function updateAnimations(delta) {
-      const time = clock.getElapsedTime();
+      const time = timer.getElapsed();
       entries.forEach(entry => {
         const { config, wrapper, state } = entry;
         switch (config.animation) {
@@ -849,7 +851,8 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
 
       function animate() {
         animId = requestAnimationFrame(animate);
-        const delta = clock.getDelta();
+        timer.update();
+        const delta = timer.getDelta();
 
         const lerp = 1 - Math.pow(0.05, delta);
 
@@ -934,9 +937,15 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
         <div>
           <h2 style={{ fontSize: '1.5rem', marginBottom: 16, opacity: 0.9 }}>3D View Unavailable</h2>
           <p style={{ fontSize: '0.9rem', opacity: 0.6, maxWidth: 400, lineHeight: 1.6 }}>{webglError}</p>
-          <p style={{ fontSize: '0.8rem', opacity: 0.4, marginTop: 24 }}>
+          <p style={{ fontSize: '0.8rem', opacity: 0.4, marginTop: 24, marginBottom: 20 }}>
             Try Chrome, Firefox, or Safari with hardware acceleration enabled.
           </p>
+          <button
+            onClick={() => onEnterScreenRef.current?.()}
+            style={{ padding: '8px 20px', background: 'rgba(10,132,255,0.9)', border: 'none', borderRadius: 8, color: '#fff', fontSize: '0.85rem', fontWeight: 500, cursor: 'pointer' }}
+          >
+            Continue to Desktop
+          </button>
         </div>
       </div>
     );
@@ -966,7 +975,7 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
         style={{ position:'fixed', bottom:20, left:20, zIndex:50, padding:'6px 14px', background:'rgba(0,0,0,0.6)', backdropFilter:'blur(10px)', border:'1px solid rgba(255,255,255,0.15)', borderRadius:6, color:'rgba(255,255,255,0.7)', fontSize:'0.75rem', fontWeight:400, cursor:'pointer', letterSpacing:'0.03em', transition:'all 0.2s' }}
       >
         <span className="preset-label">Spotlight</span>
-        <span style={{ opacity:0.35, marginLeft:8, fontSize:'0.65rem' }}>L</span>
+        <span style={{ opacity:0.4, marginLeft:10, fontSize:'0.65rem', padding:'1px 5px', border:'1px solid rgba(255,255,255,0.25)', borderRadius:3 }}>L</span>
       </button>
     </div>
   );

@@ -4,7 +4,8 @@ import { createContext, useContext, useState, useCallback, useRef } from 'react'
 const WindowContext = createContext(null);
 
 const windowDefaults = {
-  calculator:    { width: 232, height: 396 },
+  calculator:    { width: 240, height: 452 },
+  weather:       { width: 900, height: 640 },
   finder:        { width: 920, height: 560 },
   notes:         { width: 900, height: 560 },
   terminal:      { width: 640, height: 420 },
@@ -12,6 +13,9 @@ const windowDefaults = {
   settings:      { width: 780, height: 520 },
   textedit:      { width: 680, height: 480 },
   photos:        { width: 960, height: 600 },
+  mail:          { width: 1020, height: 620 },
+  preview:       { width: 820, height: 560 },
+  messages:      { width: 820, height: 560 },
   aboutthismac:  { width: 320, height: 440, resizable: false },
 };
 

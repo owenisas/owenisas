@@ -1,0 +1,17 @@
+                    'c.          thomas@owenisas
+                 ,xNMM.          ---------------
+               .OMMMMo           OS: macOS Tahoe 16.0 (in your browser)
+               OMMM0,            Host: owenisas.com portfolio
+     .;loddo:' loolloddol;.      Kernel: React 19 / Vite 8
+   cKMMMMMMMMMMNWMMMMMMMMMM0:    Uptime: since you loaded the tab
+ .KMMMMMMMMMMMMMMMMMMMMMMMWd.    Shell: custom js repl over vfs
+ XMMMMMMMMMMMMMMMMMMMMMMMX.      Resolution: whatever your viewport is
+;MMMMMMMMMMMMMMMMMMMMMMMM:       DE: Thomas's desktop
+:MMMMMMMMMMMMMMMMMMMMMMMM:       WM: own
+.MMMMMMMMMMMMMMMMMMMMMMMMX.      CPU: your CPU, I'm just rendering
+ kMMMMMMMMMMMMMMMMMMMMMMMMWd.    GPU: three.js + canvas
+ .XMMMMMMMMMMMMMMMMMMMMMMMMMMk   Memory: a few MB of react state
+  .XMMMMMMMMMMMMMMMMMMMMMMMMK.
+    kMMMMMMMMMMMMMMMMMMMMMMd
+     ;KMMMMMMMWXXWMMMMMMMk.      try: help, ls, cat Documents/Resume.md,
+       .cooc,.    .,coo:.             projects, contact, sudo hire-me

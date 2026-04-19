@@ -6,11 +6,13 @@ const dockApps = [
   { id: 'finder', title: 'Finder' },
   { id: 'launchpad', title: 'Apps' },
   { id: 'safari', title: 'Safari' },
+  { id: 'mail', title: 'Mail' },
+  { id: 'messages', title: 'Messages' },
+  { id: 'photos', title: 'Photos' },
   { id: 'notes', title: 'Notes' },
   { id: 'terminal', title: 'Terminal' },
-  { id: 'calculator', title: 'Calculator' },
   { id: 'textedit', title: 'TextEdit' },
-  { id: 'photos', title: 'Photos' },
+  { id: 'calculator', title: 'Calculator' },
   { id: 'settings', title: 'System Settings' },
 ];
 
@@ -21,6 +23,8 @@ export default function Dock({ onAppLaunch, dockStyle }) {
   const [tooltip, setTooltip] = useState(null);
   const tooltipTimeout = useRef(null);
   const { isAppOpen, restoreWindow, windows } = useWindows();
+  const dockAppIds = new Set(dockApps.map(a => a.id));
+  const trayWindows = windows.filter(w => w.minimized && !dockAppIds.has(w.appId));
 
   const onMouseMove = useCallback((e) => {
     if (!dockRef.current) return;
@@ -120,6 +124,31 @@ export default function Dock({ onAppLaunch, dockStyle }) {
 
         {/* Separator before Trash */}
         <div className="w-px h-11 bg-white/24 mx-1 self-center shadow-[1px_0_0_rgba(0,0,0,0.12)] rounded-full" />
+
+        {/* Minimized tray — non-dock apps */}
+        {trayWindows.map(win => (
+          <div key={win.id} className="relative flex flex-col items-center">
+            {tooltip === `tray-${win.id}` && (
+              <div className="absolute -top-12 px-3 py-[6px] rounded-[8px] text-[13px] text-white/90 font-medium whitespace-nowrap"
+                style={{ background: 'rgba(28,29,34,0.72)', backdropFilter: 'blur(48px) saturate(190%)', WebkitBackdropFilter: 'blur(48px) saturate(190%)', boxShadow: 'var(--mac-shadow-popover)' }}>
+                {win.title}
+                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 transform" style={{ background: 'rgba(28,29,34,0.72)' }} />
+              </div>
+            )}
+            <div
+              className="dock-icon w-[54px] h-[54px] cursor-pointer transition-transform duration-150 ease-out"
+              style={{ transformOrigin: 'bottom center', filter: 'drop-shadow(0 8px 10px rgba(0,0,0,0.24))' }}
+              onClick={() => restoreWindow(win.appId)}
+              onMouseEnter={() => showTooltip(`tray-${win.id}`)}
+              onMouseLeave={hideTooltip}
+            >
+              {appIcons[win.appId] || appIcons.finder}
+            </div>
+            <div className="w-[5px] h-[5px] rounded-full bg-white/90 absolute shadow-[0_0_3px_rgba(255,255,255,0.5)]" style={{ bottom: -8 }} />
+          </div>
+        ))}
+
+        {trayWindows.length > 0 && <div className="w-px h-11 bg-white/24 mx-1 self-center shadow-[1px_0_0_rgba(0,0,0,0.12)] rounded-full" />}
         <div className="relative flex flex-col items-center">
           {tooltip === 'trash' && (
             <div className="absolute -top-12 px-3 py-[6px] rounded-[8px] text-[13px] text-white/90 font-medium whitespace-nowrap"
