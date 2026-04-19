@@ -164,13 +164,15 @@ export function LinkedInProfile() {
             )}
             <div className="flex gap-2 mt-4 flex-wrap">
               <button
-                className="px-4 h-[32px] rounded-full text-[14px] font-semibold text-white"
+                onClick={() => window.open(profile.url, '_blank', 'noopener,noreferrer')}
+                className="px-4 h-[32px] rounded-full text-[14px] font-semibold text-white inline-flex items-center gap-1.5"
                 style={{ background: linkedInBlue }}
               >
-                Open to
+                Open on LinkedIn
+                <SFSymbol name="arrow.up.right" size={13} color="#fff" />
               </button>
               <button className="px-4 h-[32px] rounded-full text-[14px] font-semibold border-[1.5px]" style={{ borderColor: linkedInBlue, color: linkedInBlue }}>
-                Add profile section
+                Message
               </button>
               <button className="px-4 h-[32px] rounded-full text-[14px] font-semibold border-[1.5px] border-black/60 text-black/85">
                 More
@@ -307,7 +309,13 @@ export function XProfile() {
             <button className="w-[34px] h-[34px] rounded-full border border-[#2f3336] flex items-center justify-center">
               <SFSymbol name="bell" size={14} color="#e7e9ea" />
             </button>
-            <button className="px-4 h-[34px] rounded-full bg-white text-black text-[14px] font-bold">Follow</button>
+            <button
+              onClick={() => window.open(profile.url, '_blank', 'noopener,noreferrer')}
+              className="px-4 h-[34px] rounded-full bg-white text-black text-[14px] font-bold inline-flex items-center gap-1.5"
+            >
+              Open on X
+              <SFSymbol name="arrow.up.right" size={13} color="#000" />
+            </button>
           </div>
         </div>
         <h1 className="text-[20px] font-extrabold mt-3 leading-tight">{profile.name}</h1>
