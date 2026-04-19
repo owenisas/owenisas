@@ -190,6 +190,7 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
     const mouse = new THREE.Vector2();
     let hoveredEntry = null;
     let animId = null;
+    let paused = false;
     // Mouse parallax — smooth offset
     const mouseParallax = { x: 0, y: 0 };
     // 3D mouse model tracking
@@ -850,6 +851,7 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
       }
 
       function animate() {
+        if (paused) { animId = null; return; }
         animId = requestAnimationFrame(animate);
         timer.update();
         const delta = timer.getDelta();
@@ -910,6 +912,12 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
     // Expose zoom-out for parent
     cleanupRef.current = {
       zoomOut: () => { zoomState = 'zooming-out'; zoomT = 0; },
+      pause: () => { paused = true; },
+      resume: () => {
+        if (!paused) return;
+        paused = false;
+        if (!animId) animate();
+      },
       togglePreset,
       destroy: () => {
         if (animId) cancelAnimationFrame(animId);
@@ -928,6 +936,8 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
 
   useImperativeHandle(ref, () => ({
     __zoomOut: () => cleanupRef.current?.zoomOut(),
+    __pause: () => cleanupRef.current?.pause(),
+    __resume: () => cleanupRef.current?.resume(),
   }));
 
   // WebGL error fallback
