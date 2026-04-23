@@ -5,8 +5,8 @@
   "location": "Washington",
   "website": "",
   "joined": "Joined March 2026",
-  "following": "24",
-  "followers": "11",
+  "following": "26",
+  "followers": "12",
   "avatarUrl": "https://pbs.twimg.com/profile_images/2036569139293331456/5XE8c5bD_200x200.jpg",
   "bannerUrl": null,
   "tweets": [
@@ -42,5 +42,5 @@
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-04-22T09:18:00.191Z"
+  "scrapedAt": "2026-04-23T09:24:22.455Z"
 }
