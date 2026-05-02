@@ -6,7 +6,7 @@
   "website": "",
   "joined": "Joined March 2026",
   "following": "28",
-  "followers": "13",
+  "followers": "14",
   "avatarUrl": "https://pbs.twimg.com/profile_images/2036569139293331456/5XE8c5bD_200x200.jpg",
   "bannerUrl": null,
   "tweets": [
@@ -36,11 +36,11 @@
       "datetime": "2026-04-14T04:47:07.000Z",
       "time": "Apr 14",
       "replies": "11",
-      "reposts": "1",
+      "reposts": "4",
       "likes": "42",
       "href": "/imjustinliao/status/2043913920432484626"
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-05-01T09:43:34.704Z"
+  "scrapedAt": "2026-05-02T09:02:41.281Z"
 }
