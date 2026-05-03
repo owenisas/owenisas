@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef, lazy, Suspense } from 'react';
+import { useState, useCallback, useEffect, useRef, lazy, Suspense, useMemo } from 'react';
 import { WindowProvider, useWindows } from './contexts/WindowContext';
 import MenuBar from './components/MenuBar';
 import Dock from './components/Dock';
@@ -24,6 +24,14 @@ import Preview from './apps/Preview';
 import Weather from './apps/Weather';
 import Calendar from './apps/Calendar';
 import AboutThisMac from './apps/AboutThisMac';
+import { wallpaperPresets } from './data/wallpaperPresets';
+import { parseDeepLinkIntent, buildDeepLinkParams, APP_DEFAULT_TITLES } from './lib/deepLink';
+import {
+  loadIconOffsets,
+  saveIconOffsets,
+  loadWallpaperId,
+  DESKTOP_WALLPAPER_EVENT,
+} from './lib/desktopPersistence';
 
 const appComponents = {
   calculator: Calculator,
@@ -44,32 +52,45 @@ const appComponents = {
 
 
 
-function DraggableDesktopIcon({ icon, label, onDoubleClick, isSelected, onSelect }) {
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
+function DraggableDesktopIcon({ iconId, icon, label, initialOffset, onOffsetCommit, onDoubleClick, isSelected, onSelect }) {
+  const [offset, setOffset] = useState(() => initialOffset ?? { x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
+  const isDraggingRef = useRef(false);
   const startPos = useRef({ x: 0, y: 0 });
   const hasMoved = useRef(false);
+  const offsetRef = useRef(initialOffset ?? { x: 0, y: 0 });
+
+  useEffect(() => {
+    offsetRef.current = offset;
+  }, [offset]);
 
   const handlePointerDown = (e) => {
+    isDraggingRef.current = true;
     setIsDragging(true);
     hasMoved.current = false;
-    startPos.current = { x: e.clientX - offset.x, y: e.clientY - offset.y };
+    startPos.current = { x: e.clientX - offsetRef.current.x, y: e.clientY - offsetRef.current.y };
     e.currentTarget.setPointerCapture(e.pointerId);
   };
 
   const handlePointerMove = (e) => {
-    if (!isDragging) return;
+    if (!isDraggingRef.current) return;
     const newX = e.clientX - startPos.current.x;
     const newY = e.clientY - startPos.current.y;
-    if (Math.abs(newX - offset.x) > 2 || Math.abs(newY - offset.y) > 2) {
+    if (Math.abs(newX - offsetRef.current.x) > 2 || Math.abs(newY - offsetRef.current.y) > 2) {
       hasMoved.current = true;
     }
-    setOffset({ x: newX, y: newY });
+    const next = { x: newX, y: newY };
+    offsetRef.current = next;
+    setOffset(next);
   };
 
   const handlePointerUp = (e) => {
+    isDraggingRef.current = false;
     setIsDragging(false);
     e.currentTarget.releasePointerCapture(e.pointerId);
+    if (hasMoved.current && onOffsetCommit) {
+      onOffsetCommit(iconId, offsetRef.current);
+    }
   };
 
   const handleClick = (e) => {
@@ -109,15 +130,87 @@ function DraggableDesktopIcon({ icon, label, onDoubleClick, isSelected, onSelect
   );
 }
 
+function readDeepLinkIntentOnMount() {
+  if (typeof window === 'undefined') {
+    return { wantsDesktop: false, app: null, payload: null };
+  }
+  return parseDeepLinkIntent(new URLSearchParams(window.location.search));
+}
+
 function Desktop() {
-  const { windows, openWindow } = useWindows();
+  const { windows, openWindow, activeWindowId } = useWindows();
+  const deepLinkAtMount = useMemo(() => readDeepLinkIntentOnMount(), []);
   const [contextMenu, setContextMenu] = useState(null);
   const [spotlightOpen, setSpotlightOpen] = useState(false);
   const [launchpadOpen, setLaunchpadOpen] = useState(false);
-  const [view, setView] = useState('showroom'); // 'showroom' | 'transitioning' | 'desktop'
-  const [desktopVisible, setDesktopVisible] = useState(false);
+  const [view, setView] = useState(() => (deepLinkAtMount.wantsDesktop ? 'desktop' : 'showroom'));
+  const [desktopVisible, setDesktopVisible] = useState(() => deepLinkAtMount.wantsDesktop);
   const [selectedIcon, setSelectedIcon] = useState(null);
   const showroomRef = useRef(null);
+  const deepLinkHandledRef = useRef(false);
+  const [iconOffsets, setIconOffsets] = useState(() => loadIconOffsets());
+  const [wallpaperId, setWallpaperId] = useState(() => loadWallpaperId());
+
+  const wallpaperStyle = useMemo(() => {
+    const preset = wallpaperPresets.find((w) => w.id === wallpaperId) ?? wallpaperPresets[0];
+    return {
+      ...preset.preview,
+      backgroundColor: '#1a1f2b',
+    };
+  }, [wallpaperId]);
+
+  useEffect(() => {
+    if (!deepLinkAtMount.wantsDesktop) return undefined;
+    const t = window.setTimeout(() => showroomRef.current?.__pause?.(), 700);
+    return () => window.clearTimeout(t);
+  }, [deepLinkAtMount.wantsDesktop]);
+
+  useEffect(() => {
+    const onWallpaper = (e) => {
+      if (e?.detail && wallpaperPresets.some((w) => w.id === e.detail)) {
+        setWallpaperId(e.detail);
+      }
+    };
+    const onStorage = (e) => {
+      if (e.key === 'owenisas-wallpaper-id' && e.newValue && wallpaperPresets.some((w) => w.id === e.newValue)) {
+        setWallpaperId(e.newValue);
+      }
+    };
+    window.addEventListener(DESKTOP_WALLPAPER_EVENT, onWallpaper);
+    window.addEventListener('storage', onStorage);
+    return () => {
+      window.removeEventListener(DESKTOP_WALLPAPER_EVENT, onWallpaper);
+      window.removeEventListener('storage', onStorage);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!desktopVisible || deepLinkHandledRef.current) return;
+    if (deepLinkAtMount.app) {
+      const title = APP_DEFAULT_TITLES[deepLinkAtMount.app] ?? deepLinkAtMount.app;
+      openWindow(deepLinkAtMount.app, title, appIcons[deepLinkAtMount.app], deepLinkAtMount.payload);
+    }
+    deepLinkHandledRef.current = true;
+  }, [desktopVisible, openWindow, deepLinkAtMount]);
+
+  useEffect(() => {
+    if (!desktopVisible) return;
+    const params = buildDeepLinkParams(windows, activeWindowId);
+    const url = new URL(window.location.href);
+    const nextStr = params.toString();
+    const curStr = url.searchParams.toString();
+    if (nextStr === curStr) return;
+    const search = nextStr ? `?${nextStr}` : '';
+    window.history.replaceState({}, '', `${url.pathname}${search}${url.hash}`);
+  }, [desktopVisible, windows, activeWindowId]);
+
+  const handleIconOffsetCommit = useCallback((iconId, next) => {
+    setIconOffsets((prev) => {
+      const merged = { ...prev, [iconId]: next };
+      saveIconOffsets(merged);
+      return merged;
+    });
+  }, []);
 
   const handleAppLaunch = useCallback((appId, title, payload) => {
     if (appId === 'launchpad') {
@@ -162,6 +255,11 @@ function Desktop() {
         if (view === 'desktop') {
           setDesktopVisible(false);
           showroomRef.current?.__resume?.();
+          const u = new URL(window.location.href);
+          if (u.search) {
+            window.history.replaceState({}, '', `${u.pathname}${u.hash}`);
+          }
+          deepLinkHandledRef.current = false;
           setTimeout(() => {
             setView('showroom');
             showroomRef.current?.__zoomOut?.();
@@ -219,8 +317,7 @@ function Desktop() {
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: 'url(/wallpaper.jpg)',
-          backgroundColor: '#1a1f2b',
+          ...wallpaperStyle,
           opacity: desktopVisible ? 1 : 0,
           transition: 'opacity 0.45s ease',
           willChange: 'opacity',
@@ -243,32 +340,44 @@ function Desktop() {
         transition: 'opacity 0.5s ease 0.5s, transform 0.5s ease 0.5s',
       }}>
         <DraggableDesktopIcon
+          iconId="macintoshHD"
           icon={desktopIcons.macintoshHD}
           label="Macintosh HD"
+          initialOffset={iconOffsets.macintoshHD}
+          onOffsetCommit={handleIconOffsetCommit}
           isSelected={selectedIcon === 'macintoshHD'}
           onSelect={() => setSelectedIcon('macintoshHD')}
           onDoubleClick={() => handleAppLaunch('finder', 'Finder')}
         />
 
         <DraggableDesktopIcon
+          iconId="github"
           icon={desktopIcons.github}
           label="GitHub"
+          initialOffset={iconOffsets.github}
+          onOffsetCommit={handleIconOffsetCommit}
           isSelected={selectedIcon === 'github'}
           onSelect={() => setSelectedIcon('github')}
           onDoubleClick={() => handleAppLaunch('safari', 'Safari', { url: 'https://github.com/owenisas' })}
         />
 
         <DraggableDesktopIcon
+          iconId="linkedin"
           icon={desktopIcons.linkedin}
           label="LinkedIn"
+          initialOffset={iconOffsets.linkedin}
+          onOffsetCommit={handleIconOffsetCommit}
           isSelected={selectedIcon === 'linkedin'}
           onSelect={() => setSelectedIcon('linkedin')}
           onDoubleClick={() => handleAppLaunch('safari', 'Safari', { url: 'https://www.linkedin.com/in/thomas-suen-84776a262/' })}
         />
 
         <DraggableDesktopIcon
+          iconId="x"
           icon={desktopIcons.x}
           label="X"
+          initialOffset={iconOffsets.x}
+          onOffsetCommit={handleIconOffsetCommit}
           isSelected={selectedIcon === 'x'}
           onSelect={() => setSelectedIcon('x')}
           onDoubleClick={() => handleAppLaunch('safari', 'Safari', { url: 'https://x.com/ThomasSuen6' })}
