@@ -11,6 +11,16 @@
   "bannerUrl": null,
   "tweets": [
     {
+      "id": "2050992004285472855",
+      "text": "sound is not just a decoration @fdotinc it's a reaction that reinforces our reality. imagine a world without sound, everything becomes silent or perhaps \"dead.\" you can't feel the surrounding or the amplitudes created by various lives and objects. then suddenly, the world is",
+      "datetime": "2026-05-03T17:32:54.000Z",
+      "time": "16h",
+      "replies": "2",
+      "reposts": "3",
+      "likes": "11",
+      "href": "/imjustinliao/status/2050992004285472855"
+    },
+    {
       "id": "2044285406800425009",
       "text": "Managing multiple CLI auth profiles is painful. I built ContextCLI — run any dev CLI under a named profile. Integrates perfectly with your current agentic development workflow too! Open source (MIT): http://github.com/owenisas/contextcli… Follow and comment for app support request.",
       "datetime": "2026-04-15T05:23:16.000Z",
@@ -42,5 +52,5 @@
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-05-03T09:20:02.273Z"
+  "scrapedAt": "2026-05-04T10:10:31.687Z"
 }
