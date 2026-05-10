@@ -11,6 +11,16 @@
   "bannerUrl": null,
   "tweets": [
     {
+      "id": "2053158928322789770",
+      "text": "to my startup friends: you’ve grind so much that you forgot to appreciate every wholesome memory of your life. what if you can relive that? a memory playback of yours all through SOUND. launching on Tuesday, 10am PDT! ft. @parafieldai @fdotinc",
+      "datetime": "2026-05-09T17:03:29.000Z",
+      "time": "16h",
+      "replies": "4",
+      "reposts": "6",
+      "likes": "18",
+      "href": "/imjustinliao/status/2053158928322789770"
+    },
+    {
       "id": "2052522661876793844",
       "text": "instructure is gone from the website, they made an agreement with the hackers so they took it down?",
       "datetime": "2026-05-07T22:55:11.000Z",
@@ -62,5 +72,5 @@
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-05-09T09:16:10.284Z"
+  "scrapedAt": "2026-05-10T09:26:17.596Z"
 }
