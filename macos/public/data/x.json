@@ -11,13 +11,23 @@
   "bannerUrl": null,
   "tweets": [
     {
+      "id": "2054618962395299982",
+      "text": "Framing this as a free credit instead of a regression for users is wild. Now I have to make the Claude Code experience on T3 Code significantly worse in order to keep using the 25x subsidization provided on a Claude Code subscription.",
+      "datetime": "2026-05-13T17:45:08.000Z",
+      "time": "16h",
+      "replies": "57",
+      "reposts": "30",
+      "likes": "1.5K",
+      "href": "/theo/status/2054618962395299982"
+    },
+    {
       "id": "2053158928322789770",
       "text": "to my startup friends: you’ve grind so much that you forgot to appreciate every wholesome memory of your life. what if you can relive that? a memory playback of yours all through SOUND. launching on Tuesday, 10am PDT! ft. @parafieldai @fdotinc",
       "datetime": "2026-05-09T17:03:29.000Z",
       "time": "May 9",
       "replies": "4",
       "reposts": "7",
-      "likes": "19",
+      "likes": "18",
       "href": "/imjustinliao/status/2053158928322789770"
     },
     {
@@ -72,5 +82,5 @@
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-05-13T10:22:25.535Z"
+  "scrapedAt": "2026-05-14T10:13:39.226Z"
 }
