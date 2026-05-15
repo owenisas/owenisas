@@ -11,13 +11,43 @@
   "bannerUrl": null,
   "tweets": [
     {
+      "id": "2054980386703446455",
+      "text": "introducing Parafield, the spatial sound intelligence. the FIRST agentic platform that combines voice, music, and sound effect, to create a personalized 3D sound experience for you. if you're interested in sci-fi, arts, and/or spirituality experience, this is for you. comment",
+      "datetime": "2026-05-14T17:41:18.000Z",
+      "time": "16h",
+      "replies": "22",
+      "reposts": "15",
+      "likes": "",
+      "href": "/imjustinliao/status/2054980386703446455"
+    },
+    {
+      "id": "2054980390839087143",
+      "text": "kudos to my amazing team: @parafieldai @manishram007 @ThomasSuen6 cool cast: @_eth0n Rachel currently building @fdotinc",
+      "datetime": "2026-05-14T17:41:19.000Z",
+      "time": "16h",
+      "replies": "",
+      "reposts": "1",
+      "likes": "7",
+      "href": "/imjustinliao/status/2054980390839087143"
+    },
+    {
+      "id": "2054610430098870727",
+      "text": "yes, we’re officially launching on Thursday, 10am PDT. tinkering…creating…cooking… the first to bring sound intelligence to life. and mark your calendar.",
+      "datetime": "2026-05-13T17:11:14.000Z",
+      "time": "May 13",
+      "replies": "6",
+      "reposts": "4",
+      "likes": "40",
+      "href": "/imjustinliao/status/2054610430098870727"
+    },
+    {
       "id": "2054618962395299982",
       "text": "Framing this as a free credit instead of a regression for users is wild. Now I have to make the Claude Code experience on T3 Code significantly worse in order to keep using the 25x subsidization provided on a Claude Code subscription.",
       "datetime": "2026-05-13T17:45:08.000Z",
-      "time": "16h",
-      "replies": "57",
-      "reposts": "30",
-      "likes": "1.5K",
+      "time": "May 13",
+      "replies": "61",
+      "reposts": "37",
+      "likes": "1.8K",
       "href": "/theo/status/2054618962395299982"
     },
     {
@@ -69,18 +99,8 @@
       "reposts": "",
       "likes": "",
       "href": "/ThomasSuen6/status/2044287379377402124"
-    },
-    {
-      "id": "2043913920432484626",
-      "text": "It's time to build @fdotinc Thank you @hthieblot @adriannalakatos and the entire Founders Inc team! Got rejected 3 months ago btw. How hard can it be?",
-      "datetime": "2026-04-14T04:47:07.000Z",
-      "time": "Apr 14",
-      "replies": "11",
-      "reposts": "4",
-      "likes": "42",
-      "href": "/imjustinliao/status/2043913920432484626"
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-05-14T10:13:39.226Z"
+  "scrapedAt": "2026-05-15T10:19:15.552Z"
 }
