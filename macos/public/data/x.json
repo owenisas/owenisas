@@ -5,7 +5,7 @@
   "location": "Washington",
   "website": "",
   "joined": "Joined March 2026",
-  "following": "34",
+  "following": "35",
   "followers": "16",
   "avatarUrl": "https://pbs.twimg.com/profile_images/2036569139293331456/5XE8c5bD_200x200.jpg",
   "bannerUrl": null,
@@ -16,7 +16,7 @@
       "datetime": "2026-05-14T17:41:18.000Z",
       "time": "May 14",
       "replies": "25",
-      "reposts": "14",
+      "reposts": "16",
       "likes": "",
       "href": "/imjustinliao/status/2054980386703446455"
     },
@@ -102,5 +102,5 @@
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-05-16T09:27:19.430Z"
+  "scrapedAt": "2026-05-17T09:44:03.567Z"
 }
