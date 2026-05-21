@@ -65,6 +65,7 @@ AI/ML engineer and full-stack developer. CS student who fine-tunes LLMs, builds 
 | :--- | :--- | :--- |
 | **[FPAI](https://fpai.reunifylabs.com/)** | First Principle AI — ed-tech platform that explains concepts from first principles using a block-based learning interface with recursive sub-blocks. Co-founder at [Reunify Labs](https://github.com/Reunify-Labs/FPAI). | `Next.js` `AWS Lambda` `DynamoDB` `OpenAI` |
 | **[Origraph](https://github.com/owenisas/Origraph)** | AI content provenance platform — invisible text watermarking SDK, provenance registry, browser extension. **Champion at [Hack The East](https://hacktheeast.com/) 2026.** | `Python` `JS` `AI` |
+| **[Vellum](https://github.com/owenisas/vellum)** | Rebuilt Origraph from the ground up with an enhanced UI for invisible watermarking, on-chain anchoring, and provenance verification for LLM outputs. **Won an MLH track prize at [UWB Hacks](https://www.uwbhacks.com/).** | `TypeScript` `AI` `Provenance` |
 | **[Amadeus 2.0](https://github.com/owenisas/Amadeus2.0)** | Vision-first Android automation framework — AI-directed app workflows via Appium + Gemini/local LLM. GUI dashboard, TUI operator mode, scheduled jobs. | `Python` `Appium` `Gemini` |
 | **[Amadeus](https://github.com/owenisas/Amadeus)** | Original mobile AI assistant framework (legacy). Foundation for 2.0. | `Python` `Swift` |
 | **[AudioX](https://github.com/owenisas/AudioX)** | Audio generation model fine-tuned on H100s — mixed SFX & music preference datasets. | `PyTorch` `DiT` `H100` |
