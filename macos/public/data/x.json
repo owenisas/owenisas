@@ -5,18 +5,68 @@
   "location": "Washington",
   "website": "",
   "joined": "Joined March 2026",
-  "following": "35",
+  "following": "36",
   "followers": "18",
   "avatarUrl": "https://pbs.twimg.com/profile_images/2036569139293331456/5XE8c5bD_200x200.jpg",
   "bannerUrl": null,
   "tweets": [
+    {
+      "id": "2057712385750958326",
+      "text": "our pre-demo before @fdotinc festival: you've watched the movie Jurassic World but have you ever experience one IRL? try it with before you sleep.",
+      "datetime": "2026-05-22T06:37:17.000Z",
+      "time": "4h",
+      "replies": "1",
+      "reposts": "3",
+      "likes": "8",
+      "href": "/imjustinliao/status/2057712385750958326"
+    },
+    {
+      "id": "2057506382807781511",
+      "text": "great work team @manishram007 @ThomasSuen6, we are redefining the future of AI interface.",
+      "datetime": "2026-05-21T16:58:42.000Z",
+      "time": "17h",
+      "replies": "",
+      "reposts": "1",
+      "likes": "7",
+      "href": "/imjustinliao/status/2057506382807781511"
+    },
+    {
+      "id": "2057509639902965994",
+      "text": "We're the first to combine voice, music, and sound effect, to create a personalized, 3D sound experience for you. You can use it for entertainment, mindfulness, and productivity, all through one prompt while producing high-quality output. Try out now: http://parafield.ai",
+      "datetime": "2026-05-21T17:11:39.000Z",
+      "time": "17h",
+      "replies": "",
+      "reposts": "2",
+      "likes": "6",
+      "href": "/parafieldai/status/2057509639902965994"
+    },
+    {
+      "id": "2057506380169548230",
+      "text": "ASMR essentially means spatial sound experience. whether it's for mindfulness, entertainment, or productivity, it's now possible @parafieldai comment \"sound\" for private beta and join 100+ early users. or join our waitlist:",
+      "datetime": "2026-05-21T16:58:42.000Z",
+      "time": "17h",
+      "replies": "1",
+      "reposts": "1",
+      "likes": "8",
+      "href": "/imjustinliao/status/2057506380169548230"
+    },
+    {
+      "id": "2057506378370175077",
+      "text": "today, we bring ASMR to everyone. describe a situation, tag anyone to cameo, pick a use case, then Parafield creates a personalized 3D sound experience for you. imagine you’re meditating with Steve Jobs in the rainforest, or a 1920s barbershop ASMR where @garrytan is your",
+      "datetime": "2026-05-21T16:58:41.000Z",
+      "time": "17h",
+      "replies": "17",
+      "reposts": "13",
+      "likes": "38",
+      "href": "/imjustinliao/status/2057506378370175077"
+    },
     {
       "id": "2054980386703446455",
       "text": "introducing Parafield, the spatial sound intelligence. the FIRST agentic platform that combines voice, music, and sound effect, to create a personalized 3D sound experience for you. if you're interested in sci-fi, arts, and/or spirituality experience, this is for you. comment",
       "datetime": "2026-05-14T17:41:18.000Z",
       "time": "May 14",
       "replies": "27",
-      "reposts": "16",
+      "reposts": "15",
       "likes": "",
       "href": "/imjustinliao/status/2054980386703446455"
     },
@@ -36,7 +86,7 @@
       "datetime": "2026-05-13T17:11:14.000Z",
       "time": "May 13",
       "replies": "6",
-      "reposts": "4",
+      "reposts": "2",
       "likes": "40",
       "href": "/imjustinliao/status/2054610430098870727"
     },
@@ -49,68 +99,8 @@
       "reposts": "38",
       "likes": "1.8K",
       "href": "/theo/status/2054618962395299982"
-    },
-    {
-      "id": "2053158928322789770",
-      "text": "to my startup friends: you’ve grind so much that you forgot to appreciate every wholesome memory of your life. what if you can relive that? a memory playback of yours all through SOUND. launching on Tuesday, 10am PDT! ft. @parafieldai @fdotinc",
-      "datetime": "2026-05-09T17:03:29.000Z",
-      "time": "May 9",
-      "replies": "4",
-      "reposts": "5",
-      "likes": "18",
-      "href": "/imjustinliao/status/2053158928322789770"
-    },
-    {
-      "id": "2052522661876793844",
-      "text": "instructure is gone from the website, they made an agreement with the hackers so they took it down?",
-      "datetime": "2026-05-07T22:55:11.000Z",
-      "time": "May 7",
-      "replies": "2",
-      "reposts": "",
-      "likes": "6",
-      "href": "/ThomasSuen6/status/2052522661876793844"
-    },
-    {
-      "id": "2050992004285472855",
-      "text": "sound is not just a decoration @fdotinc it's a reaction that reinforces our reality. imagine a world without sound, everything becomes silent or perhaps \"dead.\" you can't feel the surrounding or the amplitudes created by various lives and objects. then suddenly, the world is",
-      "datetime": "2026-05-03T17:32:54.000Z",
-      "time": "May 3",
-      "replies": "2",
-      "reposts": "2",
-      "likes": "13",
-      "href": "/imjustinliao/status/2050992004285472855"
-    },
-    {
-      "id": "2044285406800425009",
-      "text": "Managing multiple CLI auth profiles is painful. I built ContextCLI — run any dev CLI under a named profile. Integrates perfectly with your current agentic development workflow too! Open source (MIT): http://github.com/owenisas/contextcli… Follow and comment for app support request.",
-      "datetime": "2026-04-15T05:23:16.000Z",
-      "time": "Apr 15",
-      "replies": "3",
-      "reposts": "",
-      "likes": "2",
-      "href": "/ThomasSuen6/status/2044285406800425009"
-    },
-    {
-      "id": "2044287379377402124",
-      "text": "Surely will maintain regularly if at least 100 people star the project, LOL",
-      "datetime": "2026-04-15T05:31:06.000Z",
-      "time": "Apr 15",
-      "replies": "",
-      "reposts": "",
-      "likes": "",
-      "href": "/ThomasSuen6/status/2044287379377402124"
-    },
-    {
-      "id": "2043913920432484626",
-      "text": "It's time to build @fdotinc Thank you @hthieblot @adriannalakatos and the entire Founders Inc team! Got rejected 3 months ago btw. How hard can it be?",
-      "datetime": "2026-04-14T04:47:07.000Z",
-      "time": "Apr 14",
-      "replies": "11",
-      "reposts": "1",
-      "likes": "42",
-      "href": "/imjustinliao/status/2043913920432484626"
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-05-21T11:18:49.499Z"
+  "scrapedAt": "2026-05-22T10:47:08.891Z"
 }
