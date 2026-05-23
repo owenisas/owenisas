@@ -11,20 +11,30 @@
   "bannerUrl": null,
   "tweets": [
     {
+      "id": "2057557660929863697",
+      "text": "we built a bipedal robot 10x cheaper(less than $150) than them last weekend",
+      "datetime": "2026-05-21T20:22:28.000Z",
+      "time": "May 21",
+      "replies": "9",
+      "reposts": "24",
+      "likes": "214",
+      "href": "/joshuajerinn/status/2057557660929863697"
+    },
+    {
       "id": "2057712385750958326",
       "text": "our pre-demo before @fdotinc festival: you've watched the movie Jurassic World but have you ever experience one IRL? try it with before you sleep.",
       "datetime": "2026-05-22T06:37:17.000Z",
-      "time": "4h",
+      "time": "May 22",
       "replies": "1",
-      "reposts": "3",
-      "likes": "8",
+      "reposts": "4",
+      "likes": "9",
       "href": "/imjustinliao/status/2057712385750958326"
     },
     {
       "id": "2057506382807781511",
       "text": "great work team @manishram007 @ThomasSuen6, we are redefining the future of AI interface.",
       "datetime": "2026-05-21T16:58:42.000Z",
-      "time": "17h",
+      "time": "May 21",
       "replies": "",
       "reposts": "1",
       "likes": "7",
@@ -34,7 +44,7 @@
       "id": "2057509639902965994",
       "text": "We're the first to combine voice, music, and sound effect, to create a personalized, 3D sound experience for you. You can use it for entertainment, mindfulness, and productivity, all through one prompt while producing high-quality output. Try out now: http://parafield.ai",
       "datetime": "2026-05-21T17:11:39.000Z",
-      "time": "17h",
+      "time": "May 21",
       "replies": "",
       "reposts": "2",
       "likes": "6",
@@ -44,20 +54,20 @@
       "id": "2057506380169548230",
       "text": "ASMR essentially means spatial sound experience. whether it's for mindfulness, entertainment, or productivity, it's now possible @parafieldai comment \"sound\" for private beta and join 100+ early users. or join our waitlist:",
       "datetime": "2026-05-21T16:58:42.000Z",
-      "time": "17h",
+      "time": "May 21",
       "replies": "1",
       "reposts": "1",
-      "likes": "8",
+      "likes": "",
       "href": "/imjustinliao/status/2057506380169548230"
     },
     {
       "id": "2057506378370175077",
       "text": "today, we bring ASMR to everyone. describe a situation, tag anyone to cameo, pick a use case, then Parafield creates a personalized 3D sound experience for you. imagine you’re meditating with Steve Jobs in the rainforest, or a 1920s barbershop ASMR where @garrytan is your",
       "datetime": "2026-05-21T16:58:41.000Z",
-      "time": "17h",
+      "time": "May 21",
       "replies": "17",
       "reposts": "13",
-      "likes": "38",
+      "likes": "",
       "href": "/imjustinliao/status/2057506378370175077"
     },
     {
@@ -89,18 +99,8 @@
       "reposts": "2",
       "likes": "40",
       "href": "/imjustinliao/status/2054610430098870727"
-    },
-    {
-      "id": "2054618962395299982",
-      "text": "Framing this as a free credit instead of a regression for users is wild. Now I have to make the Claude Code experience on T3 Code significantly worse in order to keep using the 25x subsidization provided on a Claude Code subscription.",
-      "datetime": "2026-05-13T17:45:08.000Z",
-      "time": "May 13",
-      "replies": "62",
-      "reposts": "38",
-      "likes": "1.8K",
-      "href": "/theo/status/2054618962395299982"
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-05-22T10:47:08.891Z"
+  "scrapedAt": "2026-05-23T09:48:15.550Z"
 }
