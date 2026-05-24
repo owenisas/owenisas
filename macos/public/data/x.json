@@ -11,13 +11,33 @@
   "bannerUrl": null,
   "tweets": [
     {
+      "id": "2058423374465077280",
+      "text": "Today, we’re making ASMR personal. describe a memory, scene, or world you want to step into. Parafield turns it into a personalized spatial audio experience. bring back what matters to you through sound intelligence. Comment \"Spatial\" for private beta access @parafieldai",
+      "datetime": "2026-05-24T05:42:30.000Z",
+      "time": "4h",
+      "replies": "3",
+      "reposts": "1",
+      "likes": "5",
+      "href": "/ThomasSuen6/status/2058423374465077280"
+    },
+    {
+      "id": "2058423421118353830",
+      "text": "@manishram007 @imjustinliao",
+      "datetime": "2026-05-24T05:42:41.000Z",
+      "time": "4h",
+      "replies": "",
+      "reposts": "",
+      "likes": "2",
+      "href": "/ThomasSuen6/status/2058423421118353830"
+    },
+    {
       "id": "2057557660929863697",
       "text": "we built a bipedal robot 10x cheaper(less than $150) than them last weekend",
       "datetime": "2026-05-21T20:22:28.000Z",
       "time": "May 21",
       "replies": "9",
       "reposts": "24",
-      "likes": "214",
+      "likes": "228",
       "href": "/joshuajerinn/status/2057557660929863697"
     },
     {
@@ -27,7 +47,7 @@
       "time": "May 22",
       "replies": "1",
       "reposts": "4",
-      "likes": "9",
+      "likes": "11",
       "href": "/imjustinliao/status/2057712385750958326"
     },
     {
@@ -47,7 +67,7 @@
       "time": "May 21",
       "replies": "",
       "reposts": "2",
-      "likes": "6",
+      "likes": "7",
       "href": "/parafieldai/status/2057509639902965994"
     },
     {
@@ -87,20 +107,10 @@
       "time": "May 14",
       "replies": "",
       "reposts": "1",
-      "likes": "8",
+      "likes": "9",
       "href": "/imjustinliao/status/2054980390839087143"
-    },
-    {
-      "id": "2054610430098870727",
-      "text": "yes, we’re officially launching on Thursday, 10am PDT. tinkering…creating…cooking… the first to bring sound intelligence to life. and mark your calendar.",
-      "datetime": "2026-05-13T17:11:14.000Z",
-      "time": "May 13",
-      "replies": "6",
-      "reposts": "2",
-      "likes": "40",
-      "href": "/imjustinliao/status/2054610430098870727"
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-05-23T09:48:15.550Z"
+  "scrapedAt": "2026-05-24T09:51:31.560Z"
 }
