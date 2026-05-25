@@ -5,26 +5,36 @@
   "location": "Washington",
   "website": "",
   "joined": "Joined March 2026",
-  "following": "36",
+  "following": "38",
   "followers": "18",
   "avatarUrl": "https://pbs.twimg.com/profile_images/2036569139293331456/5XE8c5bD_200x200.jpg",
   "bannerUrl": null,
   "tweets": [
     {
+      "id": "2058734741457900007",
+      "text": "POV: @pmarca is your barber talking about GC in ASMR created in one prompt with http://parafield.ai try it with your:",
+      "datetime": "2026-05-25T02:19:46.000Z",
+      "time": "9h",
+      "replies": "4",
+      "reposts": "3",
+      "likes": "11",
+      "href": "/imjustinliao/status/2058734741457900007"
+    },
+    {
       "id": "2058423374465077280",
       "text": "Today, we’re making ASMR personal. describe a memory, scene, or world you want to step into. Parafield turns it into a personalized spatial audio experience. bring back what matters to you through sound intelligence. Comment \"Spatial\" for private beta access @parafieldai",
       "datetime": "2026-05-24T05:42:30.000Z",
-      "time": "4h",
+      "time": "May 24",
       "replies": "3",
       "reposts": "1",
-      "likes": "5",
+      "likes": "",
       "href": "/ThomasSuen6/status/2058423374465077280"
     },
     {
       "id": "2058423421118353830",
       "text": "@manishram007 @imjustinliao",
       "datetime": "2026-05-24T05:42:41.000Z",
-      "time": "4h",
+      "time": "May 24",
       "replies": "",
       "reposts": "",
       "likes": "2",
@@ -47,7 +57,7 @@
       "time": "May 22",
       "replies": "1",
       "reposts": "4",
-      "likes": "11",
+      "likes": "10",
       "href": "/imjustinliao/status/2057712385750958326"
     },
     {
@@ -86,31 +96,11 @@
       "datetime": "2026-05-21T16:58:41.000Z",
       "time": "May 21",
       "replies": "17",
-      "reposts": "13",
+      "reposts": "12",
       "likes": "",
       "href": "/imjustinliao/status/2057506378370175077"
-    },
-    {
-      "id": "2054980386703446455",
-      "text": "introducing Parafield, the spatial sound intelligence. the FIRST agentic platform that combines voice, music, and sound effect, to create a personalized 3D sound experience for you. if you're interested in sci-fi, arts, and/or spirituality experience, this is for you. comment",
-      "datetime": "2026-05-14T17:41:18.000Z",
-      "time": "May 14",
-      "replies": "27",
-      "reposts": "15",
-      "likes": "",
-      "href": "/imjustinliao/status/2054980386703446455"
-    },
-    {
-      "id": "2054980390839087143",
-      "text": "kudos to my amazing team: @parafieldai @manishram007 @ThomasSuen6 cool cast: @_eth0n Rachel currently building @fdotinc",
-      "datetime": "2026-05-14T17:41:19.000Z",
-      "time": "May 14",
-      "replies": "",
-      "reposts": "1",
-      "likes": "9",
-      "href": "/imjustinliao/status/2054980390839087143"
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-05-24T09:51:31.560Z"
+  "scrapedAt": "2026-05-25T11:51:14.299Z"
 }
