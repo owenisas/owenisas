@@ -5,19 +5,29 @@
   "location": "Washington",
   "website": "",
   "joined": "Joined March 2026",
-  "following": "38",
-  "followers": "18",
+  "following": "39",
+  "followers": "19",
   "avatarUrl": "https://pbs.twimg.com/profile_images/2036569139293331456/5XE8c5bD_200x200.jpg",
   "bannerUrl": null,
   "tweets": [
     {
+      "id": "2059387198399815722",
+      "text": "just gave my agent a card @agentcardai https://agentcard.ai/?a=thomassuen6",
+      "datetime": "2026-05-26T21:32:24.000Z",
+      "time": "14h",
+      "replies": "",
+      "reposts": "",
+      "likes": "2",
+      "href": "/ThomasSuen6/status/2059387198399815722"
+    },
+    {
       "id": "2058734741457900007",
       "text": "POV: @pmarca is your barber talking about GC in ASMR created in one prompt with http://parafield.ai try it with your:",
       "datetime": "2026-05-25T02:19:46.000Z",
-      "time": "9h",
+      "time": "May 25",
       "replies": "4",
       "reposts": "3",
-      "likes": "11",
+      "likes": "16",
       "href": "/imjustinliao/status/2058734741457900007"
     },
     {
@@ -57,7 +67,7 @@
       "time": "May 22",
       "replies": "1",
       "reposts": "4",
-      "likes": "10",
+      "likes": "11",
       "href": "/imjustinliao/status/2057712385750958326"
     },
     {
@@ -89,18 +99,8 @@
       "reposts": "1",
       "likes": "",
       "href": "/imjustinliao/status/2057506380169548230"
-    },
-    {
-      "id": "2057506378370175077",
-      "text": "today, we bring ASMR to everyone. describe a situation, tag anyone to cameo, pick a use case, then Parafield creates a personalized 3D sound experience for you. imagine you’re meditating with Steve Jobs in the rainforest, or a 1920s barbershop ASMR where @garrytan is your",
-      "datetime": "2026-05-21T16:58:41.000Z",
-      "time": "May 21",
-      "replies": "17",
-      "reposts": "12",
-      "likes": "",
-      "href": "/imjustinliao/status/2057506378370175077"
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-05-25T11:51:14.299Z"
+  "scrapedAt": "2026-05-27T11:35:15.334Z"
 }
