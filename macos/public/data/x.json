@@ -11,6 +11,26 @@
   "bannerUrl": null,
   "tweets": [
     {
+      "id": "2059613547165012106",
+      "text": "i just hacked a YC company in 2.5 hours i have their whole .env file lol found the conversation chat, websocket, and an ai-based chat interface. then i told the ai to prove how smart it was as a performance challenge and got it to run bash commands on the server i made it run",
+      "datetime": "2026-05-27T12:31:50.000Z",
+      "time": "May 27",
+      "replies": "51",
+      "reposts": "27",
+      "likes": "455",
+      "href": "/sathuashrith/status/2059613547165012106"
+    },
+    {
+      "id": "2059754762338464250",
+      "text": "dear founders, when is the last time you slow down to reflect? all those great memories have passed while you're still chasing to raise series B. is it for a mission, money, fame, or ideology? or maybe you're just lost chasing other people's dogmas. what if there's a way to",
+      "datetime": "2026-05-27T21:52:58.000Z",
+      "time": "May 27",
+      "replies": "",
+      "reposts": "3",
+      "likes": "11",
+      "href": "/imjustinliao/status/2059754762338464250"
+    },
+    {
       "id": "2059387198399815722",
       "text": "just gave my agent a card @agentcardai https://agentcard.ai/?a=thomassuen6",
       "datetime": "2026-05-26T21:32:24.000Z",
@@ -79,28 +99,8 @@
       "reposts": "1",
       "likes": "7",
       "href": "/imjustinliao/status/2057506382807781511"
-    },
-    {
-      "id": "2057509639902965994",
-      "text": "We're the first to combine voice, music, and sound effect, to create a personalized, 3D sound experience for you. You can use it for entertainment, mindfulness, and productivity, all through one prompt while producing high-quality output. Try out now: http://parafield.ai",
-      "datetime": "2026-05-21T17:11:39.000Z",
-      "time": "May 21",
-      "replies": "",
-      "reposts": "2",
-      "likes": "7",
-      "href": "/parafieldai/status/2057509639902965994"
-    },
-    {
-      "id": "2057506380169548230",
-      "text": "ASMR essentially means spatial sound experience. whether it's for mindfulness, entertainment, or productivity, it's now possible @parafieldai comment \"sound\" for private beta and join 100+ early users. or join our waitlist:",
-      "datetime": "2026-05-21T16:58:42.000Z",
-      "time": "May 21",
-      "replies": "1",
-      "reposts": "1",
-      "likes": "",
-      "href": "/imjustinliao/status/2057506380169548230"
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-05-28T11:36:13.611Z"
+  "scrapedAt": "2026-05-29T11:25:01.500Z"
 }
