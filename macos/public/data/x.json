@@ -11,13 +11,23 @@
   "bannerUrl": null,
   "tweets": [
     {
+      "id": "2061300754053472332",
+      "text": "Nvida Vera, The CPU for Agents. NEW Era is coming.",
+      "datetime": "2026-06-01T04:16:11.000Z",
+      "time": "9h",
+      "replies": "",
+      "reposts": "",
+      "likes": "2",
+      "href": "/ThomasSuen6/status/2061300754053472332"
+    },
+    {
       "id": "2060888556101673032",
       "text": "honest take on @fdotinc Canopy: it's worth it, whether it's online or IRL! FYI, I applied and got accepted to Canopy online due to requirements for F1 visa. for early-stage founders, the program is like igniting the spark in you to get you out building, launching, and talking",
       "datetime": "2026-05-31T00:58:15.000Z",
-      "time": "9h",
-      "replies": "2",
+      "time": "May 31",
+      "replies": "3",
       "reposts": "1",
-      "likes": "13",
+      "likes": "20",
       "href": "/imjustinliao/status/2060888556101673032"
     },
     {
@@ -27,7 +37,7 @@
       "time": "May 27",
       "replies": "51",
       "reposts": "26",
-      "likes": "457",
+      "likes": "455",
       "href": "/sathuashrith/status/2059613547165012106"
     },
     {
@@ -87,10 +97,20 @@
       "time": "May 21",
       "replies": "9",
       "reposts": "24",
-      "likes": "228",
+      "likes": "227",
       "href": "/joshuajerinn/status/2057557660929863697"
+    },
+    {
+      "id": "2057712385750958326",
+      "text": "our pre-demo before @fdotinc festival: you've watched the movie Jurassic World but have you ever experience one IRL? try it with before you sleep.",
+      "datetime": "2026-05-22T06:37:17.000Z",
+      "time": "May 22",
+      "replies": "1",
+      "reposts": "4",
+      "likes": "11",
+      "href": "/imjustinliao/status/2057712385750958326"
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-05-31T10:12:02.442Z"
+  "scrapedAt": "2026-06-01T13:33:00.682Z"
 }
