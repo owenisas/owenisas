@@ -6,7 +6,7 @@
   "website": "",
   "joined": "Joined March 2026",
   "following": "41",
-  "followers": "19",
+  "followers": "20",
   "avatarUrl": "https://pbs.twimg.com/profile_images/2036569139293331456/5XE8c5bD_200x200.jpg",
   "bannerUrl": null,
   "tweets": [
@@ -37,7 +37,7 @@
       "time": "May 27",
       "replies": "51",
       "reposts": "26",
-      "likes": "454",
+      "likes": "453",
       "href": "/sathuashrith/status/2059613547165012106"
     },
     {
@@ -102,5 +102,5 @@
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-06-03T12:39:15.865Z"
+  "scrapedAt": "2026-06-04T10:58:58.516Z"
 }
