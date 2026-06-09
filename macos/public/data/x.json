@@ -11,6 +11,16 @@
   "bannerUrl": null,
   "tweets": [
     {
+      "id": "2064181235266843063",
+      "text": "Discord pays swe $154k to $472k + a year to build spatial audio voice chats. they still haven't released it. we built the whole damn thing within our app for less than a week. no funding, no internship experience, no bs. free spatial audio voices for everyone. launching",
+      "datetime": "2026-06-09T03:02:11.000Z",
+      "time": "7h",
+      "replies": "12",
+      "reposts": "6",
+      "likes": "",
+      "href": "/imjustinliao/status/2064181235266843063"
+    },
+    {
       "id": "2061300754053472332",
       "text": "Nvida Vera, The CPU for Agents. NEW Era is coming.",
       "datetime": "2026-06-01T04:16:11.000Z",
@@ -37,7 +47,7 @@
       "time": "May 27",
       "replies": "51",
       "reposts": "26",
-      "likes": "458",
+      "likes": "459",
       "href": "/sathuashrith/status/2059613547165012106"
     },
     {
@@ -79,28 +89,8 @@
       "reposts": "1",
       "likes": "",
       "href": "/ThomasSuen6/status/2058423374465077280"
-    },
-    {
-      "id": "2058423421118353830",
-      "text": "@manishram007 @imjustinliao",
-      "datetime": "2026-05-24T05:42:41.000Z",
-      "time": "May 24",
-      "replies": "",
-      "reposts": "",
-      "likes": "2",
-      "href": "/ThomasSuen6/status/2058423421118353830"
-    },
-    {
-      "id": "2057557660929863697",
-      "text": "we built a bipedal robot 10x cheaper(less than $150) than them last weekend",
-      "datetime": "2026-05-21T20:22:28.000Z",
-      "time": "May 21",
-      "replies": "9",
-      "reposts": "24",
-      "likes": "227",
-      "href": "/joshuajerinn/status/2057557660929863697"
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-06-08T12:25:45.883Z"
+  "scrapedAt": "2026-06-09T10:57:26.027Z"
 }
