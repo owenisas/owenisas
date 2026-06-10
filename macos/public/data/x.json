@@ -5,18 +5,28 @@
   "location": "Washington",
   "website": "",
   "joined": "Joined March 2026",
-  "following": "41",
-  "followers": "19",
+  "following": "40",
+  "followers": "20",
   "avatarUrl": "https://pbs.twimg.com/profile_images/2036569139293331456/5XE8c5bD_200x200.jpg",
   "bannerUrl": null,
   "tweets": [
     {
+      "id": "2064553372120993872",
+      "text": "Discord's has a reputation for anti-social mods, go0ners, and scammers. meanwhile, they pay SWE $154k to $472k+ a year to build spatial voice chats. they still haven’t shipped it. we built the whole damn thing within a week, a superior UI for everyday people, for free! no",
+      "datetime": "2026-06-10T03:40:56.000Z",
+      "time": "7h",
+      "replies": "8",
+      "reposts": "7",
+      "likes": "",
+      "href": "/imjustinliao/status/2064553372120993872"
+    },
+    {
       "id": "2064181235266843063",
       "text": "Discord pays swe $154k to $472k + a year to build spatial audio voice chats. they still haven't released it. we built the whole damn thing within our app for less than a week. no funding, no internship experience, no bs. free spatial audio voices for everyone. launching",
       "datetime": "2026-06-09T03:02:11.000Z",
-      "time": "7h",
-      "replies": "12",
-      "reposts": "6",
+      "time": "Jun 9",
+      "replies": "15",
+      "reposts": "9",
       "likes": "",
       "href": "/imjustinliao/status/2064181235266843063"
     },
@@ -79,18 +89,8 @@
       "reposts": "3",
       "likes": "16",
       "href": "/imjustinliao/status/2058734741457900007"
-    },
-    {
-      "id": "2058423374465077280",
-      "text": "Today, we’re making ASMR personal. describe a memory, scene, or world you want to step into. Parafield turns it into a personalized spatial audio experience. bring back what matters to you through sound intelligence. Comment \"Spatial\" for private beta access @parafieldai",
-      "datetime": "2026-05-24T05:42:30.000Z",
-      "time": "May 24",
-      "replies": "3",
-      "reposts": "1",
-      "likes": "",
-      "href": "/ThomasSuen6/status/2058423374465077280"
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-06-09T10:57:26.027Z"
+  "scrapedAt": "2026-06-10T11:36:50.447Z"
 }
