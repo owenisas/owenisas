@@ -6,16 +6,26 @@
   "website": "",
   "joined": "Joined March 2026",
   "following": "40",
-  "followers": "20",
+  "followers": "21",
   "avatarUrl": "https://pbs.twimg.com/profile_images/2036569139293331456/5XE8c5bD_200x200.jpg",
   "bannerUrl": null,
   "tweets": [
     {
+      "id": "2064764443431682166",
+      "text": "PRO TIP: Store passwords in the user's browser and validate everything client-side. Just send a boolean to your server. Reduces database load by 95% and keeps sensitive data off your servers. Follow for more \"PRO TIPS\"",
+      "datetime": "2026-06-10T17:39:39.000Z",
+      "time": "18h",
+      "replies": "",
+      "reposts": "",
+      "likes": "2",
+      "href": "/ThomasSuen6/status/2064764443431682166"
+    },
+    {
       "id": "2064553372120993872",
       "text": "Discord's has a reputation for anti-social mods, go0ners, and scammers. meanwhile, they pay SWE $154k to $472k+ a year to build spatial voice chats. they still haven’t shipped it. we built the whole damn thing within a week, a superior UI for everyday people, for free! no",
       "datetime": "2026-06-10T03:40:56.000Z",
-      "time": "7h",
-      "replies": "8",
+      "time": "Jun 10",
+      "replies": "10",
       "reposts": "7",
       "likes": "",
       "href": "/imjustinliao/status/2064553372120993872"
@@ -79,18 +89,8 @@
       "reposts": "",
       "likes": "3",
       "href": "/ThomasSuen6/status/2059387198399815722"
-    },
-    {
-      "id": "2058734741457900007",
-      "text": "POV: @pmarca is your barber talking about GC in ASMR created in one prompt with http://parafield.ai try it with your:",
-      "datetime": "2026-05-25T02:19:46.000Z",
-      "time": "May 25",
-      "replies": "4",
-      "reposts": "3",
-      "likes": "16",
-      "href": "/imjustinliao/status/2058734741457900007"
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-06-10T11:36:50.447Z"
+  "scrapedAt": "2026-06-11T12:07:25.975Z"
 }
