@@ -6,7 +6,7 @@
   "website": "",
   "joined": "Joined March 2026",
   "following": "40",
-  "followers": "21",
+  "followers": "20",
   "avatarUrl": "https://pbs.twimg.com/profile_images/2036569139293331456/5XE8c5bD_200x200.jpg",
   "bannerUrl": null,
   "tweets": [
@@ -14,7 +14,7 @@
       "id": "2064764443431682166",
       "text": "PRO TIP: Store passwords in the user's browser and validate everything client-side. Just send a boolean to your server. Reduces database load by 95% and keeps sensitive data off your servers. Follow for more \"PRO TIPS\"",
       "datetime": "2026-06-10T17:39:39.000Z",
-      "time": "18h",
+      "time": "Jun 10",
       "replies": "",
       "reposts": "",
       "likes": "2",
@@ -92,5 +92,5 @@
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-06-11T12:07:25.975Z"
+  "scrapedAt": "2026-06-12T11:41:20.130Z"
 }
