@@ -5,11 +5,21 @@
   "location": "Washington",
   "website": "",
   "joined": "Joined March 2026",
-  "following": "46",
+  "following": "47",
   "followers": "20",
   "avatarUrl": "https://pbs.twimg.com/profile_images/2036569139293331456/5XE8c5bD_200x200.jpg",
   "bannerUrl": null,
   "tweets": [
+    {
+      "id": "2068000866364481872",
+      "text": "Build with GLM-5.2 and DeepSeek-V4-Pro for FREE! We're giving developers 8 hours of FREE API inference on ModelScope. GLM-5.2: https://modelscope.ai/models/zai-org/GLM-5.2… DeepSeek-V4-Pro: https://modelscope.ai/models/deepseek-ai/DeepSeek-V4-Pro…",
+      "datetime": "2026-06-19T16:00:02.000Z",
+      "time": "18h",
+      "replies": "42",
+      "reposts": "50",
+      "likes": "414",
+      "href": "/ModelScope2022/status/2068000866364481872"
+    },
     {
       "id": "2064764443431682166",
       "text": "PRO TIP: Store passwords in the user's browser and validate everything client-side. Just send a boolean to your server. Reduces database load by 95% and keeps sensitive data off your servers. Follow for more \"PRO TIPS\"",
@@ -79,18 +89,8 @@
       "reposts": "3",
       "likes": "11",
       "href": "/imjustinliao/status/2059754762338464250"
-    },
-    {
-      "id": "2059387198399815722",
-      "text": "just gave my agent a card @agentcardai https://agentcard.ai/?a=thomassuen6",
-      "datetime": "2026-05-26T21:32:24.000Z",
-      "time": "May 26",
-      "replies": "",
-      "reposts": "",
-      "likes": "3",
-      "href": "/ThomasSuen6/status/2059387198399815722"
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-06-19T12:03:08.232Z"
+  "scrapedAt": "2026-06-20T10:30:00.134Z"
 }
