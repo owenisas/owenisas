@@ -6,7 +6,7 @@
   "website": "",
   "joined": "Joined March 2026",
   "following": "47",
-  "followers": "20",
+  "followers": "18",
   "avatarUrl": "https://pbs.twimg.com/profile_images/2036569139293331456/5XE8c5bD_200x200.jpg",
   "bannerUrl": null,
   "tweets": [
@@ -16,8 +16,8 @@
       "datetime": "2026-06-19T16:00:02.000Z",
       "time": "Jun 19",
       "replies": "44",
-      "reposts": "55",
-      "likes": "449",
+      "reposts": "56",
+      "likes": "451",
       "href": "/ModelScope2022/status/2068000866364481872"
     },
     {
@@ -92,5 +92,5 @@
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-06-21T11:13:40.075Z"
+  "scrapedAt": "2026-06-22T13:32:08.665Z"
 }
