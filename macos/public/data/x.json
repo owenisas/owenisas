@@ -5,19 +5,29 @@
   "location": "Washington",
   "website": "",
   "joined": "Joined March 2026",
-  "following": "47",
-  "followers": "18",
+  "following": "48",
+  "followers": "19",
   "avatarUrl": "https://pbs.twimg.com/profile_images/2036569139293331456/5XE8c5bD_200x200.jpg",
   "bannerUrl": null,
   "tweets": [
+    {
+      "id": "2069445270593732630",
+      "text": "while Discord is still “testing,” we already introduced the first spatial voice channels in the world. you can hang out with up to 9 friends, play YouTube videos on a screen, meditate together, and adjust room size to feel different kind of spatial environment. beta link in",
+      "datetime": "2026-06-23T15:39:35.000Z",
+      "time": "19h",
+      "replies": "4",
+      "reposts": "2",
+      "likes": "5",
+      "href": "/imjustinliao/status/2069445270593732630"
+    },
     {
       "id": "2068000866364481872",
       "text": "Build with GLM-5.2 and DeepSeek-V4-Pro for FREE! We're giving developers 8 hours of FREE API inference on ModelScope. GLM-5.2: https://modelscope.ai/models/zai-org/GLM-5.2… DeepSeek-V4-Pro: https://modelscope.ai/models/deepseek-ai/DeepSeek-V4-Pro…",
       "datetime": "2026-06-19T16:00:02.000Z",
       "time": "Jun 19",
-      "replies": "46",
-      "reposts": "56",
-      "likes": "454",
+      "replies": "47",
+      "reposts": "57",
+      "likes": "455",
       "href": "/ModelScope2022/status/2068000866364481872"
     },
     {
@@ -36,7 +46,7 @@
       "datetime": "2026-06-10T03:40:56.000Z",
       "time": "Jun 10",
       "replies": "11",
-      "reposts": "7",
+      "reposts": "8",
       "likes": "",
       "href": "/imjustinliao/status/2064553372120993872"
     },
@@ -77,20 +87,10 @@
       "time": "May 27",
       "replies": "51",
       "reposts": "26",
-      "likes": "459",
+      "likes": "458",
       "href": "/sathuashrith/status/2059613547165012106"
-    },
-    {
-      "id": "2059754762338464250",
-      "text": "dear founders, when is the last time you slow down to reflect? all those great memories have passed while you're still chasing to raise series B. is it for a mission, money, fame, or ideology? or maybe you're just lost chasing other people's dogmas. what if there's a way to",
-      "datetime": "2026-05-27T21:52:58.000Z",
-      "time": "May 27",
-      "replies": "",
-      "reposts": "3",
-      "likes": "11",
-      "href": "/imjustinliao/status/2059754762338464250"
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-06-23T10:59:20.420Z"
+  "scrapedAt": "2026-06-24T10:45:19.870Z"
 }
