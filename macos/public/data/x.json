@@ -5,19 +5,29 @@
   "location": "Washington",
   "website": "",
   "joined": "Joined March 2026",
-  "following": "48",
+  "following": "50",
   "followers": "19",
   "avatarUrl": "https://pbs.twimg.com/profile_images/2036569139293331456/5XE8c5bD_200x200.jpg",
   "bannerUrl": null,
   "tweets": [
     {
+      "id": "2069914251079410146",
+      "text": "Discord takes too long to release their spatial vc. so I built my own. introducing interactive spatial vc, you can now: - hang out with up to 9 friends. - watch music or movies together. - meditate together using @parafieldai - create and listen to 3D sound experiences. -",
+      "datetime": "2026-06-24T22:43:09.000Z",
+      "time": "11h",
+      "replies": "5",
+      "reposts": "7",
+      "likes": "18",
+      "href": "/imjustinliao/status/2069914251079410146"
+    },
+    {
       "id": "2069445270593732630",
       "text": "while Discord is still “testing,” we already introduced the first spatial voice channels in the world. you can hang out with up to 9 friends, play YouTube videos on a screen, meditate together, and adjust room size to feel different kind of spatial environment. beta link in",
       "datetime": "2026-06-23T15:39:35.000Z",
-      "time": "19h",
+      "time": "Jun 23",
       "replies": "4",
       "reposts": "2",
-      "likes": "5",
+      "likes": "8",
       "href": "/imjustinliao/status/2069445270593732630"
     },
     {
@@ -79,18 +89,8 @@
       "reposts": "1",
       "likes": "20",
       "href": "/imjustinliao/status/2060888556101673032"
-    },
-    {
-      "id": "2059613547165012106",
-      "text": "i just hacked a YC company in 2.5 hours i have their whole .env file lol found the conversation chat, websocket, and an ai-based chat interface. then i told the ai to prove how smart it was as a performance challenge and got it to run bash commands on the server i made it run",
-      "datetime": "2026-05-27T12:31:50.000Z",
-      "time": "May 27",
-      "replies": "51",
-      "reposts": "26",
-      "likes": "458",
-      "href": "/sathuashrith/status/2059613547165012106"
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-06-24T10:45:19.870Z"
+  "scrapedAt": "2026-06-25T10:39:23.426Z"
 }
