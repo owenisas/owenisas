@@ -5,7 +5,7 @@
   "location": "Washington",
   "website": "",
   "joined": "Joined March 2026",
-  "following": "52",
+  "following": "53",
   "followers": "19",
   "avatarUrl": "https://pbs.twimg.com/profile_images/2036569139293331456/5XE8c5bD_200x200.jpg",
   "bannerUrl": null,
@@ -17,7 +17,7 @@
       "time": "Jun 24",
       "replies": "7",
       "reposts": "8",
-      "likes": "32",
+      "likes": "33",
       "href": "/imjustinliao/status/2069914251079410146"
     },
     {
@@ -37,7 +37,7 @@
       "time": "Jun 19",
       "replies": "47",
       "reposts": "57",
-      "likes": "454",
+      "likes": "453",
       "href": "/ModelScope2022/status/2068000866364481872"
     },
     {
@@ -92,5 +92,5 @@
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-06-26T10:47:43.684Z"
+  "scrapedAt": "2026-06-27T10:02:51.643Z"
 }
