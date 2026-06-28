@@ -11,6 +11,16 @@
   "bannerUrl": null,
   "tweets": [
     {
+      "id": "2070912277319160033",
+      "text": "every startup launch video should study the first famous cartoon from Disney, Steamboat Willie (1928). this is the first cartoon with fully synchronized sound (music, dialogue, and sound effects), setting a new standard for how cartoons are made today. what makes it feel alive:",
+      "datetime": "2026-06-27T16:48:57.000Z",
+      "time": "17h",
+      "replies": "1",
+      "reposts": "2",
+      "likes": "8",
+      "href": "/imjustinliao/status/2070912277319160033"
+    },
+    {
       "id": "2069914251079410146",
       "text": "Discord takes too long to release their spatial vc. so I built my own. introducing interactive spatial vc, you can now: - hang out with up to 9 friends. - watch music or movies together. - meditate together using @parafieldai - create and listen to 3D sound experiences. -",
       "datetime": "2026-06-24T22:43:09.000Z",
@@ -69,28 +79,8 @@
       "reposts": "9",
       "likes": "",
       "href": "/imjustinliao/status/2064181235266843063"
-    },
-    {
-      "id": "2061300754053472332",
-      "text": "Nvida Vera, The CPU for Agents. NEW Era is coming.",
-      "datetime": "2026-06-01T04:16:11.000Z",
-      "time": "Jun 1",
-      "replies": "",
-      "reposts": "",
-      "likes": "2",
-      "href": "/ThomasSuen6/status/2061300754053472332"
-    },
-    {
-      "id": "2060888556101673032",
-      "text": "honest take on @fdotinc Canopy: it's worth it, whether it's online or IRL! FYI, I applied and got accepted to Canopy online due to requirements for F1 visa. for early-stage founders, the program is like igniting the spark in you to get you out building, launching, and talking",
-      "datetime": "2026-05-31T00:58:15.000Z",
-      "time": "May 31",
-      "replies": "3",
-      "reposts": "1",
-      "likes": "20",
-      "href": "/imjustinliao/status/2060888556101673032"
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-06-27T10:02:51.643Z"
+  "scrapedAt": "2026-06-28T10:24:53.392Z"
 }
