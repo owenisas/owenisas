@@ -5,8 +5,8 @@
   "location": "Washington",
   "website": "",
   "joined": "Joined March 2026",
-  "following": "54",
-  "followers": "19",
+  "following": "56",
+  "followers": "20",
   "avatarUrl": "https://pbs.twimg.com/profile_images/2036569139293331456/5XE8c5bD_200x200.jpg",
   "bannerUrl": null,
   "tweets": [
@@ -47,7 +47,7 @@
       "time": "Jun 19",
       "replies": "47",
       "reposts": "57",
-      "likes": "454",
+      "likes": "453",
       "href": "/ModelScope2022/status/2068000866364481872"
     },
     {
@@ -82,5 +82,5 @@
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-07-02T10:33:59.462Z"
+  "scrapedAt": "2026-07-03T10:31:52.823Z"
 }
