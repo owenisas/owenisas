@@ -5,7 +5,7 @@
   "location": "Washington",
   "website": "",
   "joined": "Joined March 2026",
-  "following": "56",
+  "following": "57",
   "followers": "20",
   "avatarUrl": "https://pbs.twimg.com/profile_images/2036569139293331456/5XE8c5bD_200x200.jpg",
   "bannerUrl": null,
@@ -27,7 +27,7 @@
       "time": "Jun 24",
       "replies": "8",
       "reposts": "8",
-      "likes": "34",
+      "likes": "35",
       "href": "/imjustinliao/status/2069914251079410146"
     },
     {
@@ -47,7 +47,7 @@
       "time": "Jun 19",
       "replies": "46",
       "reposts": "57",
-      "likes": "452",
+      "likes": "451",
       "href": "/ModelScope2022/status/2068000866364481872"
     },
     {
@@ -79,8 +79,28 @@
       "reposts": "9",
       "likes": "",
       "href": "/imjustinliao/status/2064181235266843063"
+    },
+    {
+      "id": "2061300754053472332",
+      "text": "Nvida Vera, The CPU for Agents. NEW Era is coming.",
+      "datetime": "2026-06-01T04:16:11.000Z",
+      "time": "Jun 1",
+      "replies": "",
+      "reposts": "",
+      "likes": "2",
+      "href": "/ThomasSuen6/status/2061300754053472332"
+    },
+    {
+      "id": "2060888556101673032",
+      "text": "honest take on @fdotinc Canopy: it's worth it, whether it's online or IRL! FYI, I applied and got accepted to Canopy online due to requirements for F1 visa. for early-stage founders, the program is like igniting the spark in you to get you out building, launching, and talking",
+      "datetime": "2026-05-31T00:58:15.000Z",
+      "time": "May 31",
+      "replies": "3",
+      "reposts": "1",
+      "likes": "20",
+      "href": "/imjustinliao/status/2060888556101673032"
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-07-05T10:08:16.181Z"
+  "scrapedAt": "2026-07-06T12:00:29.513Z"
 }
