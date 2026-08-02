@@ -73,6 +73,16 @@ AI/ML engineer and full-stack developer. CS student who fine-tunes LLMs, builds 
 | **[owenisas.com](https://www.owenisas.com)** | Personal portfolio as an interactive macOS desktop simulator — 3D desk showroom, working apps, deep linking. | `React` `Three.js` `Vite` |
 | **[Amadeus](https://github.com/owenisas/Amadeus)** | Open-source mobile AI assistant framework. Foundation for 2.0. | `Python` `Swift` |
 
+<div align="center">
+
+<a href="https://www.owenisas.com">
+  <img src="https://raw.githubusercontent.com/owenisas/owenisas/main/screenshots/showroom.jpg" width="90%" alt="owenisas.com — 3D desk showroom landing view" />
+</a>
+
+<br/><sub>Live at <a href="https://www.owenisas.com">owenisas.com</a> — boots into a 3D desk showroom, then zooms into a fully interactive macOS desktop</sub>
+
+</div>
+
 ### HuggingFace Highlights
 
 | Type | Notable | Stats |
