@@ -4,6 +4,7 @@ import { appIcons } from './Icons';
 const implementedApps = new Set([
   'finder', 'safari', 'messages', 'mail', 'photos', 'calendar', 'notes',
   'weather', 'calculator', 'terminal', 'textedit', 'preview', 'settings',
+  'anime', 'music', 'activity', 'codeeditor',
 ]);
 
 const appCatalog = [
@@ -40,6 +41,9 @@ const appCatalog = [
   { id: 'home', title: 'Home' },
   { id: 'findmy', title: 'Find My' },
   { id: 'siri', title: 'Siri' },
+  { id: 'anime', title: 'Anime Tracker' },
+  { id: 'activity', title: 'GitHub Activity' },
+  { id: 'codeeditor', title: 'Code' },
   { id: 'settings', title: 'Settings' },
   { id: 'activitymonitor', title: 'Activity Monitor' },
   { id: 'diskutility', title: 'Disk Utility' },

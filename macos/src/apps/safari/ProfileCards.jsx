@@ -11,7 +11,7 @@ const FALLBACK_LINKEDIN = {
   scrapedAt: null,
   name: 'Thomas Suen',
   headline: 'CS Student · Autonomous Systems · AI/ML · Full-Stack',
-  location: 'Bothell, Washington, United States',
+  location: 'Vancouver, BC, Canada',
   connectionCount: '500+ connections',
   avatarUrl: null,
   about:
@@ -33,7 +33,7 @@ const FALLBACK_X = {
   name: 'Thomas Suen',
   handle: '@ThomasSuen6',
   bio: 'Autonomous systems, multi-agent AI, DePIN. Building at Reunify Labs. Photographer by weekend.',
-  location: 'Bothell, WA',
+  location: 'Vancouver, BC',
   website: 'owenisas.com',
   joined: 'Joined March 2019',
   following: '412',
@@ -171,11 +171,8 @@ export function LinkedInProfile() {
                 Open on LinkedIn
                 <SFSymbol name="arrow.up.right" size={13} color="#fff" />
               </button>
-              <button className="px-4 h-[32px] rounded-full text-[14px] font-semibold border-[1.5px]" style={{ borderColor: linkedInBlue, color: linkedInBlue }}>
+              <button className="px-4 h-[32px] rounded-full text-[14px] font-semibold border-[1.5px]" style={{ borderColor: linkedInBlue, color: linkedInBlue }} onClick={() => window.open('mailto:reunifylabs@gmail.com?subject=Hello%20Thomas', '_blank')}>
                 Message
-              </button>
-              <button className="px-4 h-[32px] rounded-full text-[14px] font-semibold border-[1.5px] border-black/60 text-black/85">
-                More
               </button>
             </div>
           </div>
@@ -303,12 +300,6 @@ export function XProfile() {
             <Avatar size={134} ring="#000" src={profile.avatarUrl} />
           </div>
           <div className="flex items-center gap-2 mt-3">
-            <button className="w-[34px] h-[34px] rounded-full border border-[#2f3336] flex items-center justify-center">
-              <SFSymbol name="ellipsis" size={14} color="#e7e9ea" />
-            </button>
-            <button className="w-[34px] h-[34px] rounded-full border border-[#2f3336] flex items-center justify-center">
-              <SFSymbol name="bell" size={14} color="#e7e9ea" />
-            </button>
             <button
               onClick={() => window.open(profile.url, '_blank', 'noopener,noreferrer')}
               className="px-4 h-[34px] rounded-full bg-white text-black text-[14px] font-bold inline-flex items-center gap-1.5"

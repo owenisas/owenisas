@@ -109,7 +109,7 @@ export default function Settings() {
           <div className="absolute bottom-[2px] left-1/2 -translate-x-1/2 w-[20px] h-[4px] bg-[#8a8a8a] rounded-full" />
         </div>
         <h2 className="text-[28px] font-bold text-black">MacBook Pro</h2>
-        <p className="text-[13px] text-[#86868B] mt-1">14-inch, 2023</p>
+        <p className="text-[13px] text-[#86868B] mt-1">16-inch, 2024</p>
       </div>
 
       <MacSettingsGroup>
@@ -117,10 +117,10 @@ export default function Settings() {
           <span className="text-[14px] text-black/80">User's MacBook Pro</span>
         </MacSettingsRow>
         <MacSettingsRow label="Chip" noBorder={false}>
-          <span className="text-[14px] text-black/80">Apple M3 Pro</span>
+          <span className="text-[14px] text-black/80">Apple M3</span>
         </MacSettingsRow>
         <MacSettingsRow label="Memory" noBorder={false}>
-          <span className="text-[14px] text-black/80">18 GB</span>
+          <span className="text-[14px] text-black/80">36 GB</span>
         </MacSettingsRow>
         <MacSettingsRow label="Serial number" noBorder={false}>
           <span className="text-[14px] text-black/80">XXXX1234ABCD</span>
@@ -166,7 +166,7 @@ export default function Settings() {
           }
           noBorder
         >
-          <span className="text-[13px] text-black/60">14-inch (3024 × 1964)</span>
+          <span className="text-[13px] text-black/60">16-inch (3456 × 2234)</span>
         </MacSettingsRow>
       </MacSettingsGroup>
       </div>
@@ -596,14 +596,14 @@ export default function Settings() {
             <path d="M11.3 8.9c0-2.1 1.7-3.1 1.8-3.2-1-1.4-2.5-1.6-3-1.6-1.3-.1-2.5.7-3.1.7-.7 0-1.7-.7-2.8-.7C2.8 4.1 1.4 5 .6 6.4c-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7c1.2 0 2-1.1 2.8-2.3.9-1.3 1.2-2.5 1.3-2.6 0 0-2.5-1-2.5-3.2zM9 3.2C9.6 2.4 10 1.4 9.9.3 9 .3 7.9.9 7.3 1.7c-.6.7-1.1 1.7-1 2.7 1 .1 2-.5 2.7-1.2z" />
           </svg>
           <h2 className="text-black text-[20px] font-medium">macOS Tahoe</h2>
-          <span className="text-[#86868b] text-[13px]">Version 26.0</span>
+          <span className="text-[#86868b] text-[13px]">Version 16.0</span>
         </div>
         <MacSettingsGroup>
-          <MacSettingsRow label="Chip"><span className="text-[13px] text-black/70">Apple M3 Max</span></MacSettingsRow>
+          <MacSettingsRow label="Chip"><span className="text-[13px] text-black/70">Apple M3</span></MacSettingsRow>
           <MacSettingsRow label="Memory"><span className="text-[13px] text-black/70">36 GB</span></MacSettingsRow>
           <MacSettingsRow label="Startup Disk"><span className="text-[13px] text-black/70">Macintosh HD</span></MacSettingsRow>
           <MacSettingsRow label="Serial Number"><span className="text-[13px] text-black/70">FVFXXXXXXXXX</span></MacSettingsRow>
-          <MacSettingsRow label="macOS" noBorder><span className="text-[13px] text-black/70">Tahoe 26.0 (26A000)</span></MacSettingsRow>
+          <MacSettingsRow label="macOS" noBorder><span className="text-[13px] text-black/70">Tahoe 16.0 (16A000)</span></MacSettingsRow>
         </MacSettingsGroup>
       </>
     ),

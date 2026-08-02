@@ -124,6 +124,7 @@ export const root = dir('~', [
   dir('Documents', [
     file('Resume.md', 'md', { contentUrl: '/content/resume.md', size: 4096 }),
     file('About.md', 'md', { contentUrl: '/content/about.md', size: 2048 }),
+    file('Welcome.md', 'md', { contentUrl: '/content/about.md', size: 2048 }),
     dir('Projects', [
       file('owenisas-site.md', 'md', { contentUrl: '/content/projects/owenisas-site.md', size: 3000 }),
       file('blender-showreel.md', 'md', { contentUrl: '/content/projects/blender-showreel.md', size: 2500 }),

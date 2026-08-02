@@ -18,22 +18,22 @@ export default function AboutThisMac({ onAppLaunch }) {
       >
         MacBook Pro
       </h1>
-      <p className="text-[13px] text-[#86868B] mt-0.5">14-inch, 2025</p>
+      <p className="text-[13px] text-[#86868B] mt-0.5">16-inch, 2024</p>
 
       {/* Specs Table */}
       <table className="mt-5 text-[13px] border-separate" style={{ borderSpacing: '12px 2px' }}>
         <tbody>
           <tr>
             <td className="text-[#86868B] text-right">Chip</td>
-            <td className="text-black">Apple M4 Max</td>
+            <td className="text-black">Apple M3</td>
           </tr>
           <tr>
             <td className="text-[#86868B] text-right">Memory</td>
-            <td className="text-black">128 GB</td>
+            <td className="text-black">36 GB</td>
           </tr>
           <tr>
             <td className="text-[#86868B] text-right">macOS</td>
-            <td className="text-black">Tahoe 26.0</td>
+            <td className="text-black">Tahoe 16.0</td>
           </tr>
         </tbody>
       </table>

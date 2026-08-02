@@ -24,6 +24,10 @@ import Preview from './apps/Preview';
 import Weather from './apps/Weather';
 import Calendar from './apps/Calendar';
 import AboutThisMac from './apps/AboutThisMac';
+import AnimeTracker from './apps/AnimeTracker';
+import Music from './apps/Music';
+import ActivityGraph from './apps/ActivityGraph';
+import CodeEditor from './apps/CodeEditor';
 import { wallpaperPresets } from './data/wallpaperPresets';
 import { parseDeepLinkIntent, buildDeepLinkParams, APP_DEFAULT_TITLES } from './lib/deepLink';
 import {
@@ -48,6 +52,10 @@ const appComponents = {
   weather: Weather,
   calendar: Calendar,
   aboutthismac: AboutThisMac,
+  anime: AnimeTracker,
+  music: Music,
+  activity: ActivityGraph,
+  codeeditor: CodeEditor,
 };
 
 

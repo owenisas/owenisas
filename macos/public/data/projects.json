@@ -1,0 +1,76 @@
+[
+  {
+    "id": "macos-sim",
+    "title": "macOS Web Simulator",
+    "subtitle": "This website",
+    "repo": "owenisas/owenisas",
+    "url": "https://github.com/owenisas/owenisas",
+    "demo": "https://www.owenisas.com",
+    "description": "A full macOS desktop simulator running in the browser \u2014 3D showroom, windowing system, Spotlight, virtual filesystem, Terminal with a real shell, Safari with proxy browsing, live weather, and more. Built with React 19, Three.js, and Tailwind.",
+    "tech": [
+      "React 19",
+      "Three.js",
+      "Tailwind CSS 4",
+      "Vite",
+      "WebGL"
+    ],
+    "stars": 0,
+    "language": "JavaScript",
+    "color": "#61dafb",
+    "featured": true,
+    "snippet": {
+      "file": "src/components/DeskShowroom.jsx",
+      "lang": "jsx",
+      "code": "const presetA = new THREE.Group();\nconst divergenceMeter = new THREE.Group();\n// Each digit is a Nixie tube \u2014 glowing orange filaments\n// that render in a vacuum-sealed glass tube\ndigits.forEach((digit, i) => {\n  const tube = buildNixieTube(digit);\n  tube.position.x = i * 0.42;\n  divergenceMeter.add(tube);\n});"
+    }
+  },
+  {
+    "id": "vellum",
+    "title": "Vellum",
+    "subtitle": "Invisible watermarking for IP protection",
+    "repo": "owenisas/vellum",
+    "url": "https://github.com/owenisas/vellum",
+    "demo": null,
+    "description": "Invisible watermarking system that embeds 64-bit payloads (56-bit metadata + 8-bit CRC8) into text at safe token boundaries. Browser extension (MV3 content script) and registry that anchors Merkle batches to Solana.",
+    "tech": [
+      "TypeScript",
+      "Solana",
+      "Browser Extension",
+      "Merkle Trees",
+      "CRC8"
+    ],
+    "stars": 0,
+    "language": "TypeScript",
+    "color": "#3178c6",
+    "featured": true,
+    "snippet": {
+      "file": "src/watermark.ts",
+      "lang": "typescript",
+      "code": "// 64-bit payload: 56 bits metadata + 8 bits CRC8\n// Insert at safe boundaries (~160-token intervals)\nconst payload = encodePayload(metadata); // 64 bits\nconst checksum = crc8(payload);          // 8 bits\nconst watermark = payload.concat(checksum);"
+    }
+  },
+  {
+    "id": "origraph",
+    "title": "Origraph",
+    "subtitle": "Invisible watermarking registry on Solana",
+    "repo": "owenisas/Origraph",
+    "url": "https://github.com/owenisas/Origraph",
+    "demo": null,
+    "description": "A registry that anchors Merkle batches of invisible watermarks to the Solana blockchain, providing tamper-proof provenance for IP claims. Split license: Apache-2.0 for the library, AGPL-3.0 for the registry demo.",
+    "tech": [
+      "Rust",
+      "Solana",
+      "Merkle Trees",
+      "Web3"
+    ],
+    "stars": 0,
+    "language": "Rust",
+    "color": "#dea584",
+    "featured": true,
+    "snippet": {
+      "file": "src/registry.rs",
+      "lang": "rust",
+      "code": "// Anchor Merkle batches to Solana for\n// tamper-proof provenance claims.\n#[program]\npub fn anchor_batch(ctx: Context<AnchorBatch>, root: [u8; 32], count: u64) -> Result<()> {\n    let batch = &mut ctx.accounts.batch;\n    batch.root = root;\n    batch.count = count;\n    batch.timestamp = Clock::get()?.unix_timestamp;\n    Ok(())\n}"
+    }
+  }
+]

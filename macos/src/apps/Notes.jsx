@@ -12,9 +12,9 @@ function loadNotes() {
     void error;
   }
   return [
-    { id: '1', title: 'Welcome to Notes', content: 'This is your first note. Start typing to edit it.\n\nYou can create new notes, search through them, and organize your thoughts.', folder: 'notes', updated: Date.now() },
-    { id: '2', title: 'Shopping List', content: '- Milk\n- Eggs\n- Bread\n- Coffee\n- Avocados', folder: 'notes', updated: Date.now() - 3600000 },
-    { id: '3', title: 'Project Ideas', content: '1. macOS web simulator\n2. Portfolio website\n3. 3D desk showroom\n4. CLI tool for automation', folder: 'notes', updated: Date.now() - 86400000 },
+    { id: '1', title: 'Ship Log', content: "## Shipped\n- owenisas.com — macOS web simulator portfolio\n- Vellum — watermarking + steganography for IP protection\n- Origraph — invisible watermarking registry on Solana\n\n## In Progress\n- Umbra — private-prompt inference on Apple Silicon\n- Marketplace acquisition automation\n\n## Backlog\n- 3D desk showroom v2 (real-time lighting)\n- WebGPU compute experiments", folder: 'notes', updated: Date.now() },
+    { id: '2', title: 'Reading', content: "## Currently Reading\n- The Pragmatic Programmer\n- Designing Data-Intensive Applications\n\n## Recent\n- 'Agents that actually do work' — my own post, funny enough\n- Multi-agent coordination papers from DeepMind\n\n## Queue\n- The Three-Body Problem (Liu Cixin)\n- The Beginning of Infinity (Deutsch)", folder: 'notes', updated: Date.now() - 3600000 },
+    { id: '3', title: 'Ideas', content: "## App Ideas\n- Real-time collaborative whiteboard with WebGPU\n- CLI tool for LLM output diffing\n- Browser-based DAW with Web Audio API\n\n## Portfolio Ideas\n- Anime tracker integration (referendum)\n- Live GitHub contribution graph overlay\n- Interactive project demos linked from Finder", folder: 'notes', updated: Date.now() - 86400000 },
   ];
 }
 

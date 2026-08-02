@@ -1,0 +1,38 @@
+[
+  {
+    "id": "lofi",
+    "title": "Lo-fi Beats",
+    "subtitle": "Coding sessions",
+    "art": "linear-gradient(135deg, #2d1b4e 0%, #1a1a2e 100%)",
+    "tracks": 42,
+    "url": "https://open.spotify.com/search/lofi%20beats",
+    "color": "#9d50bb"
+  },
+  {
+    "id": "dnb",
+    "title": "Drum & Bass",
+    "subtitle": "Late nights",
+    "art": "linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%)",
+    "tracks": 28,
+    "url": "https://open.spotify.com/search/drum%20and%20bass",
+    "color": "#00d9ff"
+  },
+  {
+    "id": "interstellar",
+    "title": "Interstellar OST",
+    "subtitle": "Hans Zimmer",
+    "art": "linear-gradient(135deg, #1a1a2e 0%, #0a0a1a 40%, #2d2d5e 100%)",
+    "tracks": 16,
+    "url": "https://open.spotify.com/search/interstellar%20soundtrack",
+    "color": "#c0c0c0"
+  },
+  {
+    "id": "anime",
+    "title": "Anime Openings",
+    "subtitle": "Hype tracks",
+    "art": "linear-gradient(135deg, #ff6b35 0%, #ff0000 100%)",
+    "tracks": 35,
+    "url": "https://open.spotify.com/search/anime%20openings",
+    "color": "#ff6b35"
+  }
+]

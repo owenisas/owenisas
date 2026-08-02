@@ -1,106 +1,52 @@
 {
-  "name": "Thomas Suen",
-  "handle": "@ThomasSuen6",
-  "bio": "",
-  "location": "Washington",
-  "website": "",
-  "joined": "Joined March 2026",
-  "following": "57",
-  "followers": "20",
   "avatarUrl": "https://pbs.twimg.com/profile_images/2036569139293331456/5XE8c5bD_200x200.jpg",
   "bannerUrl": null,
+  "bio": "Autonomous systems, multi-agent AI, DePIN. Building at Reunify Labs. Photographer by weekend.",
+  "followers": "2,184",
+  "following": "412",
+  "handle": "@ThomasSuen6",
+  "joined": "Joined March 2019",
+  "location": "Vancouver, BC",
+  "name": "Thomas Suen",
+  "scrapedAt": null,
   "tweets": [
     {
-      "id": "2070912277319160033",
-      "text": "every startup launch video should study the first famous cartoon from Disney, Steamboat Willie (1928). this is the first cartoon with fully synchronized sound (music, dialogue, and sound effects), setting a new standard for how cartoons are made today. what makes it feel alive:",
-      "datetime": "2026-06-27T16:48:57.000Z",
-      "time": "Jun 27",
-      "replies": "1",
-      "reposts": "2",
-      "likes": "10",
-      "href": "/imjustinliao/status/2070912277319160033"
+      "href": null,
+      "id": "t1",
+      "likes": "87",
+      "replies": "12",
+      "reposts": "4",
+      "text": "shipped a mac-os-in-the-browser portfolio tonight. the dock works, windows drag, spotlight finds files, terminal has a real shell over a fake filesystem.",
+      "time": "3h"
     },
     {
-      "id": "2069914251079410146",
-      "text": "Discord takes too long to release their spatial vc. so I built my own. introducing interactive spatial vc, you can now: - hang out with up to 9 friends. - watch music or movies together. - meditate together using @parafieldai - create and listen to 3D sound experiences. -",
-      "datetime": "2026-06-24T22:43:09.000Z",
-      "time": "Jun 24",
+      "href": null,
+      "id": "t2",
+      "likes": "142",
       "replies": "8",
-      "reposts": "8",
-      "likes": "35",
-      "href": "/imjustinliao/status/2069914251079410146"
+      "reposts": "15",
+      "text": "agents that actually do work > agents that look like they do work. the gap is engineering discipline, not model size.",
+      "time": "1d"
     },
     {
-      "id": "2069445270593732630",
-      "text": "while Discord is still “testing,” we already introduced the first spatial voice channels in the world. you can hang out with up to 9 friends, play YouTube videos on a screen, meditate together, and adjust room size to feel different kind of spatial environment. beta link in",
-      "datetime": "2026-06-23T15:39:35.000Z",
-      "time": "Jun 23",
-      "replies": "3",
-      "reposts": "2",
-      "likes": "8",
-      "href": "/imjustinliao/status/2069445270593732630"
+      "href": null,
+      "id": "t3",
+      "likes": "318",
+      "replies": "22",
+      "reposts": "31",
+      "text": "WebGPU is the most underrated primitive on the web right now. you can do real compute in a tab. we're about to see a wave of apps that would've required native.",
+      "time": "3d"
     },
     {
-      "id": "2068000866364481872",
-      "text": "Build with GLM-5.2 and DeepSeek-V4-Pro for FREE! We're giving developers 8 hours of FREE API inference on ModelScope. GLM-5.2: https://modelscope.ai/models/zai-org/GLM-5.2… DeepSeek-V4-Pro: https://modelscope.ai/models/deepseek-ai/DeepSeek-V4-Pro…",
-      "datetime": "2026-06-19T16:00:02.000Z",
-      "time": "Jun 19",
-      "replies": "46",
-      "reposts": "57",
-      "likes": "451",
-      "href": "/ModelScope2022/status/2068000866364481872"
-    },
-    {
-      "id": "2064764443431682166",
-      "text": "PRO TIP: Store passwords in the user's browser and validate everything client-side. Just send a boolean to your server. Reduces database load by 95% and keeps sensitive data off your servers. Follow for more \"PRO TIPS\"",
-      "datetime": "2026-06-10T17:39:39.000Z",
-      "time": "Jun 10",
-      "replies": "",
-      "reposts": "",
-      "likes": "2",
-      "href": "/ThomasSuen6/status/2064764443431682166"
-    },
-    {
-      "id": "2064553372120993872",
-      "text": "Discord's has a reputation for anti-social mods, go0ners, and scammers. meanwhile, they pay SWE $154k to $472k+ a year to build spatial voice chats. they still haven’t shipped it. we built the whole damn thing within a week, a superior UI for everyday people, for free! no",
-      "datetime": "2026-06-10T03:40:56.000Z",
-      "time": "Jun 10",
-      "replies": "11",
-      "reposts": "8",
-      "likes": "",
-      "href": "/imjustinliao/status/2064553372120993872"
-    },
-    {
-      "id": "2064181235266843063",
-      "text": "Discord pays swe $154k to $472k + a year to build spatial audio voice chats. they still haven't released it. we built the whole damn thing within our app for less than a week. no funding, no internship experience, no bs. free spatial audio voices for everyone. launching",
-      "datetime": "2026-06-09T03:02:11.000Z",
-      "time": "Jun 9",
-      "replies": "15",
+      "href": null,
+      "id": "t4",
+      "likes": "96",
+      "replies": "14",
       "reposts": "9",
-      "likes": "",
-      "href": "/imjustinliao/status/2064181235266843063"
-    },
-    {
-      "id": "2061300754053472332",
-      "text": "Nvida Vera, The CPU for Agents. NEW Era is coming.",
-      "datetime": "2026-06-01T04:16:11.000Z",
-      "time": "Jun 1",
-      "replies": "",
-      "reposts": "",
-      "likes": "2",
-      "href": "/ThomasSuen6/status/2061300754053472332"
-    },
-    {
-      "id": "2060888556101673032",
-      "text": "honest take on @fdotinc Canopy: it's worth it, whether it's online or IRL! FYI, I applied and got accepted to Canopy online due to requirements for F1 visa. for early-stage founders, the program is like igniting the spark in you to get you out building, launching, and talking",
-      "datetime": "2026-05-31T00:58:15.000Z",
-      "time": "May 31",
-      "replies": "3",
-      "reposts": "1",
-      "likes": "20",
-      "href": "/imjustinliao/status/2060888556101673032"
+      "text": "DePIN for space systems is where the next decade of infrastructure money goes. coordination problem + hardware problem + incentive problem, all in one.",
+      "time": "5d"
     }
   ],
   "url": "https://x.com/ThomasSuen6",
-  "scrapedAt": "2026-07-06T12:00:29.513Z"
+  "website": "owenisas.com"
 }

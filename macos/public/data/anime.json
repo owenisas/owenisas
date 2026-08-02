@@ -1,0 +1,195 @@
+[
+  {
+    "id": "steinsgate",
+    "title": "Steins;Gate",
+    "type": "series",
+    "year": 2011,
+    "status": "completed",
+    "rating": 10,
+    "episodes": 24,
+    "studio": "White Fox",
+    "favorite": true,
+    "accent": "#00d9ff",
+    "cover": "linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)",
+    "synopsis": "A self-proclaimed mad scientist discovers time travel via microwave, unraveling a conspiracy spanning timelines. The divergence meter ticks between worldlines as Okabe Rintaro fights to save what matters.",
+    "characters": [
+      "Okabe Rintaro",
+      "Kurisu Makise",
+      "Mayuri Shiina",
+      "Suzuha Amane"
+    ],
+    "tags": [
+      "Time Travel",
+      "Sci-Fi",
+      "Thriller",
+      "Drama",
+      "Psychological"
+    ],
+    "notes": "All-time favorite. The Divergence Meter in the showroom is a Steins;Gate reference. El Psy Kongroo."
+  },
+  {
+    "id": "codegeass",
+    "title": "Code Geass",
+    "type": "series",
+    "year": 2006,
+    "status": "completed",
+    "rating": 10,
+    "episodes": 50,
+    "studio": "Sunrise",
+    "favorite": true,
+    "accent": "#ff6b35",
+    "cover": "linear-gradient(135deg, #2d0a0a 0%, #4a0d0d 40%, #8b0000 100%)",
+    "synopsis": "Lelouch vi Britannia gains the power of absolute obedience and wages a one-man war against the empire that destroyed his family. Chess, mecha, and the question of whether the ends justify the means.",
+    "characters": [
+      "Lelouch Lamperouge",
+      "C.C.",
+      "Suzaku Kururugi",
+      "Kallen Stadtfeld"
+    ],
+    "tags": [
+      "Mecha",
+      "Strategy",
+      "Rebellion",
+      "Politics",
+      "Mind Games"
+    ],
+    "notes": "Lelouch is the best anti-hero in anime. The finale is perfect."
+  },
+  {
+    "id": "deathnote",
+    "title": "Death Note",
+    "type": "series",
+    "year": 2006,
+    "status": "completed",
+    "rating": 9,
+    "episodes": 37,
+    "studio": "Madhouse",
+    "favorite": true,
+    "accent": "#ff0000",
+    "cover": "linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 40%, #2d2d2d 100%)",
+    "synopsis": "Light Yagami finds a notebook that kills anyone whose name is written in it. A god complex, a genius detective, and a cat-and-mouse game that redefined the psychological thriller genre.",
+    "characters": [
+      "Light Yagami",
+      "L",
+      "Ryuk",
+      "Misa Amane"
+    ],
+    "tags": [
+      "Psychological",
+      "Thriller",
+      "Supernatural",
+      "Crime",
+      "Mind Games"
+    ],
+    "notes": "The first half is unbeatable. L vs Light is iconic."
+  },
+  {
+    "id": "aot",
+    "title": "Attack on Titan",
+    "type": "series",
+    "year": 2013,
+    "status": "completed",
+    "rating": 10,
+    "episodes": 87,
+    "studio": "Wit Studio / MAPPA",
+    "favorite": true,
+    "accent": "#c0a060",
+    "cover": "linear-gradient(135deg, #3a2718 0%, #5a3a20 40%, #8b5a2b 100%)",
+    "synopsis": "Humanity fights for survival behind walls that protect them from man-eating Titans. A story about freedom, war, and the cycle of violence that escalates far beyond where it starts.",
+    "characters": [
+      "Eren Yeager",
+      "Levi Ackerman",
+      "Mikasa Ackerman",
+      "Armin Arlert"
+    ],
+    "tags": [
+      "Action",
+      "Drama",
+      "Fantasy",
+      "War",
+      "Mystery"
+    ],
+    "notes": "The story evolution across seasons is masterful. The reveal changes everything."
+  },
+  {
+    "id": "chaoshead",
+    "title": "Chaos;Head",
+    "type": "vn",
+    "year": 2008,
+    "status": "completed",
+    "rating": 7,
+    "episodes": 12,
+    "studio": "Silver Link",
+    "favorite": false,
+    "accent": "#b04de4",
+    "cover": "linear-gradient(135deg, #1a0a2e 0%, #2d1a4e 40%, #4a2d6e 100%)",
+    "synopsis": "A hikikomori gets caught in a series of murders linked to delusional powers. Part of the Science Adventure series alongside Steins;Gate, though the VN is much better than the anime.",
+    "characters": [
+      "Takumi Nishijou",
+      "Rimi Sakihata",
+      "Kozue Orihara"
+    ],
+    "tags": [
+      "Psychological",
+      "Mystery",
+      "Sci-Fi",
+      "Visual Novel"
+    ],
+    "notes": "The visual novel is the proper way to experience this. The Science Adventure universe is great."
+  },
+  {
+    "id": "steinsgate0",
+    "title": "Steins;Gate 0",
+    "type": "series",
+    "year": 2018,
+    "status": "completed",
+    "rating": 8,
+    "episodes": 23,
+    "studio": "White Fox",
+    "favorite": false,
+    "accent": "#5050ff",
+    "cover": "linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 40%, #2d2d5e 100%)",
+    "synopsis": "The beta worldline story \u2014 what happened to Okabe in the timeline where he gave up. A darker, more philosophical companion to the original that makes the ending of Steins;Gate possible.",
+    "characters": [
+      "Okabe Rintaro",
+      "Kurisu Makise",
+      "Maho Hiyajo",
+      "Amadeus"
+    ],
+    "tags": [
+      "Time Travel",
+      "Sci-Fi",
+      "Drama",
+      "AI",
+      "Psychological"
+    ],
+    "notes": "Makes the original ending more meaningful. Maho is a great character."
+  },
+  {
+    "id": "vinlandsaga",
+    "title": "Vinland Saga",
+    "type": "series",
+    "year": 2019,
+    "status": "completed",
+    "rating": 9,
+    "episodes": 48,
+    "studio": "Wit Studio / MAPPA",
+    "favorite": false,
+    "accent": "#daa520",
+    "cover": "linear-gradient(135deg, #2e2a1a 0%, #4e4a2d 40%, #8b8b5a 100%)",
+    "synopsis": "A young Viking named Thorfinn seeks revenge in a story that evolves into a profound meditation on violence, peace, and what it means to be a true warrior.",
+    "characters": [
+      "Thorfinn",
+      "Askeladd",
+      "Canute",
+      "Einar"
+    ],
+    "tags": [
+      "Action",
+      "Historical",
+      "Drama",
+      "Philosophy"
+    ],
+    "notes": "S2 transforms from revenge story to something much deeper."
+  }
+]

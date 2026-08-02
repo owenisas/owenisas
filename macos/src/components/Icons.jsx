@@ -89,6 +89,37 @@ export const appIcons = {
       </svg>
     </div>
   ),
+  anime: (
+    <div className="w-full h-full rounded-[22%] flex items-center justify-center relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)' }}>
+      <div className="absolute inset-0 flex items-center justify-center" style={{ fontSize: '55%', fontWeight: 800, color: '#00d9ff', textShadow: '0 0 12px rgba(0,217,255,0.6)' }}>ス</div>
+      <div className="absolute bottom-[8%] left-[12%] right-[12%] h-[3px] rounded-full" style={{ background: '#00d9ff', opacity: 0.4 }} />
+    </div>
+  ),
+  music: (
+    <div className="w-full h-full rounded-[22%] flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #fc3c44 0%, #fc5c5d 100%)' }}>
+      <svg viewBox="0 0 24 24" fill="white" className="w-[55%] h-[55%]">
+        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+      </svg>
+    </div>
+  ),
+  activity: (
+    <div className="w-full h-full rounded-[22%] flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #0d1117 0%, #161b22 100%)', border: '1px solid #30363d' }}>
+      <div className="grid grid-cols-3 gap-[1px] w-[50%] h-[50%]">
+        {[0,1,2,3,4,5].map(i => (
+          <div key={i} className="rounded-[1px]" style={{ background: ['#0e4429','#006d32','#26a641','#39d353','#006d32','#0e4429'][i] }} />
+        ))}
+      </div>
+    </div>
+  ),
+  codeeditor: (
+    <div className="w-full h-full rounded-[22%] flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #1e1e2e 0%, #181825 100%)' }}>
+      <svg viewBox="0 0 24 24" fill="none" stroke="#cba6f7" strokeWidth="2.5" className="w-[50%] h-[50%]">
+        <polyline points="8 9 4 12 8 15" />
+        <polyline points="16 9 20 12 16 15" />
+        <line x1="13" y1="7" x2="11" y2="17" />
+      </svg>
+    </div>
+  ),
 };
 
 // System file/device icons

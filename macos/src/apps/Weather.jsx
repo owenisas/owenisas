@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import SFSymbol from '../components/icons/SFSymbol';
 
 const locations = [
+  { id: 'vancouver', name: 'Vancouver', region: 'British Columbia', lat: 49.2827, lon: -123.1207, tz: 'America/Vancouver' },
   { id: 'seattle', name: 'Seattle', region: 'Washington', lat: 47.6062, lon: -122.3321, tz: 'America/Los_Angeles' },
-  { id: 'bothell', name: 'Bothell', region: 'Washington', lat: 47.7623, lon: -122.2054, tz: 'America/Los_Angeles' },
   { id: 'hongkong', name: 'Hong Kong', region: 'Hong Kong SAR', lat: 22.3193, lon: 114.1694, tz: 'Asia/Hong_Kong' },
 ];
 
