@@ -798,10 +798,15 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
     window.addEventListener('keydown', onKeyDown);
 
     // ── Load & animate ──
+    // Priority loading: essential scene (desk + macbook) first, then props stream in
+    const ESSENTIAL = ['Computer Desk', 'MacBook Pro M3'];
     (async () => {
       let loadedCount = 0;
+      const total = MODELS.length;
+      // Pass 1: essential models — reveal the scene as soon as these are ready
       for (let i = 0; i < MODELS.length; i++) {
         const cfg = MODELS[i];
+        if (!ESSENTIAL.includes(cfg.name)) continue;
         if (textEl) textEl.textContent = `Loading ${cfg.name}...`;
         try {
           const asset = await gltfLoader.loadAsync(cfg.path);
@@ -809,9 +814,23 @@ const DeskShowroom = forwardRef(function DeskShowroom({ onEnterScreen }, ref) {
           if (entry) { initAnimation(entry); entries.push(entry); }
         } catch (err) { console.error(`Failed to load ${cfg.name}:`, err); }
         loadedCount++;
-        if (fillEl) fillEl.style.width = Math.round((loadedCount / MODELS.length) * 100) + '%';
+        if (fillEl) fillEl.style.width = Math.round((loadedCount / total) * 100) + '%';
       }
+      // Reveal scene once the desk + laptop are in place
       if (overlayEl) { overlayEl.style.opacity = '0'; setTimeout(() => { overlayEl.style.display = 'none'; }, 900); }
+      // Pass 2: props stream in the background (keyboard, mouse, drone, divergence meter)
+      for (let i = 0; i < MODELS.length; i++) {
+        const cfg = MODELS[i];
+        if (ESSENTIAL.includes(cfg.name)) continue;
+        if (textEl && overlayEl && overlayEl.style.display !== 'none') textEl.textContent = `Loading ${cfg.name}...`;
+        try {
+          const asset = await gltfLoader.loadAsync(cfg.path);
+          const entry = loadModel(asset, cfg);
+          if (entry) { initAnimation(entry); entries.push(entry); }
+        } catch (err) { console.error(`Failed to load ${cfg.name}:`, err); }
+        loadedCount++;
+        if (fillEl) fillEl.style.width = Math.round((loadedCount / total) * 100) + '%';
+      }
 
       window.__entries = entries; // debug: expose entries
       // Find the Razer mouse entry for cursor tracking

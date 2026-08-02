@@ -22,6 +22,10 @@ const dockApps = [
   { id: 'settings', title: 'System Settings' },
 ];
 
+// Auto-shrink icons when dock is crowded
+const ICON_SIZE = dockApps.length > 14 ? 46 : dockApps.length > 10 ? 50 : 54;
+const ICON_GAP = dockApps.length > 14 ? 5 : 6;
+
 export default function Dock({ onAppLaunch, dockStyle }) {
   const dockRef = useRef(null);
   const [scales, setScales] = useState(dockApps.map(() => 1));
@@ -84,8 +88,9 @@ export default function Dock({ onAppLaunch, dockStyle }) {
     <div className="fixed bottom-2 left-1/2 -translate-x-1/2 z-[100]" style={dockStyle}>
       <div
         ref={dockRef}
-        className="flex items-end gap-[6px] px-3 py-[7px] rounded-[24px]"
+        className="flex items-end px-3 py-[7px] rounded-[24px]"
         style={{
+          gap: `${ICON_GAP}px`,
           background: 'linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1))',
           border: '0.5px solid rgba(255,255,255,0.18)',
           boxShadow: '0 16px 44px rgba(0,0,0,0.42), inset 0 1px 1px rgba(255,255,255,0.22)',
@@ -105,8 +110,10 @@ export default function Dock({ onAppLaunch, dockStyle }) {
               </div>
             )}
             <div
-              className="dock-icon w-[54px] h-[54px] cursor-pointer transition-transform duration-150 ease-out"
+              className="dock-icon cursor-pointer transition-transform duration-150 ease-out"
               style={{
+                width: ICON_SIZE,
+                height: ICON_SIZE,
                 transform: `scale(${scales[i]})${bouncingApp === app.id ? '' : ''}`,
                 transformOrigin: 'bottom center',
                 animation: bouncingApp === app.id ? 'dock-bounce 0.8s ease 2' : 'none',
@@ -142,8 +149,8 @@ export default function Dock({ onAppLaunch, dockStyle }) {
               </div>
             )}
             <div
-              className="dock-icon w-[54px] h-[54px] cursor-pointer transition-transform duration-150 ease-out"
-              style={{ transformOrigin: 'bottom center', filter: 'drop-shadow(0 8px 10px rgba(0,0,0,0.24))' }}
+              className="dock-icon cursor-pointer transition-transform duration-150 ease-out"
+              style={{ width: ICON_SIZE, height: ICON_SIZE, transformOrigin: 'bottom center', filter: 'drop-shadow(0 8px 10px rgba(0,0,0,0.24))' }}
               onClick={() => restoreWindow(win.appId)}
               onMouseEnter={() => showTooltip(`tray-${win.id}`)}
               onMouseLeave={hideTooltip}
@@ -164,8 +171,8 @@ export default function Dock({ onAppLaunch, dockStyle }) {
             </div>
           )}
           <div
-            className="dock-icon w-[54px] h-[54px] cursor-pointer transition-transform duration-150 ease-out"
-            style={{ transform: `scale(${scales[dockApps.length] || 1})`, transformOrigin: 'bottom center', filter: 'drop-shadow(0 8px 10px rgba(0,0,0,0.24))' }}
+            className="dock-icon cursor-pointer transition-transform duration-150 ease-out"
+            style={{ width: ICON_SIZE, height: ICON_SIZE, transform: `scale(${scales[dockApps.length] || 1})`, transformOrigin: 'bottom center', filter: 'drop-shadow(0 8px 10px rgba(0,0,0,0.24))' }}
             onMouseEnter={() => showTooltip('trash')}
             onMouseLeave={hideTooltip}
           >

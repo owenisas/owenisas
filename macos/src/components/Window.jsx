@@ -101,6 +101,8 @@ export default function Window({ windowData, children, toolbar }) {
         transition: windowData.maximized !== undefined ? 'none' : undefined,
         background: 'rgba(18,19,23,0.48)',
         border: '0.5px solid rgba(255,255,255,0.15)',
+        animation: 'scale-in 0.18s cubic-bezier(0.2, 0.9, 0.3, 1.2)',
+        transformOrigin: 'center bottom',
       }}
       onPointerDown={() => focusWindow(windowData.id)}
     >
