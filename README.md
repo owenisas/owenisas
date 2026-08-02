@@ -14,7 +14,7 @@
   <a href="https://huggingface.co/owenisas">
     <img src="https://img.shields.io/badge/HuggingFace-owenisas-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black" />
   </a>
-  <a href="https://linkedin.com/in/owenisas">
+  <a href="https://www.linkedin.com/in/thomas-suen-84776a262/">
     <img src="https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" />
   </a>
   <a href="mailto:owenisas@gmail.com">
@@ -29,11 +29,12 @@
 
 AI/ML engineer and full-stack developer. CS student who fine-tunes LLMs, builds agentic automation systems, and ships production web + mobile apps.
 
-- Won **Champion** at [Hack The East](https://hacktheeast.com/) (Hong Kong AI hackathon) with **Origraph**
+- Won **Champion** at [Hack The East](https://hacktheeast.com/) 2026 with **Origraph** — AI content provenance platform
+- Won an **MLH track prize** at [UWB Hacks](https://www.uwbhacks.com/) with **Vellum** — invisible watermarking for LLM outputs
+- Building **[Umbra](https://github.com/owenisas/umbra)** — private-prompt inference marketplace on attested Apple Silicon
 - Co-founder at **Reunify Labs** — building [FPAI](https://fpai.reunifylabs.com/) (first-principles AI ed-tech)
-- Fine-tuned LLMs (Nemotron, Qwen) and DiT audio models on H100s
-- Built autonomous pipelines with **Claude Code**, **Appium**, and multi-agent frameworks
-- 11 models + 8 datasets on [HuggingFace](https://huggingface.co/owenisas) (1.7K+ dataset downloads)
+- Fine-tuned LLMs (Nemotron, Qwen, GPT-OSS) and DiT audio models on H100s
+- 12 models + 8 datasets on [HuggingFace](https://huggingface.co/owenisas)
 
 ---
 
@@ -63,21 +64,21 @@ AI/ML engineer and full-stack developer. CS student who fine-tunes LLMs, builds 
 
 | Project | Description | Stack |
 | :--- | :--- | :--- |
-| **[FPAI](https://fpai.reunifylabs.com/)** | First Principle AI — ed-tech platform that explains concepts from first principles using a block-based learning interface with recursive sub-blocks. Co-founder at [Reunify Labs](https://github.com/Reunify-Labs/FPAI). | `Next.js` `AWS Lambda` `DynamoDB` `OpenAI` |
-| **[Origraph](https://github.com/owenisas/Origraph)** | AI content provenance platform — invisible text watermarking SDK, provenance registry, browser extension. **Champion at [Hack The East](https://hacktheeast.com/) 2026.** | `Python` `JS` `AI` |
-| **[Vellum](https://github.com/owenisas/vellum)** | Rebuilt Origraph from the ground up with an enhanced UI for invisible watermarking, on-chain anchoring, and provenance verification for LLM outputs. **Won an MLH track prize at [UWB Hacks](https://www.uwbhacks.com/).** | `TypeScript` `AI` `Provenance` |
-| **[Amadeus 2.0](https://github.com/owenisas/Amadeus2.0)** | Vision-first Android automation framework — AI-directed app workflows via Appium + Gemini/local LLM. GUI dashboard, TUI operator mode, scheduled jobs. | `Python` `Appium` `Gemini` |
-| **[Amadeus](https://github.com/owenisas/Amadeus)** | Original mobile AI assistant framework (legacy). Foundation for 2.0. | `Python` `Swift` |
-| **[AudioX](https://github.com/owenisas/AudioX)** | Audio generation model fine-tuned on H100s — mixed SFX & music preference datasets. | `PyTorch` `DiT` `H100` |
-| **[MindDrop](https://apps.apple.com/app/minddrop-voice-journal/id6761807011)** | AI voice journal & mood tracker — shipped to App Store. Built with AI-assisted development pipeline. | `SwiftUI` `Claude Code` |
-| **[iOS App Factory](https://github.com/owenisas/ios-app-factory)** | Autonomous agentic pipeline: Research, Design, Build, QA, Audit, Release, Market — powered by Claude Code subagents. | `Python` `Claude` `Agents` |
+| **[Umbra](https://github.com/owenisas/umbra)** | Private-prompt inference marketplace on attested Apple Silicon — uncensored + community fine-tunes you can't get from incumbents. | `Go` `llama.cpp` `Apple Silicon` |
+| **[Origraph](https://github.com/owenisas/Origraph)** | AI content provenance — invisible text watermarking SDK, provenance registry, browser extension. **Champion at Hack The East 2026.** | `Python` `JS` `Solana` |
+| **[Vellum](https://github.com/owenisas/vellum)** | Enhanced Origraph rebuild — invisible watermarking, on-chain anchoring, provenance verification for LLM outputs. **MLH track prize at UWB Hacks.** | `TypeScript` `Auth0` `Solana` |
+| **[FPAI](https://fpai.reunifylabs.com/)** | First Principle AI — ed-tech platform that explains concepts from first principles using recursive block-based learning. Co-founder at [Reunify Labs](https://github.com/Reunify-Labs). | `Next.js` `AWS` `DynamoDB` |
+| **[Amadeus 2.0](https://github.com/owenisas/Amadeus2.0)** | Vision-first Android automation — AI-directed app workflows via Appium + Gemini. GUI dashboard, TUI operator mode, scheduled jobs. | `Python` `Appium` `Gemini` |
+| **[ContextCLI](https://github.com/owenisas/contextcli)** | Universal CLI profile launcher — run any dev CLI under a named auth profile. One machine, multiple accounts, zero friction. | `Rust` `Keychain` |
+| **[owenisas.com](https://www.owenisas.com)** | Personal portfolio as an interactive macOS desktop simulator — 3D desk showroom, working apps, deep linking. | `React` `Three.js` `Vite` |
+| **[Amadeus](https://github.com/owenisas/Amadeus)** | Open-source mobile AI assistant framework. Foundation for 2.0. | `Python` `Swift` |
 
 ### HuggingFace Highlights
 
 | Type | Notable | Stats |
 |:---|:---|:---|
-| **Models** | `nemotron-3-nano-reasoning` (32B), `qwen-3-nano-reasoning`, `gpt-oss-20b-union-identity` (21B LLM fine-tune) | Public models |
-| **Datasets** | `opus46-reasoning-mix-full` (reasoning data), `big-math-rl-30k-subset` (math RL) | 1.7K+ downloads, 100+ likes |
+| **Models** | `gpt-oss-20b-union-identity` (21B LLM fine-tune), `nemotron-3-nano-reasoning` (32B), `qwen-3-nano-reasoning` | 12 public models |
+| **Datasets** | `opus46-reasoning-mix-full`, `big-math-rl-30k-subset`, `first-principles-thinking` | 8 datasets |
 
 ---
 

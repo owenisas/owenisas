@@ -1,16 +1,51 @@
-# React + Vite
+# owenisas.com — Interactive macOS Desktop Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A personal portfolio site that boots into a 3D desk showroom, then zooms into a fully interactive macOS desktop simulation. Built with React 19, Three.js, and Tailwind CSS v4.
 
-Currently, two official plugins are available:
+**Live:** [www.owenisas.com](https://www.owenisas.com)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## What It Does
 
-## React Compiler
+- **3D Desk Showroom** — GLTF models of real hardware (MacBook Pro M3, mechanical keyboard, DJI Mavic 3, Razer mouse, Steins;Gate divergence meter) composited on a desk with cinematic lighting, cubic-bezier camera transition into the desktop
+- **macOS Desktop Simulation** — wallpaper, menu bar, dock, desktop icons (draggable, position-persisted to localStorage), right-click context menu, Launchpad, Spotlight (Cmd+Space)
+- **Working Apps** — Calculator, Finder, Notes, Safari (with iframe proxy + profile cards for LinkedIn/X), Settings (wallpaper switcher), TextEdit, Photos, Messages, Mail, Preview, Weather, Calendar, Terminal, About This Mac
+- **Deep Linking** — apps open via URL params and state syncs back to the URL bar, shareable window configurations
+- **Scraped Profile Data** — LinkedIn + X profile data refreshed daily via GitHub Actions (Playwright), displayed in custom in-app cards
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Stack
 
-## Expanding the ESLint configuration
+- React 19 + Vite 8
+- Three.js (GLTFLoader + DRACOLoader for 3D models)
+- Tailwind CSS v4
+- Vercel (hosting + serverless proxy API)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Development
+
+```bash
+cd macos
+npm install
+npm run dev
+```
+
+Build:
+
+```bash
+npm run build   # outputs to macos/dist/
+```
+
+## Project Structure
+
+```
+macos/
+├── src/
+│   ├── App.jsx              # Desktop + 3D showroom orchestration
+│   ├── components/          # Dock, MenuBar, Window, Spotlight, Launchpad, DeskShowroom
+│   ├── apps/                # Calculator, Safari, Finder, Notes, Terminal, etc.
+│   ├── contexts/            # Window manager
+│   ├── fs/                  # Virtual filesystem
+│   └── lib/                 # Deep linking, desktop persistence
+├── scripts/
+│   └── scrape-profiles.mjs  # Playwright scraper for LinkedIn/X data
+├── public/data/             # Scraped profile JSON (auto-refreshed)
+└── assets/                  # 3D models (GLB), textures
+```
