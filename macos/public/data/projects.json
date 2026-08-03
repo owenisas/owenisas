@@ -1,76 +1,122 @@
 [
   {
-    "id": "macos-sim",
-    "title": "macOS Web Simulator",
-    "subtitle": "This website",
-    "repo": "owenisas/owenisas",
-    "url": "https://github.com/owenisas/owenisas",
-    "demo": "https://www.owenisas.com",
-    "description": "A full macOS desktop simulator running in the browser \u2014 3D showroom, windowing system, Spotlight, virtual filesystem, Terminal with a real shell, Safari with proxy browsing, live weather, and more. Built with React 19, Three.js, and Tailwind.",
-    "tech": [
-      "React 19",
-      "Three.js",
-      "Tailwind CSS 4",
-      "Vite",
-      "WebGL"
-    ],
-    "stars": 0,
-    "language": "JavaScript",
-    "color": "#61dafb",
-    "featured": true,
-    "snippet": {
-      "file": "src/components/DeskShowroom.jsx",
-      "lang": "jsx",
-      "code": "const presetA = new THREE.Group();\nconst divergenceMeter = new THREE.Group();\n// Each digit is a Nixie tube \u2014 glowing orange filaments\n// that render in a vacuum-sealed glass tube\ndigits.forEach((digit, i) => {\n  const tube = buildNixieTube(digit);\n  tube.position.x = i * 0.42;\n  divergenceMeter.add(tube);\n});"
-    }
-  },
-  {
-    "id": "vellum",
-    "title": "Vellum",
-    "subtitle": "Invisible watermarking for IP protection",
-    "repo": "owenisas/vellum",
-    "url": "https://github.com/owenisas/vellum",
+    "id": "umbra",
+    "title": "Umbra",
+    "subtitle": "Private-prompt inference marketplace on attested Apple Silicon",
+    "repo": "owenisas/umbra",
+    "url": "https://github.com/owenisas/umbra",
     "demo": null,
-    "description": "Invisible watermarking system that embeds 64-bit payloads (56-bit metadata + 8-bit CRC8) into text at safe token boundaries. Browser extension (MV3 content script) and registry that anchors Merkle batches to Solana.",
-    "tech": [
-      "TypeScript",
-      "Solana",
-      "Browser Extension",
-      "Merkle Trees",
-      "CRC8"
-    ],
+    "description": "Private-prompt inference marketplace on attested Apple Silicon, hosting uncensored and community fine-tunes that incumbents do not host.",
+    "tech": ["Go", "llama.cpp", "Apple Silicon"],
     "stars": 0,
-    "language": "TypeScript",
-    "color": "#3178c6",
+    "language": "Go",
+    "color": "#00ADD8",
     "featured": true,
-    "snippet": {
-      "file": "src/watermark.ts",
-      "lang": "typescript",
-      "code": "// 64-bit payload: 56 bits metadata + 8 bits CRC8\n// Insert at safe boundaries (~160-token intervals)\nconst payload = encodePayload(metadata); // 64 bits\nconst checksum = crc8(payload);          // 8 bits\nconst watermark = payload.concat(checksum);"
-    }
+    "snippet": {"file": "README.md", "lang": "text", "code": "Umbra — private-prompt inference marketplace\n\nAttested Apple Silicon providers. Private prompts.\nPublic approved models. In-process llama.cpp."}
   },
   {
     "id": "origraph",
     "title": "Origraph",
-    "subtitle": "Invisible watermarking registry on Solana",
+    "subtitle": "AI content provenance and invisible watermarking",
     "repo": "owenisas/Origraph",
     "url": "https://github.com/owenisas/Origraph",
     "demo": null,
-    "description": "A registry that anchors Merkle batches of invisible watermarks to the Solana blockchain, providing tamper-proof provenance for IP claims. Split license: Apache-2.0 for the library, AGPL-3.0 for the registry demo.",
-    "tech": [
-      "Rust",
-      "Solana",
-      "Merkle Trees",
-      "Web3"
-    ],
+    "description": "AI content provenance platform with invisible text watermarking, provenance registry, and browser extension. Champion at Hack The East 2026.",
+    "tech": ["Python", "JavaScript", "Solana"],
+    "stars": 0,
+    "language": "Python",
+    "color": "#3776AB",
+    "featured": true,
+    "snippet": {"file": "README.md", "lang": "text", "code": "Origraph\nAI content provenance — invisible text watermarking SDK,\nprovenance registry, and browser extension.\nChampion at Hack The East 2026."}
+  },
+  {
+    "id": "vellum",
+    "title": "Vellum",
+    "subtitle": "Invisible watermarking for LLM outputs",
+    "repo": "owenisas/vellum",
+    "url": "https://github.com/owenisas/vellum",
+    "demo": null,
+    "description": "Invisible watermarking and provenance verification for LLM outputs. MLH track prize at UWB Hacks.",
+    "tech": ["TypeScript", "Auth0", "Solana"],
+    "stars": 0,
+    "language": "TypeScript",
+    "color": "#3178C6",
+    "featured": true,
+    "snippet": {"file": "README.md", "lang": "text", "code": "Vellum\nInvisible watermarking, on-chain anchoring,\nand provenance verification for LLM outputs.\nMLH track prize at UWB Hacks."}
+  },
+  {
+    "id": "fpai",
+    "title": "FPAI",
+    "subtitle": "First Principle AI ed-tech platform",
+    "repo": "Reunify-Labs/fpai",
+    "url": "https://fpai.reunifylabs.com/",
+    "demo": "https://fpai.reunifylabs.com/",
+    "description": "First Principle AI, an ed-tech platform that explains concepts from first principles using recursive block-based learning. Co-founder at Reunify Labs.",
+    "tech": ["Next.js", "AWS", "DynamoDB"],
+    "stars": 0,
+    "language": "TypeScript",
+    "color": "#F7DF1E",
+    "featured": true,
+    "snippet": {"file": "README.md", "lang": "text", "code": "FPAI\nFirst Principle AI — recursive block-based learning\nfor explanations that build from fundamentals."}
+  },
+  {
+    "id": "amadeus2",
+    "title": "Amadeus 2.0",
+    "subtitle": "Vision-first Android automation",
+    "repo": "owenisas/Amadeus2.0",
+    "url": "https://github.com/owenisas/Amadeus2.0",
+    "demo": null,
+    "description": "AI-directed Android workflows via Appium and Gemini, with a GUI dashboard, TUI operator mode, and scheduled jobs.",
+    "tech": ["Python", "Appium", "Gemini"],
+    "stars": 0,
+    "language": "Python",
+    "color": "#3776AB",
+    "featured": false,
+    "snippet": {"file": "README.md", "lang": "text", "code": "Amadeus 2.0\nVision-first Android automation.\nAppium + Gemini + scheduled workflows."}
+  },
+  {
+    "id": "contextcli",
+    "title": "ContextCLI",
+    "subtitle": "Universal CLI profile launcher",
+    "repo": "owenisas/contextcli",
+    "url": "https://github.com/owenisas/contextcli",
+    "demo": null,
+    "description": "Universal CLI profile launcher for running developer tools under named auth profiles with one machine and multiple accounts.",
+    "tech": ["Rust", "Keychain"],
     "stars": 0,
     "language": "Rust",
-    "color": "#dea584",
+    "color": "#DEA584",
+    "featured": false,
+    "snippet": {"file": "README.md", "lang": "text", "code": "ContextCLI\nRun any developer CLI under a named auth profile.\nOne machine, multiple accounts, zero friction."}
+  },
+  {
+    "id": "owenisas-site",
+    "title": "owenisas.com",
+    "subtitle": "Interactive portfolio as a macOS desktop",
+    "repo": "owenisas/owenisas",
+    "url": "https://github.com/owenisas/owenisas",
+    "demo": "https://www.owenisas.com",
+    "description": "Personal portfolio as an interactive macOS desktop simulator with a 3D desk showroom, working apps, and deep linking.",
+    "tech": ["React", "Three.js", "Vite"],
+    "stars": 0,
+    "language": "JavaScript",
+    "color": "#61DAFB",
     "featured": true,
-    "snippet": {
-      "file": "src/registry.rs",
-      "lang": "rust",
-      "code": "// Anchor Merkle batches to Solana for\n// tamper-proof provenance claims.\n#[program]\npub fn anchor_batch(ctx: Context<AnchorBatch>, root: [u8; 32], count: u64) -> Result<()> {\n    let batch = &mut ctx.accounts.batch;\n    batch.root = root;\n    batch.count = count;\n    batch.timestamp = Clock::get()?.unix_timestamp;\n    Ok(())\n}"
-    }
+    "snippet": {"file": "macos/src/App.jsx", "lang": "jsx", "code": "// A portfolio that is itself the work.\n// 3D desk showroom → interactive macOS desktop\n// with working apps, windows, Spotlight, and Finder."}
+  },
+  {
+    "id": "amadeus",
+    "title": "Amadeus",
+    "subtitle": "Open-source mobile AI assistant framework",
+    "repo": "owenisas/Amadeus",
+    "url": "https://github.com/owenisas/Amadeus",
+    "demo": null,
+    "description": "Open-source mobile AI assistant framework and foundation for Amadeus 2.0.",
+    "tech": ["Python", "Swift"],
+    "stars": 0,
+    "language": "Python",
+    "color": "#3776AB",
+    "featured": false,
+    "snippet": {"file": "README.md", "lang": "text", "code": "Amadeus\nOpen-source mobile AI assistant framework.\nThe foundation for vision-first automation."}
   }
 ]
