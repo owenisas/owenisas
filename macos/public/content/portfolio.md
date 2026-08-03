@@ -17,4 +17,6 @@ AI/ML engineer, full-stack developer, and photographer. Builds autonomous system
 
 12 public Hugging Face models and 8 datasets, including reasoning fine-tunes and preference datasets.
 
-No public paper list is currently present in the portfolio source.
+## Paper
+
+- **Comms–Compute Co-Design for Cislunar Operations** — Patrick Suen and Thomas Suen, 77th International Astronautical Congress 2026, Paper ID 111966. [Abstract PDF](https://iafastro.directory/iac/paper/id/111966/abstract-pdf/IAC-26,B2,5,4,x111966.brief.pdf?2026-03-26.10:15:18)

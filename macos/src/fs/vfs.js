@@ -128,6 +128,7 @@ export const root = dir('~', [
     file('Portfolio.md', 'md', { contentUrl: '/content/portfolio.md', size: 4096 }),
     file('Achievements.md', 'md', { contentUrl: '/content/achievements.md', size: 2048 }),
     file('Hugging Face.md', 'md', { contentUrl: '/content/huggingface.md', size: 1024 }),
+    file('Papers.md', 'md', { contentUrl: '/content/papers.md', size: 3072 }),
     dir('Projects', [
       file('Umbra.md', 'md', { contentUrl: '/content/portfolio.md', size: 3000 }),
       file('Origraph.md', 'md', { contentUrl: '/content/achievements.md', size: 2500 }),
