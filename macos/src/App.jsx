@@ -6,6 +6,7 @@ import Window from './components/Window';
 import ContextMenu from './components/ContextMenu';
 import Spotlight from './components/Spotlight';
 import Launchpad from './components/Launchpad';
+import WidgetBoard from './components/WidgetBoard';
 
 const DeskShowroom = lazy(() => import('./components/DeskShowroom'));
 import { appIcons, desktopIcons } from './components/Icons';
@@ -391,6 +392,8 @@ function Desktop() {
           onDoubleClick={() => handleAppLaunch('safari', 'Safari', { url: 'https://x.com/ThomasSuen6' })}
         />
       </div>
+
+      <WidgetBoard onAppLaunch={handleAppLaunch} />
 
       {/* Windows */}
       {windows.map(win => {

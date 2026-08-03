@@ -107,6 +107,55 @@ select:focus-visible {
   border-radius: 12px;
 }
 
+.desktop-widget-board {
+  position: absolute;
+  top: 150px;
+  right: 18px;
+  z-index: 4;
+  width: min(326px, calc(100vw - 36px));
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.desktop-widget {
+  min-width: 0;
+  transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 180ms ease;
+}
+
+.desktop-widget:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 14px 34px rgba(0,0,0,0.2), inset 0 0.5px 0 rgba(255,255,255,0.8);
+}
+
+.desktop-widget:last-child {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 920px) {
+  .desktop-widget-board {
+    left: 14px;
+    right: auto;
+    top: 96px;
+    width: 270px;
+    gap: 8px;
+  }
+
+  .desktop-widget {
+    min-height: 118px !important;
+  }
+
+  .desktop-widget:last-child {
+    min-height: 104px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .desktop-widget { transition: none; }
+  .desktop-widget:hover { transform: none; }
+}
+
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border: 2px solid transparent; background-clip: padding-box; border-radius: 8px; }
