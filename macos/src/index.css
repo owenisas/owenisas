@@ -109,8 +109,8 @@ select:focus-visible {
 
 .desktop-widget-board {
   position: absolute;
+  left: 18px;
   top: 150px;
-  right: 18px;
   z-index: 4;
   width: min(326px, calc(100vw - 36px));
   display: grid;
