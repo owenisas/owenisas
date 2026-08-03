@@ -244,8 +244,8 @@ export default function CodeEditor() {
     <div className="h-full w-full flex flex-col" style={{ background: COLORS.bg, color: COLORS.text }}>
       {/* ===== Top toolbar ===== */}
       <div
-        className="flex items-center h-[40px] shrink-0 px-2 gap-1.5"
-        style={{ background: COLORS.bgAlt, borderBottom: `1px solid ${COLORS.border}` }}
+        className="flex items-center h-[44px] shrink-0 px-2 gap-1.5 DragHandle"
+        style={{ background: 'rgba(33,37,43,0.84)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderBottom: '0.5px solid rgba(255,255,255,0.08)' }}
       >
         <MacToolbarButton icon="play.fill" label="Run" onClick={() => {}} />
         <MacToolbarButton
@@ -270,12 +270,12 @@ export default function CodeEditor() {
             rel="noreferrer"
             className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] transition-colors no-underline"
             style={{
-              background: 'rgba(86,182,194,0.12)',
+              background: 'rgba(255,255,255,0.06)',
               color: COLORS.textBright,
-              border: `1px solid rgba(86,182,194,0.25)`,
+              border: '0.5px solid rgba(255,255,255,0.12)',
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(86,182,194,0.22)'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(86,182,194,0.12)'; }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; }}
           >
             <SFSymbol name="chevron.left.slash.chevron.right" size={11} color={COLORS.textBright} />
             View on GitHub
@@ -286,7 +286,7 @@ export default function CodeEditor() {
       {/* ===== Tab bar ===== */}
       <div
         className="flex items-stretch h-[34px] shrink-0 pl-1"
-        style={{ background: COLORS.bgAlt, borderBottom: `1px solid ${COLORS.border}` }}
+        style={{ background: 'rgba(33,37,43,0.74)', borderBottom: '0.5px solid rgba(255,255,255,0.08)' }}
       >
         {projects.map((p, i) => {
           const tabName = p.snippet?.file?.split('/').pop();
@@ -299,7 +299,7 @@ export default function CodeEditor() {
               style={{
                 background: isActive ? COLORS.bg : 'transparent',
                 color: isActive ? COLORS.textBright : COLORS.textDim,
-                borderRight: `1px solid ${COLORS.border}`,
+                borderRight: '0.5px solid rgba(255,255,255,0.08)',
                 borderTop: isActive ? '1px solid transparent' : '1px solid transparent',
                 borderBottom: isActive ? `1px solid ${COLORS.bg}` : '1px solid transparent',
               }}
@@ -339,7 +339,7 @@ export default function CodeEditor() {
         {/* ----- File tree sidebar ----- */}
         <div
           className="shrink-0 flex flex-col"
-          style={{ width: 200, background: COLORS.bgAlt, borderRight: `1px solid ${COLORS.border}` }}
+          style={{ width: 200, background: 'rgba(33,37,43,0.74)', borderRight: '0.5px solid rgba(255,255,255,0.08)' }}
         >
           <div
             className="px-3 pt-2.5 pb-2 text-[10px] uppercase tracking-wider"
@@ -366,7 +366,7 @@ export default function CodeEditor() {
             style={{
               background: COLORS.bgAlt,
               color: COLORS.textDim,
-              borderBottom: `1px solid ${COLORS.border}`,
+              borderBottom: '0.5px solid rgba(255,255,255,0.08)',
             }}
           >
             <SFSymbol name="folder" size={10} color={COLORS.textDim} />

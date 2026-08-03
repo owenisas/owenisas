@@ -365,8 +365,8 @@ export default function ActivityGraph() {
     <div className="h-full w-full flex flex-col" style={{ background: '#0d1117', color: '#e6edf3' }}>
       {/* Toolbar */}
       <div
-        className="flex items-center gap-2 h-[40px] px-3 shrink-0"
-        style={{ background: 'rgba(22,27,34,0.96)', borderBottom: '0.5px solid #30363d' }}
+        className="flex items-center gap-2 h-[44px] px-3 shrink-0 DragHandle"
+        style={{ background: 'rgba(22,27,34,0.82)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderBottom: '0.5px solid rgba(255,255,255,0.08)' }}
       >
         <div className="flex items-center gap-1.5">
           <SFSymbol name="star.fill" size={13} color="#39d353" />
@@ -431,7 +431,7 @@ export default function ActivityGraph() {
           </div>
 
           {/* Contribution graph */}
-          <div className="rounded-[10px] p-4" style={{ background: '#161b22', border: '1px solid #30363d' }}>
+          <div className="rounded-[10px] p-4" style={{ background: 'rgba(22,27,34,0.86)', border: '0.5px solid rgba(255,255,255,0.10)', boxShadow: 'inset 0 0.5px 0 rgba(255,255,255,0.04)' }}>
             <div style={{ overflowX: 'auto', paddingBottom: 2 }}>
               <div style={{ minWidth: WEEKS * WEEK_W + 30 }}>
                 {/* Month labels */}
