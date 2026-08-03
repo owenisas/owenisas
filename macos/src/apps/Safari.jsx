@@ -15,10 +15,10 @@ const defaultFavorites = [
 ];
 
 const frequentlyVisited = [
-  { name: 'Claude', color: '#D97706', letter: 'C', subtitle: 'AI workspace' },
-  { name: 'Hacker News', color: '#FF6600', letter: 'Y', subtitle: 'Daily reading' },
-  { name: 'Tailwind CSS', color: '#38BDF8', letter: '~', subtitle: 'Design system' },
-  { name: 'npm', color: '#CB3837', letter: 'n', subtitle: 'Packages' },
+  { name: 'Claude', url: 'https://claude.ai', color: '#D97706', letter: 'C', subtitle: 'AI workspace' },
+  { name: 'Hacker News', url: 'https://news.ycombinator.com', color: '#FF6600', letter: 'Y', subtitle: 'Daily reading' },
+  { name: 'Tailwind CSS', url: 'https://tailwindcss.com', color: '#38BDF8', letter: '~', subtitle: 'Design system' },
+  { name: 'npm', url: 'https://www.npmjs.com', color: '#CB3837', letter: 'n', subtitle: 'Packages' },
 ];
 
 const readingList = [
@@ -471,7 +471,7 @@ export default function Safari({ windowData }) {
               <StartSection title="Frequently Visited">
                 <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-y-6 gap-x-2 mt-4">
                   {frequentlyVisited.map(site => (
-                    <StartTile key={site.name} item={site} onClick={() => navigate(`https://${site.name.toLowerCase().replace(/\s+/g, '')}.com`)} />
+                    <StartTile key={site.name} item={site} onClick={() => navigate(site.url)} />
                   ))}
                 </div>
               </StartSection>
