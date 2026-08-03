@@ -112,13 +112,35 @@ function getMenuItems(appId) {
   return appMenus[appId] || defaultMenus;
 }
 
+function ControlTile({ icon, title, detail, active, onClick }) {
+  const glyph = icon === 'wifi' ? '⌁' : icon === 'bluetooth' ? 'ᛒ' : icon === 'moon.fill' ? '◐' : '◉';
+  return (
+    <button
+      className="text-left rounded-[10px] p-2.5 transition-colors"
+      style={{ background: active ? 'rgba(10,132,255,0.86)' : 'rgba(255,255,255,0.08)' }}
+      onClick={onClick}
+    >
+      <div className="flex items-center gap-2">
+        <span className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: active ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.12)' }}>{glyph}</span>
+        <span className="text-[12px] font-medium">{title}</span>
+      </div>
+      <div className="mt-1 pl-8 text-[10px] text-white/65 truncate">{detail}</div>
+    </button>
+  );
+}
+
 export default function MenuBar({ onSpotlightToggle, onAppLaunch, barStyle }) {
   const { activeApp } = useWindows();
   const [time, setTime] = useState('');
   const [appleMenuOpen, setAppleMenuOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState(null);
+  const [controlCenterOpen, setControlCenterOpen] = useState(false);
+  const [wifiOn, setWifiOn] = useState(true);
+  const [bluetoothOn, setBluetoothOn] = useState(true);
+  const [focusOn, setFocusOn] = useState(false);
   const menuRef = useRef(null);
   const menuBarRef = useRef(null);
+  const controlCenterRef = useRef(null);
 
   useEffect(() => {
     const update = () => {
@@ -139,9 +161,23 @@ export default function MenuBar({ onSpotlightToggle, onAppLaunch, barStyle }) {
       if (menuBarRef.current && !menuBarRef.current.contains(e.target)) {
         setOpenMenu(null);
       }
+      if (controlCenterRef.current && !controlCenterRef.current.contains(e.target)) {
+        setControlCenterOpen(false);
+      }
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key !== 'Escape') return;
+      setAppleMenuOpen(false);
+      setOpenMenu(null);
+      setControlCenterOpen(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
   }, []);
 
   return (
@@ -195,15 +231,18 @@ export default function MenuBar({ onSpotlightToggle, onAppLaunch, barStyle }) {
               ) : (
                 <button
                   key={i}
+                  type="button"
+                  disabled={!item.action}
+                  aria-disabled={!item.action}
                   className="flex items-center justify-between w-full text-left cursor-default"
                   style={{
                     padding: '2px 12px 2px 20px',
                     fontSize: 13,
-                    color: 'rgba(255,255,255,0.9)',
+                    color: item.action ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.38)',
                     lineHeight: '20px',
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.background = '#0a84ff'; e.currentTarget.style.color = '#fff'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.9)'; }}
+                  onMouseEnter={e => { if (item.action) { e.currentTarget.style.background = '#0a84ff'; e.currentTarget.style.color = '#fff'; } }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = item.action ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.38)'; }}
                   onClick={() => { setAppleMenuOpen(false); item.action?.(); }}
                 >
                   <span>{item.label}</span>
@@ -273,14 +312,31 @@ export default function MenuBar({ onSpotlightToggle, onAppLaunch, barStyle }) {
           <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="7" cy="7" r="5"/><path d="m14 14-3.5-3.5"/></svg>
         </button>
         {/* Control Center — two horizontal toggles stacked */}
-        <button aria-label="Control Center" className="h-[22px] flex justify-center items-center hover:bg-white/15 rounded-[6px] transition-colors" style={{ padding: '0 6px' }}>
-          <svg width="11" height="9" viewBox="0 0 14 12" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
-            <rect x="1" y="1" width="12" height="4" rx="2"/>
-            <rect x="1" y="7" width="12" height="4" rx="2"/>
-            <circle cx="9.5" cy="3" r="1.2" fill="currentColor" stroke="none"/>
-            <circle cx="4.5" cy="9" r="1.2" fill="currentColor" stroke="none"/>
-          </svg>
-        </button>
+        <div className="relative" ref={controlCenterRef}>
+          <button aria-label="Control Center" onClick={() => setControlCenterOpen(v => !v)} className="h-[22px] flex justify-center items-center hover:bg-white/15 rounded-[6px] transition-colors" style={{ padding: '0 6px', background: controlCenterOpen ? 'rgba(255,255,255,0.16)' : undefined }}>
+            <svg width="11" height="9" viewBox="0 0 14 12" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
+              <rect x="1" y="1" width="12" height="4" rx="2"/>
+              <rect x="1" y="7" width="12" height="4" rx="2"/>
+              <circle cx="9.5" cy="3" r="1.2" fill="currentColor" stroke="none"/>
+              <circle cx="4.5" cy="9" r="1.2" fill="currentColor" stroke="none"/>
+            </svg>
+          </button>
+          {controlCenterOpen && (
+            <div className="absolute top-[27px] right-0 w-[292px] rounded-[14px] p-3 text-white" style={{ background: 'rgba(36,37,43,0.86)', backdropFilter: 'blur(54px) saturate(180%)', WebkitBackdropFilter: 'blur(54px) saturate(180%)', border: '0.5px solid rgba(255,255,255,0.16)', boxShadow: 'var(--mac-shadow-popover)' }}>
+              <div className="grid grid-cols-2 gap-2">
+                <ControlTile icon="wifi" title="Wi-Fi" detail={wifiOn ? 'Home Network' : 'Off'} active={wifiOn} onClick={() => setWifiOn(v => !v)} />
+                <ControlTile icon="bluetooth" title="Bluetooth" detail={bluetoothOn ? 'On' : 'Off'} active={bluetoothOn} onClick={() => setBluetoothOn(v => !v)} />
+                <ControlTile icon="moon.fill" title="Focus" detail={focusOn ? 'On' : 'Off'} active={focusOn} onClick={() => setFocusOn(v => !v)} />
+                <ControlTile icon="airplayaudio" title="Sound" detail="MacBook Pro Speakers" active />
+              </div>
+              <div className="mt-3 rounded-[10px] p-2.5" style={{ background: 'rgba(255,255,255,0.08)' }}>
+                <div className="flex items-center justify-between text-[11px] text-white/70"><span>Display</span><span>75%</span></div>
+                <div className="mt-2 h-1.5 rounded-full bg-white/20 overflow-hidden"><div className="h-full w-3/4 rounded-full bg-white/90" /></div>
+              </div>
+              <div className="mt-2 flex items-center justify-between text-[11px] text-white/55 px-1"><span>Battery</span><span className="text-white/80">87% · Charging</span></div>
+            </div>
+          )}
+        </div>
         {/* WiFi */}
         <button aria-label="Wi-Fi" className="h-[22px] flex justify-center items-center hover:bg-white/15 rounded-[6px] transition-colors" style={{ padding: '0 6px' }}>
           <svg width="12" height="9" viewBox="0 0 16 12" fill="currentColor">

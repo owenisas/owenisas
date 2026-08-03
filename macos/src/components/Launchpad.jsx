@@ -67,7 +67,8 @@ function AppGlyph({ app, size = 70 }) {
 function AppTile({ app, onLaunch }) {
   return (
     <button
-      className="w-[110px] h-[110px] flex flex-col items-center justify-start gap-1.5 rounded-[12px] p-2 outline-none transition-transform active:scale-95 group focus:bg-white/10"
+      className="app-tile w-[110px] h-[110px] flex flex-col items-center justify-start gap-1.5 rounded-[12px] p-2 outline-none transition-transform active:scale-95 group focus:bg-white/10"
+      aria-label={`Open ${app.title}`}
       onClick={() => onLaunch(app.id, app.title)}
     >
       <div className="w-[74px] h-[74px] transition-transform duration-200 group-hover:-translate-y-1 drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)]">
@@ -118,6 +119,9 @@ export default function Launchpad({ isOpen, onClose, onAppLaunch }) {
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Launchpad"
       className="fixed inset-0 z-[300] flex flex-col items-center pt-[5vh] pb-[10vh] overflow-hidden"
       style={{
         background: 'rgba(0,0,0,0.15)',
@@ -145,6 +149,7 @@ export default function Launchpad({ isOpen, onClose, onAppLaunch }) {
           </svg>
           <input
             type="text"
+            aria-label="Search applications"
             placeholder="Search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}

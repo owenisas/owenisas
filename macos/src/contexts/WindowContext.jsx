@@ -33,12 +33,10 @@ export function WindowProvider({ children }) {
   }, []);
 
   const openWindow = useCallback((appId, title, icon, payload = null) => {
-    const existing = windows.find(w => w.appId === appId && !w.minimized);
+    const existing = windows.find(w => w.appId === appId);
     if (existing) {
       focusWindow(existing.id);
-      if (payload) {
-        setWindows(prev => prev.map(w => w.id === existing.id ? { ...w, payload } : w));
-      }
+      if (payload !== null) setWindows(prev => prev.map(w => w.id === existing.id ? { ...w, payload, minimized: false } : w));
       return existing.id;
     }
 

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import SFSymbol from '../components/icons/SFSymbol';
 import {
   MacSegmentedControl, MacSearchField, MacToolbarButton,
@@ -123,6 +123,16 @@ export default function Finder({ windowData, onAppLaunch }) {
   const [sortAsc, setSortAsc] = useState(true);
   const [history, setHistory] = useState([path]);
   const [historyIdx, setHistoryIdx] = useState(0);
+
+  useEffect(() => {
+    const nextPath = windowData?.payload?.vfsPath;
+    if (!nextPath || nextPath === path) return;
+    setPath(nextPath);
+    setHistory([nextPath]);
+    setHistoryIdx(0);
+    setSelected(null);
+    setSearch('');
+  }, [windowData?.payload?.vfsPath]);
 
   const currentNode = useMemo(() => getByPath(path) || getByPath('~'), [path]);
   const isDir = currentNode?.type === 'dir';
@@ -405,7 +415,8 @@ function ColumnView({ path, selected, setSelected, onNavigate, onOpen }) {
                     background: isActive ? '#0A84FF' : 'transparent',
                     color: isActive ? '#fff' : 'rgba(0,0,0,0.82)',
                   }}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setSelected(child.name);
                     if (child.type === 'dir') onNavigate(childPath);
                   }}
@@ -437,15 +448,15 @@ function GalleryView({ entries, selected, setSelected, onOpen }) {
   const selNode = selected ? entries.find(e => e.name === selected) : entries[0];
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 flex items-center justify-center p-6 overflow-hidden" style={{ background: '#1c1c1e' }}>
+      <div className="flex-1 flex items-center justify-center p-6 overflow-hidden" style={{ background: '#f5f5f7' }}>
         {selNode ? (
           selNode.kind === 'image' && selNode.contentUrl ? (
-            <img src={selNode.contentUrl} alt="" className="max-w-full max-h-full object-contain rounded-[8px] shadow-[0_8px_32px_rgba(0,0,0,0.5)]" />
+            <img src={selNode.contentUrl} alt="" className="max-w-full max-h-full object-contain rounded-[8px] shadow-[0_8px_32px_rgba(0,0,0,0.16)]" />
           ) : (
-            <div className="flex flex-col items-center gap-4 text-white/70">
+            <div className="flex flex-col items-center gap-4 text-black/50">
               <SFSymbol name={iconForNode(selNode).name} size={120} color={iconForNode(selNode).color} />
-              <div className="text-[14px] text-white/90 font-medium">{selNode.name}</div>
-              <div className="text-[11px] text-white/50">{fileKindLabel(selNode)}</div>
+              <div className="text-[14px] text-black/80 font-medium">{selNode.name}</div>
+              <div className="text-[11px] text-black/45">{fileKindLabel(selNode)}</div>
             </div>
           )
         ) : (
@@ -462,9 +473,9 @@ function GalleryView({ entries, selected, setSelected, onOpen }) {
               className="w-[64px] h-[64px] shrink-0 rounded-[10px] flex items-center justify-center cursor-default overflow-hidden"
               style={{
                 background: node.kind === 'image' ? 'rgba(0,0,0,0.08)' : 'rgba(0,0,0,0.03)',
-                border: isSel ? '2px solid #0A84FF' : '1px solid rgba(0,0,0,0.08)',
+                border: isSel ? '1.5px solid #0A84FF' : '0.5px solid rgba(0,0,0,0.08)',
               }}
-              onClick={() => setSelected(node.name)}
+              onClick={(e) => { e.stopPropagation(); setSelected(node.name); }}
               onDoubleClick={() => onOpen(node)}
             >
               {node.kind === 'image' && node.contentUrl ? (

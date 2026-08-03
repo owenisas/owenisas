@@ -175,6 +175,7 @@ export function MacDropdown({ value, options, onChange, width }) {
 // --- Toolbar Button ---
 export function MacToolbarButton({ icon, onClick, active, label, size = 28, variant = 'quiet', tone = 'glass' }) {
   const isLight = tone === 'light' || tone === 'light-quiet';
+  const isDisabled = !onClick;
   const activeBg = isLight ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.16)';
   const hoverBg = isLight ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.1)';
   const activeColor = isLight ? 'rgba(0,0,0,0.9)' : '#fff';
@@ -184,16 +185,22 @@ export function MacToolbarButton({ icon, onClick, active, label, size = 28, vari
     : { background: active ? activeBg : 'transparent', border: '0.5px solid transparent', borderRadius: 6 };
   return (
     <button
+      type="button"
+      aria-label={label}
+      aria-disabled={isDisabled}
+      disabled={isDisabled}
       onClick={onClick}
       className="flex items-center justify-center transition-colors duration-100 cursor-default mac-control"
       style={{
         width: size, height: size,
         ...base,
         color: active ? activeColor : idleColor,
+        opacity: isDisabled ? 0.48 : 1,
+        cursor: isDisabled ? 'default' : undefined,
         boxShadow: active ? (isLight ? 'inset 0 0 0 0.5px rgba(0,0,0,0.08)' : 'inset 0 0.5px 0 rgba(255,255,255,0.12)') : 'none',
       }}
-      onMouseEnter={e => { if (!active) e.currentTarget.style.background = hoverBg; }}
-      onMouseLeave={e => { if (!active) e.currentTarget.style.background = variant === 'pill' ? toneStyles[tone].background : 'transparent'; }}
+      onMouseEnter={e => { if (!active && !isDisabled) e.currentTarget.style.background = hoverBg; }}
+      onMouseLeave={e => { if (!active && !isDisabled) e.currentTarget.style.background = variant === 'pill' ? toneStyles[tone].background : 'transparent'; }}
       title={label}
     >
       {typeof icon === 'string' ? <SFSymbol name={icon} size={14} /> : icon}

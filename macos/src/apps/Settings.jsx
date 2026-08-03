@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SFSymbol from '../components/icons/SFSymbol';
 import { MacToggle, MacSlider, MacSettingsRow, MacSettingsGroup, MacSettingsIcon, MacSearchField } from '../components/ui/MacControls';
 import { wallpaperPresets } from '../data/wallpaperPresets';
@@ -31,9 +31,9 @@ const categories = [
 
 const batteryHistory = [18, 19, 21, 22, 24, 23, 22, 20, 19, 20, 23, 28, 32, 36, 40, 45, 44, 41, 37, 33, 29, 26, 23, 21];
 
-export default function Settings() {
+export default function Settings({ windowData }) {
   const [active, setActive] = useState('general');
-  const [subPanel, setSubPanel] = useState(null); // 'about', 'storage', etc.
+  const [subPanel, setSubPanel] = useState(() => windowData?.payload?.subPanel || null); // 'about', 'storage', etc.
   const [search, setSearch] = useState('');
   const [s, setS] = useState({
     handoff: true, askKeepChanges: true, closeWindows: false,
@@ -50,6 +50,10 @@ export default function Settings() {
   });
 
   const set = (k, v) => setS(p => ({ ...p, [k]: v }));
+
+  useEffect(() => {
+    if (windowData?.payload?.subPanel) setSubPanel(windowData.payload.subPanel);
+  }, [windowData?.payload?.subPanel]);
 
   const filtered = search ? categories.filter(c => c.label.toLowerCase().includes(search.toLowerCase())) : categories;
   const selectedWallpaper = wallpaperPresets.find(w => w.id === s.wallpaperId) ?? wallpaperPresets[0];
@@ -142,12 +146,12 @@ export default function Settings() {
               <div className="w-[36px] h-[36px] rounded-[8px] bg-gradient-to-br from-[#ffd700] via-[#ff6b00] to-[#ff1493] flex items-center justify-center">
                 <span className="text-white text-[18px] font-bold">S</span>
               </div>
-              <span className="text-[14px]">macOS Sequoia</span>
+              <span className="text-[14px]">macOS Tahoe</span>
             </div>
           }
           noBorder
         >
-          <span className="text-[13px] text-black/60">Version 15.0</span>
+          <span className="text-[13px] text-black/60">Version 26.0</span>
         </MacSettingsRow>
       </MacSettingsGroup>
 
@@ -670,7 +674,7 @@ export default function Settings() {
           {subPanel === 'about' ? (
             <AboutPanel />
           ) : (
-            panels[active] || panels['general']
+            panels[active] || <PlaceholderPanel title={categories.find(c => c.id === active)?.label || 'Settings'} />
           )}
         </div>
       </div>
@@ -680,6 +684,26 @@ export default function Settings() {
 
 function PanelTitle({ children }) {
   return <h2 className="text-black text-[22px] font-semibold mb-5 tracking-tight pt-6">{children}</h2>;
+}
+
+function PlaceholderPanel({ title }) {
+  return (
+    <div className="pb-8">
+      <PanelTitle>{title}</PanelTitle>
+      <MacSettingsGroup>
+        <MacSettingsRow label="Status" noBorder>
+          <span className="text-[12px] text-[#86868b]">Configured for this Mac</span>
+        </MacSettingsRow>
+      </MacSettingsGroup>
+      <div className="rounded-[10px] bg-black/[0.035] border border-black/[0.06] px-5 py-6 text-center">
+        <div className="w-10 h-10 rounded-full bg-black/[0.06] mx-auto flex items-center justify-center">
+          <SFSymbol name="gear" size={20} color="rgba(0,0,0,0.38)" />
+        </div>
+        <div className="text-[14px] font-medium text-black/75 mt-3">{title} settings</div>
+        <div className="text-[12px] leading-relaxed text-[#86868b] mt-1 max-w-[300px] mx-auto">This simulator surface is available for navigation and visual review. Additional controls will appear here as the desktop model grows.</div>
+      </div>
+    </div>
+  );
 }
 
 function WallpaperPreview({ wallpaper }) {

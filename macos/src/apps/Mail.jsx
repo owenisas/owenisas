@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SFSymbol from '../components/icons/SFSymbol';
 import { MacSidebarItem, MacSidebarSection, MacToolbarButton } from '../components/ui/MacControls';
 
@@ -159,6 +159,10 @@ export default function Mail() {
 
   const selected = inboxMessages.find(m => m.id === selectedId) || null;
 
+  useEffect(() => {
+    if (!visible.some(m => m.id === selectedId)) setSelectedId(visible[0]?.id || null);
+  }, [activeMailbox, selectedId, visible]);
+
   const selectMessage = (id) => {
     setSelectedId(id);
     setReadSet(prev => new Set(prev).add(id));
@@ -206,7 +210,7 @@ export default function Mail() {
             <span className="text-[11px] text-white/45 leading-tight mt-[1px]">{visible.length} messages, {visible.filter(m => m.unread && !readSet.has(m.id)).length} unread</span>
           </div>
           <div className="flex-1" />
-          <MacToolbarButton icon="line.3.horizontal.decrease" size={26} />
+          <MacToolbarButton icon="line.3.horizontal.decrease" size={26} label="Filter" />
         </div>
         <div className="flex-1 overflow-y-auto">
           {visible.length === 0 ? (
@@ -259,7 +263,7 @@ export default function Mail() {
           />
         </div>
 
-        {selected ? (
+        {selected && visible.some(m => m.id === selected.id) ? (
           <div className="flex-1 overflow-y-auto">
             <div className="px-6 pt-5 pb-4 border-b border-white/6">
               <div className="text-[18px] text-white font-medium leading-snug">{selected.subject}</div>

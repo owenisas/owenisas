@@ -29,7 +29,10 @@ function classify(photo) {
 function matchesSection(photo, section, favs) {
   if (section === 'all') return true;
   if (section === 'favorites') return favs.has(photo.slug);
-  if (section === 'screenshots') return false;
+  if (section === 'screenshots') {
+    const haystack = `${photo.slug} ${photo.title} ${photo.src}`.toLowerCase();
+    return haystack.includes('screenshot') || haystack.includes('screen-') || haystack.includes('screen_');
+  }
   if (section === 'recent') return true;
   return classify(photo) === section;
 }

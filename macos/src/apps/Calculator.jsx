@@ -70,6 +70,8 @@ export default function Calculator() {
   // Keyboard support
   useEffect(() => {
     const onKey = (e) => {
+      const target = e.target;
+      if (target instanceof HTMLElement && (target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName))) return;
       if (e.key >= '0' && e.key <= '9') inputDigit(Number(e.key));
       else if (e.key === '.') inputDecimal();
       else if (e.key === '+') performOperation('+');

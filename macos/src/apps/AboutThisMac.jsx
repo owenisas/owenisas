@@ -14,7 +14,7 @@ export default function AboutThisMac({ onAppLaunch }) {
       {/* Title */}
       <h1
         className="text-[26px] text-black tracking-[-0.02em] mt-3"
-        style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif', fontWeight: 500, fontStyle: 'italic' }}
+        style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif', fontWeight: 600 }}
       >
         MacBook Pro
       </h1>
@@ -33,7 +33,7 @@ export default function AboutThisMac({ onAppLaunch }) {
           </tr>
           <tr>
             <td className="text-[#86868B] text-right">macOS</td>
-            <td className="text-black">Tahoe 16.0</td>
+            <td className="text-black">Tahoe 26.0</td>
           </tr>
         </tbody>
       </table>
@@ -42,7 +42,7 @@ export default function AboutThisMac({ onAppLaunch }) {
       <button
         className="mt-6 px-5 py-[5px] text-[13px] text-black bg-white rounded-md border border-black/15 hover:bg-gray-50 active:bg-gray-100 transition-colors"
         style={{ boxShadow: '0 0.5px 1px rgba(0,0,0,0.1)' }}
-        onClick={() => onAppLaunch?.('settings', 'System Settings')}
+        onClick={() => onAppLaunch?.('settings', 'System Settings', { subPanel: 'about' })}
       >
         More Info...
       </button>

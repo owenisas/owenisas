@@ -6,15 +6,22 @@ const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 export default function Calendar() {
   const [view, setView] = useState('month');
+  const [cursor, setCursor] = useState(() => new Date());
+  const [search, setSearch] = useState('');
 
-  // Hardcoded current month view for mock purposes
   const generateDays = () => {
     const days = [];
-    for (let i = 0; i < 35; i++) {
-        const isCurrentMonth = i >= 3 && i < 33;
-        const dayNumber = isCurrentMonth ? i - 2 : (i < 3 ? 29 + i : i - 32);
-        const hasEvent = [12, 18, 25].includes(dayNumber) && isCurrentMonth;
-        days.push({ id: i, number: dayNumber, current: isCurrentMonth, today: dayNumber === 15 && isCurrentMonth, event: hasEvent });
+    const first = new Date(cursor.getFullYear(), cursor.getMonth(), 1);
+    const start = new Date(first);
+    start.setDate(first.getDate() - first.getDay());
+    const today = new Date();
+    for (let i = 0; i < 42; i++) {
+        const date = new Date(start);
+        date.setDate(start.getDate() + i);
+        const isCurrentMonth = date.getMonth() === cursor.getMonth();
+        const hasEvent = [12, 18, 25].includes(date.getDate()) && isCurrentMonth;
+        const eventTitle = hasEvent ? (search ? 'Team Sync' : '10:00 AM Team Sync') : null;
+        days.push({ id: date.toISOString(), number: date.getDate(), current: isCurrentMonth, today: date.toDateString() === today.toDateString(), event: eventTitle });
     }
     return days;
   };
@@ -26,12 +33,12 @@ export default function Calendar() {
       {/* Toolbar */}
       <div className="h-[52px] flex items-center justify-between px-4 border-b border-white/10 shrink-0 DragHandle" style={{ background: 'rgba(40, 40, 40, 0.4)' }}>
         <div className="flex items-center gap-4">
-          <MacToolbarButton icon="sidebar.left" size={28} />
+          <MacToolbarButton icon="sidebar.left" size={28} label="Sidebar" />
           <div className="flex items-center gap-1">
-            <MacToolbarButton icon="chevron.left" size={28} />
-            <MacToolbarButton icon="chevron.right" size={28} />
+            <MacToolbarButton icon="chevron.left" size={28} label="Previous Month" onClick={() => setCursor(d => new Date(d.getFullYear(), d.getMonth() - 1, 1))} />
+            <MacToolbarButton icon="chevron.right" size={28} label="Next Month" onClick={() => setCursor(d => new Date(d.getFullYear(), d.getMonth() + 1, 1))} />
           </div>
-          <span className="text-white text-[18px] font-medium ml-2">April 2026</span>
+          <span className="text-white text-[18px] font-medium ml-2">{cursor.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
         </div>
         
         <div className="flex items-center gap-4 hidden sm:flex">
@@ -51,9 +58,9 @@ export default function Calendar() {
         <div className="flex items-center gap-2">
           <div className="bg-white/10 border border-white/5 rounded-md px-2 py-1 flex items-center gap-1.5 h-[28px] w-[150px]">
             <SFSymbol name="magnifyingglass" size={12} color="rgba(255,255,255,0.4)" />
-            <input type="text" placeholder="Search" className="bg-transparent text-[13px] text-white outline-none w-full placeholder:text-white/40" />
+            <input aria-label="Search calendar" type="text" placeholder="Search" value={search} onChange={e => setSearch(e.target.value)} className="bg-transparent text-[13px] text-white outline-none w-full placeholder:text-white/40" />
           </div>
-          <MacToolbarButton icon="plus" size={28} />
+          <MacToolbarButton icon="calendar" size={28} label="Today" onClick={() => setCursor(new Date())} />
         </div>
       </div>
 
@@ -89,8 +96,8 @@ export default function Calendar() {
             </div>
 
             {/* Grid */}
-            <div className="flex-1 grid grid-cols-7 grid-rows-5 bg-white/5 gap-[1px]">
-                {days.map((day, idx) => (
+            <div className="flex-1 grid grid-cols-7 grid-rows-6 bg-white/5 gap-[1px]">
+                {days.map((day) => (
                     <div key={day.id} className="bg-[#1e1e1e] flex flex-col p-1">
                         <div className="flex justify-end">
                             <span className={`w-7 h-7 flex items-center justify-center rounded-full text-[13px] font-medium
@@ -103,7 +110,7 @@ export default function Calendar() {
                         </div>
                         {day.event && (
                             <div className="mt-1 px-1.5 py-0.5 rounded-[4px] bg-[#0a84ff]/20 border border-[#0a84ff]/30 text-[#409cff] text-[10px] font-medium truncate">
-                                10:00 AM Team Sync
+                                {day.event}
                             </div>
                         )}
                     </div>

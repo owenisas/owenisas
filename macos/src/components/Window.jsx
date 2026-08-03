@@ -1,6 +1,10 @@
 import { useRef, useCallback, useEffect, useState } from 'react';
 import { useWindows } from '../contexts/WindowContext';
 
+const LIGHT_CHROME_APPS = new Set([
+  'finder', 'settings', 'aboutthismac', 'calendar', 'photos', 'preview', 'textedit',
+]);
+
 export default function Window({ windowData, children, toolbar }) {
   const { closeWindow, minimizeWindow, maximizeWindow, focusWindow, updateWindow, activeWindowId } = useWindows();
   const windowRef = useRef(null);
@@ -13,6 +17,7 @@ export default function Window({ windowData, children, toolbar }) {
   const [trafficHover, setTrafficHover] = useState(false);
 
   const isActive = activeWindowId === windowData.id;
+  const isLightChrome = LIGHT_CHROME_APPS.has(windowData.appId);
 
   const onDragMove = useCallback((e) => {
     if (!isDragging.current) return;
@@ -99,8 +104,8 @@ export default function Window({ windowData, children, toolbar }) {
         borderRadius: windowData.maximized ? 0 : 10,
         boxShadow: isActive ? 'var(--mac-shadow-window)' : 'var(--mac-shadow-window-inactive)',
         transition: windowData.maximized !== undefined ? 'none' : undefined,
-        background: 'rgba(18,19,23,0.48)',
-        border: '0.5px solid rgba(255,255,255,0.15)',
+        background: isLightChrome ? 'rgba(246,246,248,0.72)' : 'rgba(18,19,23,0.48)',
+        border: isLightChrome ? '0.5px solid rgba(0,0,0,0.16)' : '0.5px solid rgba(255,255,255,0.15)',
         animation: 'scale-in 0.18s cubic-bezier(0.2, 0.9, 0.3, 1.2)',
         transformOrigin: 'center bottom',
       }}
@@ -110,8 +115,10 @@ export default function Window({ windowData, children, toolbar }) {
       <div
         className="flex items-center h-[36px] shrink-0 pl-[18px] pr-[14px] gap-[8px] select-none"
         style={{
-          background: isActive ? 'rgba(245,248,255,0.12)' : 'rgba(245,248,255,0.07)',
-          borderBottom: '0.5px solid rgba(255,255,255,0.09)',
+          background: isLightChrome
+            ? (isActive ? 'rgba(255,255,255,0.78)' : 'rgba(246,246,248,0.66)')
+            : (isActive ? 'rgba(245,248,255,0.12)' : 'rgba(245,248,255,0.07)'),
+          borderBottom: isLightChrome ? '0.5px solid rgba(0,0,0,0.10)' : '0.5px solid rgba(255,255,255,0.09)',
           backdropFilter: 'blur(56px) saturate(190%)',
           WebkitBackdropFilter: 'blur(56px) saturate(190%)',
           cursor: 'default',
@@ -161,7 +168,10 @@ export default function Window({ windowData, children, toolbar }) {
             )}
           </button>
         </div>
-        <span className="flex-1 text-center text-[13px] text-white/80 font-medium truncate pointer-events-none" style={{ textShadow: '0 1px 1px rgba(0,0,0,0.22)' }}>
+        <span
+          className={`flex-1 text-center text-[13px] font-medium truncate pointer-events-none ${isLightChrome ? 'text-black/75' : 'text-white/80'}`}
+          style={{ textShadow: isLightChrome ? 'none' : '0 1px 1px rgba(0,0,0,0.22)' }}
+        >
           {windowData.title}
         </span>
         <div className="w-[54px]" />
@@ -172,8 +182,8 @@ export default function Window({ windowData, children, toolbar }) {
         <div
           className="shrink-0"
           style={{
-            background: 'rgba(245,248,255,0.08)',
-            borderBottom: '0.5px solid rgba(255,255,255,0.08)',
+            background: isLightChrome ? 'rgba(246,246,248,0.70)' : 'rgba(245,248,255,0.08)',
+            borderBottom: isLightChrome ? '0.5px solid rgba(0,0,0,0.08)' : '0.5px solid rgba(255,255,255,0.08)',
             backdropFilter: 'blur(56px) saturate(190%)',
             WebkitBackdropFilter: 'blur(56px) saturate(190%)',
           }}
@@ -185,7 +195,7 @@ export default function Window({ windowData, children, toolbar }) {
       <div
         className={`flex-1 overflow-hidden ${!toolbar && !windowData.maximized ? 'rounded-b-[10px]' : ''}`}
         style={{
-          background: 'rgba(28,29,34,0.82)',
+          background: isLightChrome ? 'rgba(246,246,248,0.42)' : 'rgba(28,29,34,0.82)',
           backdropFilter: 'blur(78px) saturate(190%)',
           WebkitBackdropFilter: 'blur(78px) saturate(190%)',
           borderRadius: windowData.maximized ? 0 : undefined,

@@ -109,8 +109,10 @@ export default function Dock({ onAppLaunch, dockStyle }) {
                 <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 transform" style={{ background: 'rgba(28,29,34,0.72)' }} />
               </div>
             )}
-            <div
-              className="dock-icon cursor-pointer transition-transform duration-150 ease-out"
+            <button
+              type="button"
+              aria-label={app.title}
+              className="dock-icon cursor-pointer transition-transform duration-150 ease-out appearance-none border-0 bg-transparent p-0"
               style={{
                 width: ICON_SIZE,
                 height: ICON_SIZE,
@@ -125,7 +127,7 @@ export default function Dock({ onAppLaunch, dockStyle }) {
               onMouseLeave={hideTooltip}
             >
               {appIcons[app.id]}
-            </div>
+            </button>
             {isAppOpen(app.id) && (
               <div
                 className="w-[5px] h-[5px] rounded-full bg-white/90 absolute shadow-[0_0_3px_rgba(255,255,255,0.5)]"
@@ -148,15 +150,17 @@ export default function Dock({ onAppLaunch, dockStyle }) {
                 <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 transform" style={{ background: 'rgba(28,29,34,0.72)' }} />
               </div>
             )}
-            <div
-              className="dock-icon cursor-pointer transition-transform duration-150 ease-out"
+            <button
+              type="button"
+              aria-label={`Restore ${win.title}`}
+              className="dock-icon cursor-pointer transition-transform duration-150 ease-out appearance-none border-0 bg-transparent p-0"
               style={{ width: ICON_SIZE, height: ICON_SIZE, transformOrigin: 'bottom center', filter: 'drop-shadow(0 8px 10px rgba(0,0,0,0.24))' }}
               onClick={() => restoreWindow(win.appId)}
               onMouseEnter={() => showTooltip(`tray-${win.id}`)}
               onMouseLeave={hideTooltip}
             >
               {appIcons[win.appId] || appIcons.finder}
-            </div>
+            </button>
             <div className="w-[5px] h-[5px] rounded-full bg-white/90 absolute shadow-[0_0_3px_rgba(255,255,255,0.5)]" style={{ bottom: -8 }} />
           </div>
         ))}
@@ -171,7 +175,8 @@ export default function Dock({ onAppLaunch, dockStyle }) {
             </div>
           )}
           <div
-            className="dock-icon cursor-pointer transition-transform duration-150 ease-out"
+            aria-label="Trash"
+            className="dock-icon transition-transform duration-150 ease-out"
             style={{ width: ICON_SIZE, height: ICON_SIZE, transform: `scale(${scales[dockApps.length] || 1})`, transformOrigin: 'bottom center', filter: 'drop-shadow(0 8px 10px rgba(0,0,0,0.24))' }}
             onMouseEnter={() => showTooltip('trash')}
             onMouseLeave={hideTooltip}
