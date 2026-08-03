@@ -408,7 +408,7 @@ function Desktop() {
 
       {/* Dock */}
       <Dock onAppLaunch={handleAppLaunch} dockStyle={{
-        transform: desktopVisible ? 'translateY(0)' : 'translateY(80px)',
+        '--dock-y': desktopVisible ? '0px' : '80px',
         opacity: desktopVisible ? 1 : 0,
         transition: 'transform 0.6s cubic-bezier(0.16,1,0.3,1) 0.4s, opacity 0.4s ease 0.4s',
       }} />

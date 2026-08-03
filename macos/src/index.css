@@ -133,6 +133,23 @@ select:focus-visible {
   grid-column: 1 / -1;
 }
 
+.dock-shell {
+  transform-origin: bottom center;
+  transform: translateX(-50%) translateY(var(--dock-y, 0px));
+}
+
+@media (max-width: 950px) {
+  .dock-shell {
+    transform: translateX(-50%) translateY(var(--dock-y, 0px)) scale(0.82);
+  }
+}
+
+@media (max-width: 720px) {
+  .dock-shell {
+    transform: translateX(-50%) translateY(var(--dock-y, 0px)) scale(0.68);
+  }
+}
+
 @media (max-width: 920px) {
   .desktop-widget-board {
     left: 14px;

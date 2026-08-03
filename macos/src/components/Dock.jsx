@@ -85,7 +85,7 @@ export default function Dock({ onAppLaunch, dockStyle }) {
   }, [onAppLaunch, restoreWindow, windows, isAppOpen]);
 
   return (
-    <div className="fixed bottom-2 left-1/2 -translate-x-1/2 z-[100]" style={dockStyle}>
+    <div className="dock-shell fixed bottom-2 left-1/2 z-[100]" style={dockStyle}>
       <div
         ref={dockRef}
         className="flex items-end px-3 py-[7px] rounded-[24px]"

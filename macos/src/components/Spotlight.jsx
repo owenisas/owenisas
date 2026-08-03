@@ -116,9 +116,9 @@ export default function Spotlight({ isOpen, onClose, onAppLaunch }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[300] flex items-start justify-center pt-[28vh]" onClick={onClose}>
+    <div className="fixed inset-0 z-[300] flex items-start justify-center pt-[18vh]" onClick={onClose}>
       <div
-        className="w-[700px] rounded-[8px] overflow-hidden animate-[scale-in_0.15s_ease-out]"
+        className="w-[700px] max-h-[calc(100vh-240px)] rounded-[8px] overflow-hidden animate-[scale-in_0.15s_ease-out]"
         style={{ background: 'rgba(28,30,36,0.78)', backdropFilter: 'blur(64px) saturate(190%)', WebkitBackdropFilter: 'blur(64px) saturate(190%)', boxShadow: 'var(--mac-shadow-popover)', border: '0.5px solid rgba(255,255,255,0.18)' }}
         onClick={e => e.stopPropagation()}
       >
@@ -141,7 +141,7 @@ export default function Spotlight({ isOpen, onClose, onAppLaunch }) {
           />
         </div>
         {filtered.length > 0 ? (
-          <div className="max-h-[420px] overflow-y-auto py-2">
+          <div className="max-h-[calc(100vh-330px)] overflow-y-auto py-2">
             {groups.map(group => (
               <div key={group.title} className="mb-1">
                 <div className="px-4 py-1 text-[11px] text-white/42 font-medium uppercase tracking-wider">{group.title}</div>
