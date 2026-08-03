@@ -247,14 +247,14 @@ export default function CodeEditor() {
         className="flex items-center h-[44px] shrink-0 px-2 gap-1.5 DragHandle"
         style={{ background: 'rgba(33,37,43,0.84)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderBottom: '0.5px solid rgba(255,255,255,0.08)' }}
       >
-        <MacToolbarButton icon="play.fill" label="Run" onClick={() => {}} />
+        <MacToolbarButton icon="play.fill" label="Run" />
         <MacToolbarButton
           icon={showTerminal ? 'terminal.fill' : 'terminal'}
           label="Toggle Terminal"
           active={showTerminal}
           onClick={() => setShowTerminal(s => !s)}
         />
-        <MacToolbarButton icon="magnifyingglass" label="Search" onClick={() => {}} />
+        <MacToolbarButton icon="magnifyingglass" label="Search" />
         <div className="flex-1" />
         <div className="flex items-center gap-2 pr-1">
           <span

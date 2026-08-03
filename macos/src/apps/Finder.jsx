@@ -241,7 +241,7 @@ export default function Finder({ windowData, onAppLaunch }) {
               icon={<div className="w-[10px] h-[10px] rounded-full" style={{ background: tag.color }} />}
               label={tag.label}
               selected={false}
-              onClick={() => {}}
+
             />
           ))}
         </MacSidebarSection>

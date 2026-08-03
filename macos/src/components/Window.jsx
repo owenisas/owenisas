@@ -57,6 +57,13 @@ export default function Window({ windowData, children, toolbar }) {
     if (dir.includes('s')) h = Math.max(minH, b.height + dy);
     if (dir.includes('n')) { h = Math.max(minH, b.height - dy); y = b.y + b.height - h; }
 
+    const maxW = Math.max(minW, window.innerWidth - Math.max(0, x));
+    const maxH = Math.max(minH, window.innerHeight - 25 - Math.max(0, y));
+    w = Math.min(w, maxW);
+    h = Math.min(h, maxH);
+    x = Math.max(0, Math.min(x, window.innerWidth - w));
+    y = Math.max(25, Math.min(y, window.innerHeight - h));
+
     updateWindow(windowData.id, { x, y, width: w, height: h, maximized: false, prevBounds: null });
   }, [windowData.id, updateWindow]);
 

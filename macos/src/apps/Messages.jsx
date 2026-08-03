@@ -121,7 +121,7 @@ export default function Messages({ onAppLaunch }) {
         <div className="h-[52px] flex items-center px-3 shrink-0 DragHandle" style={{ borderBottom: '0.5px solid rgba(255,255,255,0.04)' }}>
           <div className="text-[14px] text-white/90 font-semibold tracking-tight">Messages</div>
           <div className="flex-1" />
-          <MacToolbarButton icon="square.and.pencil" size={28} />
+          <MacToolbarButton icon="square.and.pencil" size={28} label="New Message" />
         </div>
 
         <div className="px-3 pt-2 pb-2">
@@ -176,7 +176,7 @@ export default function Messages({ onAppLaunch }) {
             {active?.subtitle && <span className="text-white/55 text-[11px] mt-[1px]">{active.subtitle}</span>}
           </div>
           <div className="absolute right-3">
-            <MacToolbarButton icon="info.circle" size={28} />
+            <MacToolbarButton icon="info.circle" size={28} label="Conversation Info" />
           </div>
         </div>
 
