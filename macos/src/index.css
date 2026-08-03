@@ -112,7 +112,7 @@ select:focus-visible {
   left: 18px;
   top: 32px;
   z-index: 4;
-  width: min(326px, calc(100vw - 36px));
+  width: min(310px, calc(100vw - 36px));
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
@@ -125,8 +125,7 @@ select:focus-visible {
 }
 
 .desktop-widget:hover {
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: 0 14px 34px rgba(0,0,0,0.2), inset 0 0.5px 0 rgba(255,255,255,0.8);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.28), inset 0 0.5px 0 rgba(255,255,255,0.14);
 }
 
 .desktop-widget:last-child {
@@ -170,7 +169,6 @@ select:focus-visible {
 
 @media (prefers-reduced-motion: reduce) {
   .desktop-widget { transition: none; }
-  .desktop-widget:hover { transform: none; }
 }
 
 ::-webkit-scrollbar { width: 8px; height: 8px; }

@@ -7,11 +7,11 @@ function WidgetCard({ children, className = '', style, onDoubleClick }) {
     <div
       className={`desktop-widget rounded-[18px] overflow-hidden ${className}`}
       style={{
-        background: 'rgba(245,247,252,0.72)',
-        border: '0.5px solid rgba(255,255,255,0.62)',
-        boxShadow: '0 10px 30px rgba(0,0,0,0.16), inset 0 0.5px 0 rgba(255,255,255,0.72)',
-        backdropFilter: 'blur(28px) saturate(145%)',
-        WebkitBackdropFilter: 'blur(28px) saturate(145%)',
+        background: 'rgba(32,34,40,0.76)',
+        border: '0.5px solid rgba(255,255,255,0.16)',
+        boxShadow: '0 8px 24px rgba(0,0,0,0.24), inset 0 0.5px 0 rgba(255,255,255,0.12)',
+        backdropFilter: 'blur(30px) saturate(150%)',
+        WebkitBackdropFilter: 'blur(30px) saturate(150%)',
         ...style,
       }}
       onDoubleClick={onDoubleClick}
@@ -46,15 +46,15 @@ function CalendarWidget({ onOpen }) {
   const weekday = date.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
   const month = date.toLocaleDateString('en-US', { month: 'long' });
   return (
-    <WidgetCard className="min-h-[152px]" onDoubleClick={onOpen}>
+    <WidgetCard className="min-h-[132px]" onDoubleClick={onOpen}>
       <div className="p-3.5 h-full flex flex-col">
         <div className="flex items-center justify-between">
-          <div className="text-[11px] font-semibold text-[#ff3b30]">{month}</div>
+          <div className="text-[11px] font-semibold text-[#ff6961]">{month}</div>
           <SFSymbol name="calendar" size={15} color="#ff3b30" />
         </div>
-        <div className="mt-1 text-[38px] leading-none tracking-[-0.06em] font-light text-[#1d1d1f]">{date.getDate()}</div>
-        <div className="mt-auto text-[10px] font-semibold tracking-[0.08em] text-black/48">{weekday}</div>
-        <div className="mt-1 text-[10px] text-black/65 truncate">10:00 AM · Team Sync</div>
+        <div className="mt-1 text-[38px] leading-none tracking-[-0.06em] font-light text-white">{date.getDate()}</div>
+        <div className="mt-auto text-[10px] font-semibold tracking-[0.08em] text-white/48">{weekday}</div>
+        <div className="mt-1 text-[10px] text-white/65 truncate">10:00 AM · Team Sync</div>
       </div>
     </WidgetCard>
   );
@@ -63,16 +63,16 @@ function CalendarWidget({ onOpen }) {
 function ActivityWidget({ onOpen }) {
   const cells = useMemo(() => Array.from({ length: 35 }, (_, i) => (i * 7 + 3) % 5), []);
   return (
-    <WidgetCard className="min-h-[152px]" onDoubleClick={onOpen}>
+    <WidgetCard className="min-h-[132px]" onDoubleClick={onOpen}>
       <div className="p-3.5 h-full flex flex-col">
         <div className="flex items-center justify-between">
-          <div className="text-[11px] font-semibold text-black/70">GitHub Activity</div>
+          <div className="text-[11px] font-semibold text-white/75">GitHub Activity</div>
           <SFSymbol name="chart.bar.fill" size={14} color="#30a14e" />
         </div>
         <div className="mt-3 grid grid-cols-7 gap-[3px]">
           {cells.map((level, i) => <span key={i} className="aspect-square rounded-[3px]" style={{ background: ['rgba(0,0,0,0.08)', '#b7e3c0', '#70c77e', '#40a85a', '#22863a'][level] }} />)}
         </div>
-        <div className="mt-auto flex items-baseline gap-1"><span className="text-[22px] font-semibold text-[#1d1d1f]">17</span><span className="text-[10px] text-black/48">contributions this year</span></div>
+        <div className="mt-auto flex items-baseline gap-1"><span className="text-[22px] font-semibold text-white">17</span><span className="text-[10px] text-white/48">contributions this year</span></div>
       </div>
     </WidgetCard>
   );
@@ -96,10 +96,10 @@ function PhotoWidget({ onOpen }) {
 
 function BatteryWidget() {
   return (
-    <WidgetCard className="min-h-[96px]">
+    <WidgetCard className="min-h-[84px]">
       <div className="p-3.5 h-full flex flex-col">
-        <div className="flex items-center justify-between"><span className="text-[11px] font-semibold text-black/70">Battery</span><SFSymbol name="battery.100" size={16} color="#30a14e" /></div>
-        <div className="mt-auto flex items-baseline gap-1"><span className="text-[25px] font-light text-[#1d1d1f]">87%</span><span className="text-[10px] text-black/48">Charging</span></div>
+        <div className="flex items-center justify-between"><span className="text-[11px] font-semibold text-white/75">Battery</span><SFSymbol name="battery.100" size={16} color="#30a14e" /></div>
+        <div className="mt-auto flex items-baseline gap-1"><span className="text-[25px] font-light text-white">87%</span><span className="text-[10px] text-white/48">Charging</span></div>
       </div>
     </WidgetCard>
   );
