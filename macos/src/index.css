@@ -110,7 +110,7 @@ select:focus-visible {
 .desktop-widget-board {
   position: absolute;
   left: 18px;
-  top: 150px;
+  top: 32px;
   z-index: 4;
   width: min(326px, calc(100vw - 36px));
   display: grid;
@@ -137,7 +137,7 @@ select:focus-visible {
   .desktop-widget-board {
     left: 14px;
     right: auto;
-    top: 96px;
+    top: 32px;
     width: 270px;
     gap: 8px;
   }
