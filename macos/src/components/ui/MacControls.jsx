@@ -25,13 +25,16 @@ const toneStyles = {
 };
 
 // --- Toggle Switch (green when on, like real macOS) ---
-export function MacToggle({ checked, onChange, size = 'default' }) {
+export function MacToggle({ checked, onChange, size = 'default', label = 'Toggle' }) {
   const w = size === 'small' ? 32 : 38;
   const h = size === 'small' ? 18 : 22;
   const knob = size === 'small' ? 14 : 18;
   const pad = 2;
   return (
     <button
+      type="button"
+      aria-label={label}
+      aria-pressed={checked}
       className="relative shrink-0 rounded-full transition-colors duration-200 cursor-default"
       style={{
         width: w, height: h,

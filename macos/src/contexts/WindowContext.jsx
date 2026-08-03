@@ -102,6 +102,7 @@ export function WindowProvider({ children }) {
   }, [windows]);
 
   const maximizeWindow = useCallback((id) => {
+    focusWindow(id);
     setWindows(prev => prev.map(w => {
       if (w.id !== id) return w;
       if (w.maximized) {
@@ -117,7 +118,7 @@ export function WindowProvider({ children }) {
         height: window.innerHeight - 25,
       };
     }));
-  }, []);
+  }, [focusWindow]);
 
   const updateWindow = useCallback((id, updates) => {
     setWindows(prev => prev.map(w =>

@@ -18,6 +18,7 @@ export default function Window({ windowData, children, toolbar }) {
 
   const isActive = activeWindowId === windowData.id;
   const isLightChrome = LIGHT_CHROME_APPS.has(windowData.appId);
+  const trafficColors = { close: isActive ? '#ff5f57' : 'rgba(255,95,87,0.44)', minimize: isActive ? '#febc2e' : 'rgba(254,188,46,0.44)', maximize: isActive ? '#28c840' : 'rgba(40,200,64,0.44)' };
 
   const onDragMove = useCallback((e) => {
     if (!isDragging.current) return;
@@ -141,8 +142,8 @@ export default function Window({ windowData, children, toolbar }) {
           <button
             aria-label="Close Window"
             className="w-[12px] h-[12px] rounded-full flex items-center justify-center border-[0.5px] border-black/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]"
-            style={{ background: isActive ? '#ff5f57' : 'rgba(255,255,255,0.24)', opacity: isActive || trafficHover ? 1 : 0.55 }}
-            onClick={() => closeWindow(windowData.id)}
+            style={{ background: trafficColors.close, opacity: isActive || trafficHover ? 1 : 0.72 }}
+            onClick={() => { focusWindow(windowData.id); closeWindow(windowData.id); }}
           >
             {trafficHover && (
               <svg width="6" height="6" viewBox="0 0 6 6" fill="none" stroke="rgba(0,0,0,0.6)" strokeWidth="1.2" strokeLinecap="round">
@@ -153,8 +154,8 @@ export default function Window({ windowData, children, toolbar }) {
           <button
             aria-label="Minimize Window"
             className="w-[12px] h-[12px] rounded-full flex items-center justify-center border-[0.5px] border-black/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]"
-            style={{ background: isActive ? '#febc2e' : 'rgba(255,255,255,0.24)', opacity: isActive || trafficHover ? 1 : 0.55 }}
-            onClick={() => minimizeWindow(windowData.id)}
+            style={{ background: trafficColors.minimize, opacity: isActive || trafficHover ? 1 : 0.72 }}
+            onClick={() => { focusWindow(windowData.id); minimizeWindow(windowData.id); }}
           >
             {trafficHover && (
               <svg width="6" height="6" viewBox="0 0 6 6" fill="none" stroke="rgba(0,0,0,0.6)" strokeWidth="1.5">
@@ -165,8 +166,8 @@ export default function Window({ windowData, children, toolbar }) {
           <button
             aria-label="Maximize Window"
             className="w-[12px] h-[12px] rounded-full flex items-center justify-center border-[0.5px] border-black/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]"
-            style={{ background: isActive ? '#28c840' : 'rgba(255,255,255,0.24)', opacity: isActive || trafficHover ? 1 : 0.55 }}
-            onClick={() => maximizeWindow(windowData.id)}
+            style={{ background: trafficColors.maximize, opacity: isActive || trafficHover ? 1 : 0.72 }}
+            onClick={() => { focusWindow(windowData.id); maximizeWindow(windowData.id); }}
           >
             {trafficHover && (
               <svg width="6" height="6" viewBox="0 0 6 6" fill="none" stroke="rgba(0,0,0,0.6)" strokeWidth="1.2">

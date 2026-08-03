@@ -86,36 +86,17 @@ export default function Calendar() {
 
         {/* Calendar Grid */}
         <div className="flex-1 flex flex-col bg-[#1e1e1e]">
-            {/* Days Header */}
-            <div className="grid grid-cols-7 border-b border-white/10 shrink-0">
-                {DAYS.map(day => (
-                    <div key={day} className="h-[30px] flex items-center justify-end pr-2 text-[11px] font-medium text-white/50 border-r border-white/10 last:border-0">
-                        {day}
-                    </div>
-                ))}
-            </div>
-
-            {/* Grid */}
-            <div className="flex-1 grid grid-cols-7 grid-rows-6 bg-white/5 gap-[1px]">
-                {days.map((day) => (
-                    <div key={day.id} className="bg-[#1e1e1e] flex flex-col p-1">
-                        <div className="flex justify-end">
-                            <span className={`w-7 h-7 flex items-center justify-center rounded-full text-[13px] font-medium
-                                ${day.today ? 'bg-[#ff3b30] text-white' : ''}
-                                ${!day.current && !day.today ? 'text-white/30' : ''}
-                                ${day.current && !day.today ? 'text-white/80' : ''}
-                            `}>
-                                {day.number}
-                            </span>
-                        </div>
-                        {day.event && (
-                            <div className="mt-1 px-1.5 py-0.5 rounded-[4px] bg-[#0a84ff]/20 border border-[#0a84ff]/30 text-[#409cff] text-[10px] font-medium truncate">
-                                {day.event}
-                            </div>
-                        )}
-                    </div>
-                ))}
-            </div>
+            {view === 'month' && <>
+              <div className="grid grid-cols-7 border-b border-white/10 shrink-0">
+                {DAYS.map(day => <div key={day} className="h-[30px] flex items-center justify-end pr-2 text-[11px] font-medium text-white/50 border-r border-white/10 last:border-0">{day}</div>)}
+              </div>
+              <div className="flex-1 grid grid-cols-7 grid-rows-6 bg-white/5 gap-[1px]">
+                {days.map((day) => <div key={day.id} className="bg-[#1e1e1e] flex flex-col p-1"><div className="flex justify-end"><span className={`w-7 h-7 flex items-center justify-center rounded-full text-[13px] font-medium ${day.today ? 'bg-[#ff3b30] text-white' : ''} ${!day.current && !day.today ? 'text-white/30' : ''} ${day.current && !day.today ? 'text-white/80' : ''}`}>{day.number}</span></div>{day.event && <div className="mt-1 px-1.5 py-0.5 rounded-[4px] bg-[#0a84ff]/20 border border-[#0a84ff]/30 text-[#409cff] text-[10px] font-medium truncate">{day.event}</div>}</div>)}
+              </div>
+            </>}
+            {view === 'day' && <div className="flex-1 p-8"><div className="text-white/55 text-[12px] uppercase tracking-wider">{cursor.toLocaleDateString('en-US', { weekday: 'long' })}</div><div className="text-white text-[32px] font-light mt-1">{cursor.getDate()} {cursor.toLocaleDateString('en-US', { month: 'long' })}</div><div className="mt-8 rounded-lg border border-[#0a84ff]/30 bg-[#0a84ff]/15 px-4 py-3 text-[#7db9ff] text-[13px]">10:00 AM · Team Sync</div></div>}
+            {view === 'week' && <div className="flex-1 grid grid-cols-7 divide-x divide-white/10">{DAYS.map((day, i) => <div key={day} className="p-2"><div className="text-[11px] text-white/50">{day}</div><div className="text-[18px] text-white mt-1">{new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate() - cursor.getDay() + i).getDate()}</div>{i === 2 && <div className="mt-5 rounded bg-[#0a84ff]/20 border border-[#0a84ff]/30 px-1.5 py-1 text-[10px] text-[#7db9ff]">Team Sync</div>}</div>)}</div>}
+            {view === 'year' && <div className="flex-1 grid grid-cols-3 gap-6 p-8">{Array.from({ length: 12 }, (_, i) => <div key={i} className="rounded-lg border border-white/10 p-3"><div className="text-[12px] text-white/70">{new Date(cursor.getFullYear(), i, 1).toLocaleDateString('en-US', { month: 'long' })}</div><div className="grid grid-cols-7 gap-1 mt-3">{Array.from({ length: 35 }, (_, j) => <span key={j} className="w-1.5 h-1.5 rounded-full" style={{ background: j % 9 === 0 ? '#ff3b30' : 'rgba(255,255,255,0.18)' }} />)}</div></div>)}</div>}
         </div>
       </div>
     </div>

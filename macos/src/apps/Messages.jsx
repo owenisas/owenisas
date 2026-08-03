@@ -218,7 +218,14 @@ export default function Messages({ onAppLaunch }) {
               type="text"
               value={draft}
               onChange={e => setDraft(e.target.value)}
-              onKeyDown={e => { if (e.key === 'Enter' && draft.trim()) { setDraft(''); } }}
+              onKeyDown={e => {
+                if (e.key === 'Enter' && draft.trim() && active) {
+                  const message = { from: 'me', text: draft.trim() };
+                  active.messages.push(message);
+                  setRevealed(r => ({ ...r, [active.id]: active.messages.length }));
+                  setDraft('');
+                }
+              }}
               className="flex-1 bg-transparent text-white outline-none min-h-[20px] text-[14px] placeholder:text-white/30"
               placeholder="Ask Thomas a question…"
             />

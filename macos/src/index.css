@@ -147,6 +147,19 @@ select:focus-visible {
   .dock-shell {
     transform: translateX(-50%) translateY(var(--dock-y, 0px)) scale(0.68);
   }
+
+  .menu-bar-menus,
+  .menu-bar-wifi,
+  .menu-bar-battery {
+    display: none;
+  }
+
+  .menu-bar-app-name {
+    max-width: 112px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 @media (max-width: 920px) {

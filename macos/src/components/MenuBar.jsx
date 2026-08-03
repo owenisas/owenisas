@@ -191,7 +191,7 @@ export default function MenuBar({ onSpotlightToggle, onAppLaunch, barStyle }) {
         paddingLeft: 8, paddingRight: 8,
         ...barStyle,
       }}>
-      <div className="flex items-center">
+      <div className="menu-bar-left flex items-center min-w-0">
         <div className="relative" ref={menuRef}>
           <button aria-label="Apple Menu" className="h-[22px] hover:bg-white/20 transition-colors flex items-center justify-center rounded-[6px]" style={{ padding: '0 12px' }} onClick={() => setAppleMenuOpen(!appleMenuOpen)}>
             <svg width="13" height="15" viewBox="0 0 14 17" fill="white">
@@ -253,8 +253,8 @@ export default function MenuBar({ onSpotlightToggle, onAppLaunch, barStyle }) {
             </div>
           )}
         </div>
-        <button className="h-[22px] hover:bg-white/15 transition-colors rounded-[6px] font-semibold text-white" style={{ padding: '0 10px' }}>{activeApp?.title || 'Finder'}</button>
-        <div ref={menuBarRef} className="flex items-center">
+        <button className="menu-bar-app-name h-[22px] hover:bg-white/15 transition-colors rounded-[6px] font-semibold text-white" style={{ padding: '0 10px' }}>{activeApp?.title || 'Finder'}</button>
+        <div ref={menuBarRef} className="menu-bar-menus flex items-center">
           {getMenuItems(activeApp?.appId).map(item => (
             <div key={item} className="relative">
               <button
@@ -306,7 +306,7 @@ export default function MenuBar({ onSpotlightToggle, onAppLaunch, barStyle }) {
           ))}
         </div>
       </div>
-      <div className="flex items-center text-white/90" style={{ gap: 3 }}>
+      <div className="menu-bar-status flex items-center text-white/90" style={{ gap: 3 }}>
         {/* Spotlight */}
         <button aria-label="Spotlight" onClick={onSpotlightToggle} className="h-[22px] flex justify-center items-center hover:bg-white/15 rounded-[6px] transition-colors" style={{ padding: '0 6px' }}>
           <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="7" cy="7" r="5"/><path d="m14 14-3.5-3.5"/></svg>
@@ -338,7 +338,7 @@ export default function MenuBar({ onSpotlightToggle, onAppLaunch, barStyle }) {
           )}
         </div>
         {/* WiFi */}
-        <button aria-label="Wi-Fi" className="h-[22px] flex justify-center items-center hover:bg-white/15 rounded-[6px] transition-colors" style={{ padding: '0 6px' }}>
+        <button aria-label="Wi-Fi" className="menu-bar-wifi h-[22px] flex justify-center items-center hover:bg-white/15 rounded-[6px] transition-colors" style={{ padding: '0 6px' }}>
           <svg width="12" height="9" viewBox="0 0 16 12" fill="currentColor">
             <circle cx="8" cy="10.5" r="1.2"/>
             <path d="M5.5 8.2a3.6 3.6 0 0 1 5 0" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
@@ -347,7 +347,7 @@ export default function MenuBar({ onSpotlightToggle, onAppLaunch, barStyle }) {
           </svg>
         </button>
         {/* Battery */}
-        <button aria-label="Battery" className="h-[22px] flex justify-center items-center hover:bg-white/15 rounded-[6px] transition-colors" style={{ padding: '0 6px' }}>
+        <button aria-label="Battery" className="menu-bar-battery h-[22px] flex justify-center items-center hover:bg-white/15 rounded-[6px] transition-colors" style={{ padding: '0 6px' }}>
           <svg width="18" height="9" viewBox="0 0 22 10">
             <rect x="0.5" y="0.5" width="18" height="9" rx="2" fill="none" stroke="currentColor" strokeWidth="0.9" opacity="0.5"/>
             <path d="M19.5 3.2v3.6a1 1 0 0 0 0-3.6z" fill="currentColor" opacity="0.4"/>

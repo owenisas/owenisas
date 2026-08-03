@@ -233,6 +233,10 @@ export default function CodeEditor() {
   const highlighted = useMemo(() => syntaxHighlight(code, lang), [code, lang]);
   const tree = useMemo(() => active ? buildTree(active.snippet) : null, [active]);
   const lineCount = code.split('\n').length;
+  const closeProject = (index) => {
+    setProjects(prev => prev.filter((_, i) => i !== index));
+    setActiveIdx(prev => Math.max(0, Math.min(prev, projects.length - 2)));
+  };
 
   if (!active) {
     return <div className="h-full flex items-center justify-center text-white/30">Loading...</div>;
@@ -310,7 +314,7 @@ export default function CodeEditor() {
               />
               <span className="text-[12px] truncate" style={{ maxWidth: 140 }}>{tabName}</span>
               <button
-                onClick={(e) => { e.stopPropagation(); }}
+                onClick={(e) => { e.stopPropagation(); closeProject(i); }}
                 className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
                 style={{ width: 16, height: 16, borderRadius: 4, color: COLORS.textDim }}
                 onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
