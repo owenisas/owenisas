@@ -630,9 +630,7 @@ export default function Settings({ windowData }) {
         {/* Profile Card */}
         <div className="px-3 mb-2 mt-1 px-4">
           <div className="flex items-center gap-3">
-            <div className="w-[38px] h-[38px] rounded-full flex items-center justify-center text-white text-[16px] font-medium" style={{ background: 'linear-gradient(to bottom right, #555, #222)' }}>
-              TS
-            </div>
+            <img src="/assets/profile.jpg" alt="Thomas Suen" className="w-[38px] h-[38px] rounded-full object-cover" style={{ boxShadow: '0 0 0 0.5px rgba(0,0,0,0.16), 0 1px 3px rgba(0,0,0,0.18)' }} />
             <div>
               <div className="text-[14px] font-bold text-black tracking-tight">Thomas Suen</div>
               <div className="text-[11px] text-[#86868b] leading-tight mt-0.5">Apple Account</div>

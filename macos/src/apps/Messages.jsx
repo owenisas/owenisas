@@ -17,6 +17,9 @@ function useConversations() {
 }
 
 function Avatar({ name, color, active }) {
+  if (name === 'TS') {
+    return <img src="/assets/profile.jpg" alt="Thomas Suen" className="w-[42px] h-[42px] rounded-full object-cover shrink-0" style={{ boxShadow: active ? '0 0 0 2px rgba(10,132,255,0.4)' : 'inset 0 0 0 0.5px rgba(255,255,255,0.12)' }} />;
+  }
   return (
     <div
       className="w-[42px] h-[42px] rounded-full flex items-center justify-center shrink-0 text-white text-[16px] font-medium"

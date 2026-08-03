@@ -94,11 +94,12 @@ function formatRelative(iso) {
 
 /* ---------------- Shared avatar ---------------- */
 
-function Avatar({ size = 152, ring = '#fff', src = null }) {
-  if (src) {
+function Avatar({ size = 152, ring = '#fff', src = '/assets/profile.jpg' }) {
+  const imageSrc = src || '/assets/profile.jpg';
+  if (imageSrc) {
     return (
       <img
-        src={src}
+        src={imageSrc}
         alt=""
         className="rounded-full object-cover"
         style={{
