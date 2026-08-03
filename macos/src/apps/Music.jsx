@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import SFSymbol from '../components/icons/SFSymbol';
-import { MacToolbarButton, MacSidebarItem, MacSidebarSection } from '../components/ui/MacControls';
+import { MacToolbarButton, MacSidebarItem, MacSidebarSection, MacSlider } from '../components/ui/MacControls';
 
 // Deterministic pseudo-random so the same playlist always shows the same tracks
 function seeded(rng) {
@@ -433,17 +433,15 @@ export default function Music() {
           </div>
           <div className="flex items-center gap-2 w-full max-w-[420px]">
             <span className="text-[10px] tabular-nums shrink-0" style={{ color: 'rgba(235,235,245,0.5)' }}>{fmt(progress)}</span>
-            <div className="flex-1 h-[4px] rounded-full relative" style={{ background: 'rgba(255,255,255,0.12)' }}>
-              <div
-                className="absolute top-0 left-0 h-full rounded-full group-hover:bg-opacity-100"
-                style={{ width: `${totalSec ? (progress / totalSec) * 100 : 0}%`, background: accent, transition: 'width 0.2s linear' }}
-              >
-                <div
-                  className="absolute right-0 top-1/2 -translate-y-1/2 w-[9px] h-[9px] rounded-full bg-white opacity-0"
-                  style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.4)' }}
-                />
-              </div>
-            </div>
+            <input
+              aria-label="Playback position"
+              type="range"
+              min="0"
+              max={totalSec || 1}
+              value={Math.min(progress, totalSec || 1)}
+              onChange={e => setProgress(Number(e.target.value))}
+              className="flex-1 accent-[#fc3c44]"
+            />
             <span className="text-[10px] tabular-nums shrink-0" style={{ color: 'rgba(235,235,245,0.5)' }}>{fmt(totalSec)}</span>
           </div>
         </div>
@@ -451,9 +449,7 @@ export default function Music() {
         {/* Right: volume + AirPlay */}
         <div className="flex items-center gap-2 shrink-0">
           <SFSymbol name="speaker.wave.2.fill" size={13} color="rgba(235,235,245,0.55)" />
-          <div className="w-[72px] h-[4px] rounded-full relative" style={{ background: 'rgba(255,255,255,0.12)' }}>
-            <div className="h-full rounded-full" style={{ width: `${volume}%`, background: 'rgba(235,235,245,0.85)' }} />
-          </div>
+          <div className="w-[72px]"><MacSlider value={volume} onChange={setVolume} accentColor={accent} /></div>
           <MacToolbarButton icon="airplayaudio" size={24} label="AirPlay" />
           <MacToolbarButton icon="list.bullet.indent" size={24} label="Queue" />
         </div>

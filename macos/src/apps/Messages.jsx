@@ -30,7 +30,7 @@ function Avatar({ name, color, active }) {
   );
 }
 
-function Bubble({ msg, color }) {
+function Bubble({ msg }) {
   const me = msg.from === 'me';
   return (
     <div className={`flex ${me ? 'justify-end' : 'justify-start'}`}>
@@ -58,6 +58,7 @@ export default function Messages({ onAppLaunch }) {
   const [revealed, setRevealed] = useState({});
   const [draft, setDraft] = useState('');
   const scrollRef = useRef(null);
+  const revealTimerRef = useRef(null);
 
   useEffect(() => {
     if (!activeId && threads.length) setActiveId(threads[0].id);
@@ -75,9 +76,13 @@ export default function Messages({ onAppLaunch }) {
     const tick = () => {
       i += 1;
       setRevealed(r => ({ ...r, [active.id]: i }));
-      if (i < count) setTimeout(tick, 260);
+      if (i < count) revealTimerRef.current = setTimeout(tick, 260);
     };
-    setTimeout(tick, 200);
+    revealTimerRef.current = setTimeout(tick, 200);
+    return () => {
+      if (revealTimerRef.current) clearTimeout(revealTimerRef.current);
+      revealTimerRef.current = null;
+    };
   }, [active, revealed]);
 
   useEffect(() => {
@@ -177,7 +182,7 @@ export default function Messages({ onAppLaunch }) {
             <>
               <div className="text-center text-white/40 text-[11px] font-medium mt-2 mb-1">Today</div>
               {active.messages.slice(0, revealed[active.id] ?? 0).map((m, i) => (
-                <Bubble key={i} msg={m} color={active.color} />
+                <Bubble key={i} msg={m} />
               ))}
               {(revealed[active.id] ?? 0) < active.messages.length && (
                 <div className="self-start flex items-center gap-1 px-3 py-2 rounded-[16px] bg-white/6 border border-white/5">

@@ -92,12 +92,16 @@ export default function TextEdit({ windowData }) {
   const { text } = useFileContent(node?.contentUrl);
 
   const seededHtml = useMemo(() => {
+    if (vfsPath) {
+      const saved = window.localStorage.getItem(`owenisas-textedit:${vfsPath}`);
+      if (saved) return saved;
+    }
     if (node && text) {
       if (node.kind === 'md') return mdToHtml(text);
       return `<pre style="font-family:Menlo,monospace;font-size:12px;white-space:pre-wrap;margin:0">${text.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</pre>`;
     }
     return '<p style="margin-bottom:12px"><strong>Welcome to TextEdit</strong></p><p style="margin-bottom:12px">This is a simulated macOS text editor running in your browser.</p><h2 style="font-size:18px;font-weight:600;margin:16px 0 8px">Try these in Terminal:</h2><ul style="margin:8px 0 12px 24px"><li style="margin:2px 0"><code style="background:rgba(0,0,0,0.05);padding:1px 4px;border-radius:3px;font-family:Menlo,monospace">help</code> — see available commands</li><li style="margin:2px 0"><code style="background:rgba(0,0,0,0.05);padding:1px 4px;border-radius:3px;font-family:Menlo,monospace">ls ~/Documents/Projects</code> — browse project files</li><li style="margin:2px 0"><code style="background:rgba(0,0,0,0.05);padding:1px 4px;border-radius:3px;font-family:Menlo,monospace">cat Documents/About.md</code> — read about Thomas</li><li style="margin:2px 0"><code style="background:rgba(0,0,0,0.05);padding:1px 4px;border-radius:3px;font-family:Menlo,monospace">contact</code> — get contact info</li><li style="margin:2px 0"><code style="background:rgba(0,0,0,0.05);padding:1px 4px;border-radius:3px;font-family:Menlo,monospace">neofetch</code> — system info</li></ul><h2 style="font-size:18px;font-weight:600;margin:16px 0 8px">Explore:</h2><ul style="margin:8px 0 12px 24px"><li style="margin:2px 0"><strong>Finder</strong> — browse the virtual filesystem</li><li style="margin:2px 0"><strong>Safari</strong> — visit github.com/owenisas or linkedin.com</li><li style="margin:2px 0"><strong>Photos</strong> — photography portfolio</li><li style="margin:2px 0"><strong>Mail</strong> — compose a message to Thomas</li><li style="margin:2px 0"><strong>Messages</strong> — scripted conversation threads</li></ul><p style="margin-top:16px;color:#666">— Thomas Suen</p>';
-  }, [node, text]);
+  }, [node, text, vfsPath]);
 
   useEffect(() => {
     if (editorRef.current && seededHtml) {
@@ -206,6 +210,9 @@ export default function TextEdit({ windowData }) {
           onSelect={updateActiveFormats}
           onKeyUp={updateActiveFormats}
           onMouseUp={updateActiveFormats}
+          onInput={() => {
+            if (vfsPath && editorRef.current) window.localStorage.setItem(`owenisas-textedit:${vfsPath}`, editorRef.current.innerHTML);
+          }}
           onKeyDown={e => {
             if (e.metaKey || e.ctrlKey) {
               if (e.key === 'b') { e.preventDefault(); exec('bold'); }
