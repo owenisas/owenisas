@@ -48,11 +48,11 @@ Make the simulator feel like one coherent macOS desktop rather than a collection
 - [x] Scope Calculator keyboard handling away from text inputs and contenteditable surfaces.
 - [x] Add missing `pause.fill` SF Symbol used by Music.
 - [ ] Wire or disable no-op Mail toolbar actions.
-- [ ] Wire Music seek/volume controls and label Queue/Shuffle/Repeat/AirPlay actions.
-- [ ] Add Messages reveal-timer cleanup when changing conversations.
-- [ ] Fix Preview zoom behavior for text/PDF surfaces.
-- [ ] Persist TextEdit edits in the simulator VFS/session state.
-- [ ] Replace Safari’s derived frequently-visited URLs with explicit URL records.
+- [x] Wire Music seek/volume controls and label Queue/Shuffle/Repeat/AirPlay actions.
+- [x] Add Messages reveal-timer cleanup when changing conversations.
+- [x] Fix Preview zoom behavior for text/PDF surfaces.
+- [x] Persist TextEdit edits in the simulator VFS/session state.
+- [x] Replace Safari’s derived frequently-visited URLs with explicit URL records.
 - [ ] Normalize toolbar heights and sidebar widths through shared tokens.
 
 ## Phase 4 — Accessibility and interaction quality
